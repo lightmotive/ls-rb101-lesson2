@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # ask the user for two numbers
 # ask the user for the operation to perform on those numbers
 # perform the operation on the two numbers
