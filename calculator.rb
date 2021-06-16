@@ -67,6 +67,8 @@ def prompt_operation(operations)
 end
 
 def calculate(number1, number2, operation)
+  puts "\n"
+  show_message("#{operation[1].capitalize} #{number1} and #{number2}...")
   number1.send(operation[2], number2)
 end
 
