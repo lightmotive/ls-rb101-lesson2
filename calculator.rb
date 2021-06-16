@@ -30,4 +30,6 @@ result = case operator
          when '4' then number1 / number2
          end
 
-Kernel.puts(result)
+result = result.to_i if result.modulo(1).zero?
+
+Kernel.puts("Result: #{result}")
