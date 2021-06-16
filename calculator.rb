@@ -24,7 +24,6 @@ def prompt_name
 
   loop do
     name = gets.strip
-
     break name unless name.empty?
 
     show_message('Please enter a name. You can use a fake one if you wish.')
@@ -59,7 +58,6 @@ def prompt_operation(operations)
 
   loop do
     input = Kernel.gets.strip
-
     break operations[input.to_sym] if operations.key?(input.to_sym)
 
     show_message('Please enter a valid operation from the choices above.')
