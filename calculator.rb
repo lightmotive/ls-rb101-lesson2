@@ -8,15 +8,19 @@
 # answer = Kernel.gets
 # Kernel.puts(answer)
 
-Kernel.puts('Welcome to Calculator!')
+def prompt(message)
+  Kernel.puts("=> #{message}")
+end
 
-Kernel.print("What's the first number? ")
+prompt('Welcome to Calculator!')
+
+prompt("What's the first number? ")
 number1 = Kernel.gets.strip.to_f
 
-Kernel.print("What's the second number? ")
+prompt("What's the second number? ")
 number2 = Kernel.gets.strip.to_f
 
-Kernel.print("What's the operation? 1) add 2) subtract 3) multiply 4) divide: ")
+prompt("What's the operation?\nadd: 1 | subtract: 2 | multiply: 3 | divide: 4")
 operator = Kernel.gets.strip
 
 result = case operator
