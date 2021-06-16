@@ -8,7 +8,7 @@
 # answer = Kernel.gets
 # Kernel.puts(answer)
 
-def prompt(message)
+def show_message(message)
   Kernel.puts("=> #{message}")
 end
 
@@ -19,22 +19,22 @@ rescue StandardError
 end
 
 def prompt_number(message)
-  prompt(message)
+  show_message(message)
 
   loop do
     number = Kernel.gets.strip
     break number.to_f if number?(number)
 
-    prompt("That's not a valid number. Please try again.")
+    show_message("That's not a valid number. Please try again.")
   end
 end
 
 def prompt_operation
-  prompt("What's the operation?\nadd: 1 | subtract: 2 | multiply: 3 | divide: 4")
+  show_message("What's the operation?\nadd: 1 | subtract: 2 | multiply: 3 | divide: 4")
   Kernel.gets.strip
 end
 
-prompt('Welcome to Calculator!')
+show_message('Welcome to Calculator!')
 
 number1 = prompt_number("What's the first number?")
 number2 = prompt_number("What's the second number?")
@@ -48,4 +48,4 @@ result = case prompt_operation
 
 result = result.to_i if result.modulo(1).zero?
 
-Kernel.puts("Result: #{result}")
+show_message("Result: #{result}")
