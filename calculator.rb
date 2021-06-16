@@ -45,7 +45,14 @@ end
 
 def prompt_operation
   show_message("What's the operation?\nadd: 1 | subtract: 2 | multiply: 3 | divide: 4")
-  Kernel.gets.strip
+
+  loop do
+    operation = Kernel.gets.strip
+
+    break operation if %w[1 2 3 4].include?(operation)
+
+    show_message('Please enter a valid operation: 1, 2, 3, or 4')
+  end
 end
 
 show_message('Welcome to Calculator!')
