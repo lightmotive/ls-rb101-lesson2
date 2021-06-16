@@ -44,7 +44,7 @@ def prompt_number(message)
 
   loop do
     number = Kernel.gets.strip
-    break number.to_f if number?(number)
+    break number if number?(number)
 
     show_message("That's not a valid number. Please try again.")
   end
@@ -66,9 +66,17 @@ def prompt_operation(operations)
   end
 end
 
-def calculate(number1, number2, operation)
+def string_to_number(string)
+  number = string.to_f
+  number == number.to_i ? number.to_i : number
+end
+
+def show_calculating_message(operation, number_string1, number_string2)
   puts "\n"
-  show_message("#{operation[1].capitalize} #{number1} and #{number2}...")
+  show_message("#{operation[1].capitalize} #{number_string1} and #{number_string2}...")
+end
+
+def calculate(number1, number2, operation)
   number1.send(operation[2], number2)
 end
 
@@ -76,10 +84,15 @@ show_message('Welcome to Calculator!')
 show_message("Hello, #{prompt_name} :-)\n\n")
 
 loop do
-  result = calculate(prompt_number("What's the first number?"),
-                     prompt_number("What's the second number?"),
-                     prompt_operation(operations))
-  result = result.to_i if result.modulo(1).zero?
+  input1 = prompt_number("What's the first number?")
+  input2 = prompt_number("What's the second number?")
+  operation = prompt_operation(operations)
+  show_calculating_message(operation, input1, input2)
+
+  result = calculate(string_to_number(input1),
+                     string_to_number(input2),
+                     operation)
+  result = result.to_i if result == result.to_i
 
   show_message("Result: #{result}\n\n")
   show_message("Type 'y' to perform another operation, or enter to quit.")
