@@ -12,13 +12,27 @@ def prompt(message)
   Kernel.puts("=> #{message}")
 end
 
+def number?(number)
+  true if Float(number)
+rescue StandardError
+  false
+end
+
+def get_number(message)
+  prompt(message)
+
+  loop do
+    number = Kernel.gets.strip
+    break number.to_f if number?(number)
+
+    prompt("That's not a valid number. Please try again.")
+  end
+end
+
 prompt('Welcome to Calculator!')
 
-prompt("What's the first number? ")
-number1 = Kernel.gets.strip.to_f
-
-prompt("What's the second number? ")
-number2 = Kernel.gets.strip.to_f
+number1 = get_number("What's the first number? ")
+number2 = get_number("What's the second number? ")
 
 prompt("What's the operation?\nadd: 1 | subtract: 2 | multiply: 3 | divide: 4")
 operator = Kernel.gets.strip
