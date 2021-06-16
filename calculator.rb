@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 # ask the user for two numbers
-# ask the user for the operation to perform on those numbers
-# perform the operation on the two numbers
+# ask the user for the prompt_operation to perform on those numbers
+# perform the prompt_operation on the two numbers
 # output the result
 
 # answer = Kernel.gets
@@ -18,7 +18,7 @@ rescue StandardError
   false
 end
 
-def get_number(message)
+def prompt_number(message)
   prompt(message)
 
   loop do
@@ -29,15 +29,17 @@ def get_number(message)
   end
 end
 
+def prompt_operation
+  prompt("What's the operation?\nadd: 1 | subtract: 2 | multiply: 3 | divide: 4")
+  Kernel.gets.strip
+end
+
 prompt('Welcome to Calculator!')
 
-number1 = get_number("What's the first number? ")
-number2 = get_number("What's the second number? ")
+number1 = prompt_number("What's the first number?")
+number2 = prompt_number("What's the second number?")
 
-prompt("What's the operation?\nadd: 1 | subtract: 2 | multiply: 3 | divide: 4")
-operator = Kernel.gets.strip
-
-result = case operator
+result = case prompt_operation
          when '1' then number1 + number2
          when '2' then number1 - number2
          when '3' then number1 * number2
