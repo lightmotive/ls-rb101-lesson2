@@ -12,6 +12,18 @@ def show_message(message)
   Kernel.puts("=> #{message}")
 end
 
+def prompt_name
+  show_message("What's your name?")
+
+  loop do
+    name = gets.strip
+
+    break name unless name.empty?
+
+    show_message('Please enter a name. You can use a fake one if you wish.')
+  end
+end
+
 def number?(number)
   true if Float(number)
 rescue StandardError
@@ -35,6 +47,7 @@ def prompt_operation
 end
 
 show_message('Welcome to Calculator!')
+show_message("Hello, #{prompt_name} :-)")
 
 loop do
   number1 = prompt_number("What's the first number?")
