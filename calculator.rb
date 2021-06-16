@@ -83,6 +83,6 @@ loop do
 
   show_message("Result: #{result}\n\n")
   show_message("Type 'y' to perform another operation, or enter to quit.")
-  continue = gets.chomp.strip.downcase
+  continue = gets.strip.downcase
   break if continue != 'y'
 end
