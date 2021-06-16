@@ -50,12 +50,12 @@ def prompt_number(message)
   end
 end
 
-def operation_prompt_message(operations)
+def prompt_operation_message(operations)
   String.new("What's the operation?") + operations.map { |k, v| "\n#{k}) #{v[0]}" }.reduce(&:+)
 end
 
 def prompt_operation(operations)
-  show_message(operation_prompt_message(operations))
+  show_message(prompt_operation_message(operations))
 
   loop do
     input = Kernel.gets.strip
