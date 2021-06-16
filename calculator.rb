@@ -43,8 +43,18 @@ def prompt_number(message)
   end
 end
 
+def operation_prompt_message
+  <<~MSG
+    What's the operation?
+    1) add
+    2) subtract
+    3) multiply
+    4) divide
+  MSG
+end
+
 def prompt_operation
-  show_message("What's the operation?\nadd: 1 | subtract: 2 | multiply: 3 | divide: 4")
+  show_message(operation_prompt_message)
 
   loop do
     operation = Kernel.gets.strip
@@ -56,7 +66,7 @@ def prompt_operation
 end
 
 show_message('Welcome to Calculator!')
-show_message("Hello, #{prompt_name} :-)")
+show_message("Hello, #{prompt_name} :-)\n\n")
 
 loop do
   number1 = prompt_number("What's the first number?")
@@ -71,8 +81,8 @@ loop do
 
   result = result.to_i if result.modulo(1).zero?
 
-  show_message("Result: #{result}")
-  show_message('Type "y" to perform another operation, or enter to quit.')
+  show_message("Result: #{result}\n\n")
+  show_message("Type 'y' to perform another operation, or enter to quit.")
   continue = gets.chomp.strip.downcase
   break if continue != 'y'
 end
