@@ -8,6 +8,13 @@
 # answer = Kernel.gets
 # Kernel.puts(answer)
 
+operations = {
+  '1': ['add', 'adding', :+],
+  '2': ['subtract', 'subtracting', :-],
+  '3': ['multiply', 'multiplying', :*],
+  '4': ['divide', 'dividing', :/]
+}
+
 def show_message(message)
   Kernel.puts("=> #{message}")
 end
@@ -43,35 +50,24 @@ def prompt_number(message)
   end
 end
 
-def operation_prompt_message
-  <<~MSG
-    What's the operation?
-    1) add
-    2) subtract
-    3) multiply
-    4) divide
-  MSG
+def operation_prompt_message(operations)
+  String.new("What's the operation?") + operations.map { |k, v| "\n#{k}) #{v[0]}" }.reduce(&:+)
 end
 
-def prompt_operation
-  show_message(operation_prompt_message)
+def prompt_operation(operations)
+  show_message(operation_prompt_message(operations))
 
   loop do
-    operation = Kernel.gets.strip
+    input = Kernel.gets.strip
 
-    break operation if %w[1 2 3 4].include?(operation)
+    break operations[input.to_sym] if operations.key?(input.to_sym)
 
-    show_message('Please enter a valid operation: 1, 2, 3, or 4')
+    show_message('Please enter a valid operation from the choices above.')
   end
 end
 
 def calculate(number1, number2, operation)
-  case operation
-  when '1' then number1 + number2
-  when '2' then number1 - number2
-  when '3' then number1 * number2
-  when '4' then number1 / number2
-  end
+  number1.send(operation[2], number2)
 end
 
 show_message('Welcome to Calculator!')
@@ -80,7 +76,7 @@ show_message("Hello, #{prompt_name} :-)\n\n")
 loop do
   result = calculate(prompt_number("What's the first number?"),
                      prompt_number("What's the second number?"),
-                     prompt_operation)
+                     prompt_operation(operations))
   result = result.to_i if result.modulo(1).zero?
 
   show_message("Result: #{result}\n\n")
