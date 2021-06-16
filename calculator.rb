@@ -26,8 +26,10 @@ end
 
 def number?(number)
   true if Float(number)
-rescue StandardError
+rescue ArgumentError
   false
+rescue StandardError => e
+  raise e
 end
 
 def prompt_number(message)
