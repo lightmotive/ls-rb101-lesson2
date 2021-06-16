@@ -36,16 +36,21 @@ end
 
 show_message('Welcome to Calculator!')
 
-number1 = prompt_number("What's the first number?")
-number2 = prompt_number("What's the second number?")
+loop do
+  number1 = prompt_number("What's the first number?")
+  number2 = prompt_number("What's the second number?")
 
-result = case prompt_operation
-         when '1' then number1 + number2
-         when '2' then number1 - number2
-         when '3' then number1 * number2
-         when '4' then number1 / number2
-         end
+  result = case prompt_operation
+           when '1' then number1 + number2
+           when '2' then number1 - number2
+           when '3' then number1 * number2
+           when '4' then number1 / number2
+           end
 
-result = result.to_i if result.modulo(1).zero?
+  result = result.to_i if result.modulo(1).zero?
 
-show_message("Result: #{result}")
+  show_message("Result: #{result}")
+  show_message('Type "y" to perform another operation, or enter to quit.')
+  continue = gets.chomp.strip.downcase
+  break if continue != 'y'
+end
