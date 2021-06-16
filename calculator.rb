@@ -65,20 +65,22 @@ def prompt_operation
   end
 end
 
+def calculate(number1, number2, operation)
+  case operation
+  when '1' then number1 + number2
+  when '2' then number1 - number2
+  when '3' then number1 * number2
+  when '4' then number1 / number2
+  end
+end
+
 show_message('Welcome to Calculator!')
 show_message("Hello, #{prompt_name} :-)\n\n")
 
 loop do
-  number1 = prompt_number("What's the first number?")
-  number2 = prompt_number("What's the second number?")
-
-  result = case prompt_operation
-           when '1' then number1 + number2
-           when '2' then number1 - number2
-           when '3' then number1 * number2
-           when '4' then number1 / number2
-           end
-
+  result = calculate(prompt_number("What's the first number?"),
+                     prompt_number("What's the second number?"),
+                     prompt_operation)
   result = result.to_i if result.modulo(1).zero?
 
   show_message("Result: #{result}\n\n")
