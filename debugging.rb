@@ -9,9 +9,9 @@ def make(new_car)
 end
 
 def model(new_car)
-  new_car.split(' ')[2]
+  new_car.split(' ')[1]
 end
 
 make, model = car('Ford Mustang')
-make == 'Ford'         # => true
-model.start_with?('M') # => NoMethodError: undefined method `start_with?' for nil:NilClass
+p make == 'Ford'         # => true
+p model.start_with?('M') # => NoMethodError: undefined method `start_with?' for nil:NilClass
