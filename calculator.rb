@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'bigdecimal'
+
 # ask the user for two numbers
 # ask the user for the prompt_operation to perform on those numbers
 # perform the prompt_operation on the two numbers
@@ -31,7 +33,7 @@ def prompt_name
 end
 
 def number?(number)
-  true if Float(number)
+  true if BigDecimal(number)
 rescue ArgumentError
   false
 rescue StandardError => e
@@ -65,8 +67,7 @@ def prompt_operation(operations)
 end
 
 def string_to_number(string)
-  number = string.to_f
-  number == number.to_i ? number.to_i : number
+  number = BigDecimal(string)
 end
 
 def show_calculating_message(operation, number_string1, number_string2)
@@ -76,6 +77,17 @@ end
 
 def calculate(number1, number2, operation)
   number1.send(operation[2], number2)
+end
+
+def simplify_result(result)
+  return result.to_i if result == result.to_i
+  # rubocop:disable Lint/FloatComparison
+  return result.to_f if result == result.to_f
+  # rubocop:enable Lint/FloatComparison
+
+  result
+rescue FloatDomainError
+  result
 end
 
 show_message('Welcome to Calculator!')
@@ -90,9 +102,8 @@ loop do
   result = calculate(string_to_number(input1),
                      string_to_number(input2),
                      operation)
-  result = result.to_i if result == result.to_i
 
-  show_message("Result: #{result}\n\n")
+  show_message("Result: #{simplify_result(result)}\n\n")
   show_message("Type 'y' to perform another operation, or enter to quit.")
   continue = gets.strip.downcase
   break if continue != 'y'
