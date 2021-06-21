@@ -68,7 +68,7 @@ def prompt_operation(operations)
 end
 
 def string_to_number(string)
-  number = BigDecimal(string)
+  BigDecimal(string)
 end
 
 def show_calculating_message(operation, number_string1, number_string2)
