@@ -1,20 +1,20 @@
 # frozen_string_literal: true
 
 require 'bigdecimal'
+require 'yaml'
 
 # ask the user for two numbers
 # ask the user for the prompt_operation to perform on those numbers
 # perform the prompt_operation on the two numbers
 # output the result
 
-# answer = Kernel.gets
-# Kernel.puts(answer)
+MESSAGES = YAML.load_file('calculator_messages.yml')
 
 operations = {
-  '1': ['add', 'adding', :+],
-  '2': ['subtract', 'subtracting', :-],
-  '3': ['multiply', 'multiplying', :*],
-  '4': ['divide', 'dividing', :/]
+  '1': [MESSAGES['operation_add'], MESSAGES['operation_verb_add'], :+],
+  '2': [MESSAGES['operation_subtract'], MESSAGES['operation_verb_subtract'], :-],
+  '3': [MESSAGES['operation_multiply'], MESSAGES['operation_verb_multiply'], :*],
+  '4': [MESSAGES['operation_divide'], MESSAGES['operation_verb_divide'], :/]
 }
 
 def show_message(message, separate: false)
@@ -23,13 +23,13 @@ def show_message(message, separate: false)
 end
 
 def prompt_name
-  show_message("What's your name?")
+  show_message(MESSAGES['name_prompt'])
 
   loop do
     name = gets.strip
     break name unless name.empty?
 
-    show_message('Please enter a name. You can use a fake one if you wish.')
+    show_message(MESSAGES['name_prompt_clarify'])
   end
 end
 
@@ -48,12 +48,12 @@ def prompt_number(message)
     number = Kernel.gets.strip
     break number if number?(number)
 
-    show_message("That's not a valid number. Please try again.")
+    show_message(MESSAGES['number_prompt_clarify'])
   end
 end
 
 def prompt_operation_message(operations)
-  String.new("What's the operation?") + operations.map { |k, v| "\n#{k}) #{v[0]}" }.reduce(&:+)
+  String.new(MESSAGES['operation_prompt']) + operations.map { |k, v| "\n#{k}) #{v[0]}" }.reduce(&:+)
 end
 
 def prompt_operation(operations)
@@ -63,7 +63,7 @@ def prompt_operation(operations)
     input = Kernel.gets.strip
     break operations[input.to_sym] if operations.key?(input.to_sym)
 
-    show_message('Please enter a valid operation from the choices above.')
+    show_message(MESSAGES['operation_prompt_clarify'])
   end
 end
 
@@ -90,14 +90,15 @@ rescue FloatDomainError
   result
 end
 
-show_message('Welcome to Calculator!')
+show_message(MESSAGES['welcome_message'])
 name = prompt_name
-show_message("Hello, #{name} :-)", separate: true)
+show_message("#{MESSAGES['greeting_prefix']} #{name} #{MESSAGES['greeting_suffix']}", separate: true)
+# TODO: add a templating system to increase greeting flexibility.
 print "\n"
 
 loop do
-  input1 = prompt_number("What's the first number?")
-  input2 = prompt_number("What's the second number?")
+  input1 = prompt_number(MESSAGES['number1_prompt'])
+  input2 = prompt_number(MESSAGES['number2_prompt'])
   operation = prompt_operation(operations)
   show_calculating_message(operation, input1, input2)
 
@@ -105,8 +106,8 @@ loop do
                      string_to_number(input2),
                      operation)
 
-  show_message("Result: #{simplify_result(result)}", separate: true)
-  show_message("Enter 'y' to perform another operation, or hit Enter to quit.")
+  show_message("#{MESSAGES['message_result_header']} #{simplify_result(result)}", separate: true)
+  show_message(MESSAGES['continue_prompt'])
   continue = gets.strip.downcase
-  break if continue != 'y'
+  break if continue != MESSAGES['continue_prompt_char_yes']
 end
