@@ -8,7 +8,9 @@ require 'yaml'
 # perform the prompt_operation on the two numbers
 # output the result
 
-MESSAGES = YAML.load_file('calculator_messages.yml')
+language = 'en-US'
+# TODO: Add dynamic language selection here when needed
+MESSAGES = YAML.load_file("calculator_messages_#{language}.yml")
 
 operations = {
   '1': [MESSAGES['operation_add'], MESSAGES['operation_verb_add'], :+],
