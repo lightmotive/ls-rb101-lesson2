@@ -17,7 +17,8 @@ operations = {
   '4': ['divide', 'dividing', :/]
 }
 
-def show_message(message)
+def show_message(message, separate: false)
+  print "\n" if separate
   Kernel.puts("=> #{message}")
 end
 
@@ -71,7 +72,6 @@ def string_to_number(string)
 end
 
 def show_calculating_message(operation, number_string1, number_string2)
-  puts "\n"
   show_message("#{operation[1].capitalize} #{number_string1} and #{number_string2}...")
 end
 
@@ -91,7 +91,9 @@ rescue FloatDomainError
 end
 
 show_message('Welcome to Calculator!')
-show_message("Hello, #{prompt_name} :-)\n\n")
+name = prompt_name
+show_message("Hello, #{name} :-)", separate: true)
+print "\n"
 
 loop do
   input1 = prompt_number("What's the first number?")
@@ -103,8 +105,8 @@ loop do
                      string_to_number(input2),
                      operation)
 
-  show_message("Result: #{simplify_result(result)}\n\n")
-  show_message("Type 'y' to perform another operation, or enter to quit.")
+  show_message("Result: #{simplify_result(result)}", separate: true)
+  show_message("Enter 'y' to perform another operation, or hit Enter to quit.")
   continue = gets.strip.downcase
   break if continue != 'y'
 end
