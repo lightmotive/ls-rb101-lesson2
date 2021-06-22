@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'yaml'
+
 # 1. Understand the Problem
 # -------------------------
 # -  Inputs: loan amount, APR, loan duration
@@ -56,7 +58,7 @@
 # CALCULATE period_interest_rate by dividing APR by the number of compounding terms per year.
 #   Use a default 12 periods per year for now.
 # CALCULATE loan_duration_months as (years * 12) + months.
-# CALCULATE monthly_payment using the provided formula and a design that allows substituting other formulas.
+# CALCULATE monthly_payment using the provided formula and a design that allows substituting other formulas (hash).
 #
 # SHOW loan_duration_months and monthly_payment
 #
