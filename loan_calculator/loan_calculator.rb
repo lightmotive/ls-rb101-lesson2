@@ -82,21 +82,49 @@ def string_to_float(string)
   Float(string)
 end
 
-def prompt_integer(prompt)
-  show_prompt(prompt)
+def numeric_valid?(numeric, require_positive, require_zero_plus)
+  (require_positive ? numeric.positive? : true) &&
+    (require_zero_plus ? numeric.zero? || numeric.positive? : true)
+end
 
+def numeric_invalid_explanation(numeric, require_positive, require_zero_plus)
+  message = String.new
+
+  message += MESSAGES['number_input_clarify_positive'] if require_positive ? numeric.positive? : false
+  if require_zero_plus ? numeric.zero? || numeric.positive? : false
+    message += "\n" if message.length.positive?
+    message += MESSAGES['number_input_clarify_zero_plus']
+  end
+
+  message
+end
+
+def numeric_valid_with_explanation?(numeric, require_positive, require_zero_plus)
+  return true if numeric_valid?(numeric, require_positive, require_zero_plus)
+
+  puts numeric_invalid_explanation(numeric, require_positive, require_zero_plus)
+  false
+end
+
+def prompt_integer(prompt, require_positive: false, require_zero_plus: false)
+  show_prompt(prompt)
   loop do
-    break string_to_integer(gets.strip)
+    integer = string_to_integer(gets.strip)
+    next unless numeric_valid_with_explanation?(integer, require_positive, require_zero_plus)
+
+    break integer
   rescue StandardError
     show_prompt("#{MESSAGES['entry_invalid_message']} #{prompt}")
   end
 end
 
-def prompt_float(prompt)
+def prompt_float(prompt, require_positive: false, require_zero_plus: false)
   show_prompt(prompt)
-
   loop do
-    break string_to_float(gets.strip)
+    float = string_to_float(gets.strip)
+    next unless numeric_valid_with_explanation?(float, require_positive, require_zero_plus)
+
+    break float
   rescue StandardError
     show_prompt("#{MESSAGES['entry_invalid_message']} #{prompt}")
   end
@@ -139,7 +167,11 @@ compound_methods = {
   monthly: {
     option_display: MESSAGES['compound_method_monthly_display'],
     duration_prompt: -> { prompt_loan_duration_months },
-    interest_rate_prompt: -> { prompt_float(MESSAGES['compound_method_monthly_prompt_interest_rate']) / 100 },
+    interest_rate_prompt: lambda do
+      rate = prompt_float(MESSAGES['compound_method_monthly_prompt_interest_rate'], require_zero_plus: true) / 100
+      puts "Got it, #{rate * 100}%"
+      rate
+    end,
     payment: lambda do |principal, interest_rate, duration|
       return principal / duration if interest_rate.zero?
 
@@ -157,7 +189,7 @@ compound_methods = {
 puts MESSAGES['welcome_message']
 print "\n"
 
-loan_amount = prompt_float(MESSAGES['loan_amount_prompt'])
+loan_amount = prompt_float(MESSAGES['loan_amount_prompt'], require_positive: true)
 
 # User would select compound method here
 method = compound_methods[:monthly]
