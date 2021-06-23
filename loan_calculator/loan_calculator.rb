@@ -179,9 +179,9 @@ compound_methods = {
       principal * (monthly_interest_rate / (1 - (1 + monthly_interest_rate)**-duration))
     end,
     show_result: lambda do |principal, duration, payment|
-      puts "#{duration} monthly payments of $#{format('%.2f', payment)}"
+      puts "#{duration} #{MESSAGES['monthly_payments_of']} #{MESSAGES['currency_symbol']}#{format('%.2f', payment)}"
       total_interest = (payment * duration) - principal
-      puts "Total interest: $#{format('%.2f', total_interest)}"
+      puts "#{MESSAGES['total_interest_prefix']} #{MESSAGES['currency_symbol']}#{format('%.2f', total_interest)}"
     end
   }
 }
@@ -189,15 +189,19 @@ compound_methods = {
 puts MESSAGES['welcome_message']
 print "\n"
 
-loan_amount = prompt_float(MESSAGES['loan_amount_prompt'], require_positive: true)
+loop do
+  loan_amount = prompt_float(MESSAGES['loan_amount_prompt'], require_positive: true)
 
-# User would select compound method here
-method = compound_methods[:monthly]
+  # User would select compound method here
+  method = compound_methods[:monthly]
 
-interest_rate = method[:interest_rate_prompt].call
-duration = method[:duration_prompt].call
-payment = method[:payment].call(loan_amount, interest_rate, duration)
+  interest_rate = method[:interest_rate_prompt].call
+  duration = method[:duration_prompt].call
+  payment = method[:payment].call(loan_amount, interest_rate, duration)
 
-print "\n"
-puts '--Payments and Interest--'
-method[:show_result].call(loan_amount, duration, payment)
+  print "\n"
+  puts MESSAGES['result_header']
+  method[:show_result].call(loan_amount, duration, payment)
+
+  show_prompt
+end
