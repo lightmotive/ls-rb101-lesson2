@@ -1,0 +1,6 @@
+welcome_message: "Welcome to Loan Calculator"
+entry_invalid_message: "That entry wasn't valid, please try again."
+loan_amount_prompt: "What's the loan amount?"
+loan_duration_prompt: "What's the loan duration? Please type years, months, or both like this: 5y | 6m | 5y 6m"
+compound_method_monthly_display: "Monthly (APR)"
+compound_method_monthly_prompt_interest_rate: "What's the annual percentage rate (APR)? Please type the percentage value, e.g., 6.25"
