@@ -203,5 +203,6 @@ loop do
   puts MESSAGES['result_header']
   method[:show_result].call(loan_amount, duration, payment)
 
-  show_prompt
+  show_prompt(MESSAGES['continue_prompt'])
+  break unless gets.strip.downcase.start_with?('y')
 end
