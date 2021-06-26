@@ -8,7 +8,8 @@
   Basically, divide the APR by 12
 
 ### **Implicit Requirements:**
-None
+- User must enter a positive number for the loan amount.
+- User must enter a value greater than or equal to zero for the interest rate.
 
 ### **Clarifying Questions:**
 1. Will the user enter the loan input in years, or years and months?
@@ -41,27 +42,181 @@ Use a YAML configuration file for messages.
 
 ## 4. Algorithm
 ---
+
+### Sub-procedure: numeric_valid?
+```
+Given a numeric, require_positive, and require_zero_plus
+
+SET require_positive_valid to true
+IF require_positive
+  SET require_positive_valid to false
+  IF numeric is positive
+    SET require_positive_valid to true
+  ENDIF
+ENDIF
+
+SET require_zero_plus_valid to true
+IF require_zero_plus
+  SET require_zero_plus_valid to false
+  IF numeric is zero or greater
+    SET require_zero_plus_valid to true
+  ENDIF
+ENDIF
+
+IF numeric is valid for all options
+  RETURN true
+ELSE
+  RETURN false
+ENDIF
+```
+
+### Sub-procedure: validate_numeric
+```
+Given a numeric, require_positive, and require_zero_plus
+
+SET numeric_is_valid
+  CALL numeric_valid? with given parameters
+
+IF numeric_is_valid
+  RETURN nil
+ELSE
+  THROW InvalidNumericError that includes specific error message(s)
+ENDIF
+```
+
+### Sub-procedure: prompt_numeric
+```
+Given a prompt message, a numeric conversion function, require_positive (optional), and require_zero_plus (optional)
+
+SHOW prompt message
+
+REPEAT
+  BEGIN
+    GET input as string
+    CONVERT input to numeric
+      CALL numeric conversion function with input
+    CALL validate_numeric with numeric and require... options
+    RETURN numeric
+  EXCEPTION
+    WHEN InvalidNumericError
+      SHOW the specific error message(s) followed by the prompt.
+    WHEN any other error
+      SHOW friendly error message like "That wasn't a valid number." followed by the prompt.
+  END
+UNTIL input is a valid numeric value according to conversion function and options
+```
+
+### Sub-procedure: parse_loan_duration_input
+```
+Given any input string
+
+PARSE the digits before the letters 'y' for years and 'm' for months using a regular expression
+RETURN years and months as an array
+```
+
+### Sub-procedure: prompt_loan_duration
+```
+SHOW prompt message
+
+REPEAT
+
+  GET input as a string like "5y 6m" or "5y" or "6m"
+  SET years and months
+    CALL parse_loan_duration_input with input
+  RETURN total months: years * 12 + months
+
+UNTIL years and/or months is not zero
+```
+
+### Sub-procedure: method.interest_rate_prompt
+#### Interface
+```
+- Output: float between 0 and 1
+```
+#### Monthly Compounding Implementation
+```
+GET interest rate (APR) as a percentage, e.g., "6.5%" and convert to a number
+  CALL prompt_numeric that prompts and returns a float
+SHOW entered interest rate for user confirmation
+RETURN interest rate / 100
+```
+
+### Sub-procedure: method.duration_prompt
+#### Interface
+```
+Anything
+```
+#### Monthly Compounding Implementation
+```
+CALL prompt_loan_duration
+```
+
+### Sub-procedure: method.payment
+#### Interface
+```
+- Input: principal as Float, interest_rate as Float, duration as Integer
+- Output: Float
+```
+#### Monthly Compounding Implementation
+```
+Given principal, interest_rate as an APR, and duration as number of months
+
+IF interest_rate is 0
+  RETURN principal / duration
+ENDIF
+
+CALCULATE monthly_interest_rate as interest_rate / 12
+CALCULATE payment with this formula: principal * (monthly_interest_rate / (1 - (1 + monthly_interest_rate)^-duration))
+
+RETURN payment
+```
+
+### Sub-procedure: method.show_result
+#### Interface
+```
+- Input: principal, duration, payment
+- Output: PRINT to screen or anything else that shows a result to the user
+```
+#### Monthly Compounding Implementation
+```
+Given principal, duration as number of months, and the calculated payment
+
+PRINT number of monthly payments and the payment amount
+CALCULATE total_interest as (payment * duration) - principal,
+PRINT total interest
+```
+
+### Main program
 ```
 START
 
 PRINT a welcome prompt
 
-GET loan_amount as a float.
-GET APR expressed as a percentage (float), e.g., 6.25.
-GET loan_duration_years as an integer.
-GET loan_duration_months as an integer.
+REPEAT
+  GET loan_amount as a float
+    CALL prompt_float with message and require a positive number
 
-CALCULATE monthly_interest_rate by dividing APR by the number of compounding terms per year.
-  Use a default 12 periods per year for now.
-CALCULATE loan_duration_months as (years * 12) + months.
-CALCULATE monthly_payment using the provided formula and a design that allows substituting other formulas (hash).
+  SET method from COMPOUND_METHODS constant
+    Can swap different compount method interfaces here in the future
 
-SHOW loan_duration_months and monthly_payment
+  GET interest_rate expressed as a percentage (float), e.g., 6.25
+    CALL interest_rate_prompt on method
+  GET duration as a number of months (integer)
+    CALL duration_prompt on method to
+  CALCULATE payment
+    CALL payment on method
+
+  SHOW result for selected method
+    CALL show_result on method with loan_amount, interest_rate, and duration
+
+  SHOW prompt asking if user wants to continue
+  GET another_calculation as text input
+UNTIL another_calculation is anything other than a string starting with 'y'
 
 END
 ```
 
-## 5. Code - learning experience
+## 5. Code - learning experience and thoughts
 Learning experience: by not following the planned logic, I hack-n-slashed in search of a more elegant and robust solution. That took more time than expected. Next time, I'll keep it simple until better functionality is needed.
 
 In this case, I learned more about working with lambdas and RegEx in Ruby while creating a more flexible program.
