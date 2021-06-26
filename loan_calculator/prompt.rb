@@ -2,6 +2,7 @@
 
 require_relative 'localization'
 require_relative 'convert_string'
+require_relative 'invalid_numeric_error'
 
 def show_prompt(message)
   puts "=> #{message}"
@@ -12,32 +13,34 @@ def numeric_valid?(numeric, require_positive, require_zero_plus)
     (require_zero_plus ? numeric.zero? || numeric.positive? : true)
 end
 
-def numeric_invalid_explanation(numeric, require_positive, require_zero_plus)
+def invalid_numeric_message(numeric, require_positive, require_zero_plus)
   message = String.new
 
-  message += MESSAGES['number_input_clarify_positive'] if require_positive ? numeric.positive? : false
-  if require_zero_plus ? numeric.zero? || numeric.positive? : false
+  message += MESSAGES['number_input_clarify_positive'] unless require_positive ? numeric.positive? : true
+  unless require_zero_plus ? numeric.zero? || numeric.positive? : true
     message += "\n" if message.length.positive?
     message += MESSAGES['number_input_clarify_zero_plus']
   end
-
   message
 end
 
-def numeric_valid_with_explanation?(numeric, require_positive, require_zero_plus)
-  return true if numeric_valid?(numeric, require_positive, require_zero_plus)
+def validate_numeric(numeric, require_positive, require_zero_plus)
+  unless numeric_valid?(numeric, require_positive, require_zero_plus)
+    raise InvalidNumericError,
+          invalid_numeric_message(numeric, require_positive, require_zero_plus)
+  end
 
-  puts numeric_invalid_explanation(numeric, require_positive, require_zero_plus)
-  false
+  nil
 end
 
 def prompt_numeric(prompt, convert, require_positive: false, require_zero_plus: false)
   show_prompt(prompt)
   loop do
     float = convert.call(gets.strip)
-    next unless numeric_valid_with_explanation?(float, require_positive, require_zero_plus)
-
+    validate_numeric(float, require_positive, require_zero_plus)
     break float
+  rescue InvalidNumericError => e
+    show_prompt("#{e.message} #{prompt}")
   rescue StandardError
     show_prompt("#{MESSAGES['entry_invalid_message']} #{prompt}")
   end

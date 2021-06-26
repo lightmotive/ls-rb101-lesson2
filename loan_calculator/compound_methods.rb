@@ -11,7 +11,7 @@ COMPOUND_METHODS =
       interest_rate_prompt: lambda do
         rate = prompt_float(MESSAGES['compound_method_monthly_prompt_interest_rate'],
                             require_zero_plus: true) / 100
-        puts "Got it, #{rate * 100}%"
+        puts "#{MESSAGES['interest_rate_confirmation_message_prefix']}#{rate * 100}% #{MESSAGES['APR_message']}"
         rate
       end,
       payment: lambda do |principal, interest_rate, duration|
