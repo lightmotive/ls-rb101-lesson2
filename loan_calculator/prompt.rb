@@ -60,8 +60,8 @@ end
 
 # Return [years, months] with input like 5y 6m
 def parse_loan_duration_input(input)
-  years_match = /(\d+)y/i.match(input)
-  months_match = /(\d+)m/i.match(input)
+  years_match = /(\d+)\s*y/i.match(input)
+  months_match = /(\d+)\s*m/i.match(input)
 
   [years_match.nil? ? 0 : ConvertString.to_integer.call(years_match[1]),
    months_match.nil? ? 0 : ConvertString.to_integer.call(months_match[1])]
