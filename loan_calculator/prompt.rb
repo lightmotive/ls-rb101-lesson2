@@ -1,17 +1,10 @@
 # frozen_string_literal: true
 
 require_relative 'localization'
+require_relative 'convert_string'
 
 def show_prompt(message)
   puts "=> #{message}"
-end
-
-def string_to_integer(string)
-  Integer(string)
-end
-
-def string_to_float(string)
-  Float(string)
 end
 
 def numeric_valid?(numeric, require_positive, require_zero_plus)
@@ -38,22 +31,10 @@ def numeric_valid_with_explanation?(numeric, require_positive, require_zero_plus
   false
 end
 
-def prompt_integer(prompt, require_positive: false, require_zero_plus: false)
+def prompt_numeric(prompt, convert, require_positive: false, require_zero_plus: false)
   show_prompt(prompt)
   loop do
-    integer = string_to_integer(gets.strip)
-    next unless numeric_valid_with_explanation?(integer, require_positive, require_zero_plus)
-
-    break integer
-  rescue StandardError
-    show_prompt("#{MESSAGES['entry_invalid_message']} #{prompt}")
-  end
-end
-
-def prompt_float(prompt, require_positive: false, require_zero_plus: false)
-  show_prompt(prompt)
-  loop do
-    float = string_to_float(gets.strip)
+    float = convert.call(gets.strip)
     next unless numeric_valid_with_explanation?(float, require_positive, require_zero_plus)
 
     break float
@@ -62,13 +43,25 @@ def prompt_float(prompt, require_positive: false, require_zero_plus: false)
   end
 end
 
+def prompt_integer(prompt, require_positive: false, require_zero_plus: false)
+  prompt_numeric(prompt, ConvertString.to_integer,
+                 require_positive: require_positive,
+                 require_zero_plus: require_zero_plus)
+end
+
+def prompt_float(prompt, require_positive: false, require_zero_plus: false)
+  prompt_numeric(prompt, ConvertString.to_float,
+                 require_positive: require_positive,
+                 require_zero_plus: require_zero_plus)
+end
+
 # Return [years, months] with input like 5y 6m
 def duration_input_to_months(input)
   years_match = /(\d+)y/.match(input)
   months_match = /(\d+)m/.match(input)
 
-  [years_match.nil? ? 0 : string_to_integer(years_match[1]),
-   months_match.nil? ? 0 : string_to_integer(months_match[1])]
+  [years_match.nil? ? 0 : ConvertString.to_integer.call(years_match[1]),
+   months_match.nil? ? 0 : ConvertString.to_integer.call(months_match[1])]
 end
 
 def prompt_loan_duration_months
