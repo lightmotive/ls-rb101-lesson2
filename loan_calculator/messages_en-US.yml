@@ -1,5 +1,5 @@
 welcome_message: "Welcome to Loan Calculator"
-entry_invalid_message: "Please enter a valid number."
+entry_invalid_message: "Your entry was invalid."
 loan_amount_prompt: "What's the loan amount?"
 loan_duration_prompt: "What's the loan duration? Please type years, months, or both like this: 5y | 6m | 5y 6m"
 compound_method_monthly_display: "Monthly (APR)"
