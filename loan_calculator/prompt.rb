@@ -59,7 +59,7 @@ def prompt_float(prompt, require_positive: false, require_zero_plus: false)
 end
 
 # Return [years, months] with input like 5y 6m
-def duration_input_to_months(input)
+def parse_duration_input(input)
   years_match = /(\d+)y/.match(input)
   months_match = /(\d+)m/.match(input)
 
@@ -73,7 +73,7 @@ def prompt_loan_duration_months
 
   loop do
     input = gets.strip
-    years, months = duration_input_to_months(input)
+    years, months = parse_duration_input(input)
     break (years * 12) + months unless years.zero? && months.zero?
 
     show_prompt("#{MESSAGES['entry_invalid_message']} #{prompt}")
