@@ -70,7 +70,7 @@ ELSE
 ENDIF
 ```
 
-### Sub-procedure: validate_numeric
+### Sub-procedure: numeric_validate
 ```
 Given a numeric, require_positive, and require_zero_plus
 
@@ -95,7 +95,7 @@ REPEAT
     GET input as string
     CONVERT input to numeric
       CALL numeric conversion function with input
-    CALL validate_numeric with numeric and require... options
+    CALL numeric_validate with numeric and require... options
     RETURN numeric
   EXCEPTION
     WHEN NumericInvalidError

@@ -24,7 +24,7 @@ def numeric_invalid_message(numeric, require_positive, require_zero_plus)
   message
 end
 
-def validate_numeric(numeric, require_positive, require_zero_plus)
+def numeric_validate(numeric, require_positive, require_zero_plus)
   unless numeric_valid?(numeric, require_positive, require_zero_plus)
     raise NumericInvalidError,
           numeric_invalid_message(numeric, require_positive, require_zero_plus)
@@ -37,7 +37,7 @@ def numeric_prompt(prompt, convert, require_positive: false, require_zero_plus: 
   prompt(prompt)
   loop do
     float = convert.call(gets.strip)
-    validate_numeric(float, require_positive, require_zero_plus)
+    numeric_validate(float, require_positive, require_zero_plus)
     break float
   rescue NumericInvalidError => e
     prompt("#{e.message} #{prompt}")
