@@ -11,7 +11,7 @@ COMPOUND_METHODS =
       interest_rate_prompt: lambda do
         rate = prompt_float(MESSAGES['compound_method_monthly_prompt_interest_rate'],
                             require_zero_plus: true) / 100
-        puts "#{MESSAGES['interest_rate_confirmation_message_prefix']}#{rate * 100}% #{MESSAGES['APR_message']}"
+        puts format(MESSAGES['interest_rate_APR_confirmation'], APR: rate * 100)
         rate
       end,
       payment: lambda do |principal, interest_rate, duration|
@@ -21,9 +21,9 @@ COMPOUND_METHODS =
         principal * (monthly_interest_rate / (1 - (1 + monthly_interest_rate)**-duration))
       end,
       show_result: lambda do |principal, duration, payment|
-        puts "#{duration} #{MESSAGES['monthly_payments_of']} #{MESSAGES['currency_symbol']}#{format('%.2f', payment)}"
+        puts format(MESSAGES['monthly_payments_display'], payment_count: duration, payment: payment)
         total_interest = (payment * duration) - principal
-        puts "#{MESSAGES['total_interest_prefix']} #{MESSAGES['currency_symbol']}#{format('%.2f', total_interest)}"
+        puts format(MESSAGES['total_interest_display'], interest: total_interest)
       end
     }
   }.freeze
