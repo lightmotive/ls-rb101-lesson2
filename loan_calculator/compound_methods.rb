@@ -7,9 +7,9 @@ COMPOUND_METHODS =
   {
     monthly: {
       option_display: MESSAGES['compound_method_monthly_display'],
-      duration_prompt: -> { prompt_loan_duration },
+      duration_prompt: -> { loan_duration_prompt },
       interest_rate_prompt: lambda do
-        rate = prompt_float(MESSAGES['compound_method_monthly_prompt_interest_rate'],
+        rate = float_prompt(MESSAGES['compound_method_monthly_prompt_interest_rate'],
                             require_zero_plus: true) / 100
         puts format(MESSAGES['interest_rate_APR_confirmation'], APR: rate * 100)
         rate

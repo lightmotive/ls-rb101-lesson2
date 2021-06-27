@@ -80,11 +80,11 @@ SET numeric_is_valid
 IF numeric_is_valid
   RETURN nil
 ELSE
-  THROW InvalidNumericError that includes specific error message(s)
+  THROW NumericInvalidError that includes specific error message(s)
 ENDIF
 ```
 
-### Sub-procedure: prompt_numeric
+### Sub-procedure: numeric_prompt
 ```
 Given a prompt message, a numeric conversion function, require_positive (optional), and require_zero_plus (optional)
 
@@ -98,7 +98,7 @@ REPEAT
     CALL validate_numeric with numeric and require... options
     RETURN numeric
   EXCEPTION
-    WHEN InvalidNumericError
+    WHEN NumericInvalidError
       SHOW the specific error message(s) followed by the prompt.
     WHEN any other error
       SHOW friendly error message like "That wasn't a valid number." followed by the prompt.
@@ -106,7 +106,7 @@ REPEAT
 UNTIL input is a valid numeric value according to conversion function and options
 ```
 
-### Sub-procedure: parse_loan_duration_input
+### Sub-procedure: loan_duration_input_parse
 ```
 Given any input string
 
@@ -114,7 +114,7 @@ PARSE the digits before the letters 'y' for years and 'm' for months using a reg
 RETURN years and months as an array
 ```
 
-### Sub-procedure: prompt_loan_duration
+### Sub-procedure: loan_duration_prompt
 ```
 SHOW prompt message
 
@@ -122,7 +122,7 @@ REPEAT
 
   GET input as a string like "5y 6m" or "5y" or "6m"
   SET years and months
-    CALL parse_loan_duration_input with input
+    CALL loan_duration_input_parse with input
   RETURN total months: years * 12 + months
 
 UNTIL years and/or months is not zero
@@ -136,7 +136,7 @@ UNTIL years and/or months is not zero
 #### Monthly Compounding Implementation
 ```
 GET interest rate (APR) as a percentage, e.g., "6.5%" and convert to a number
-  CALL prompt_numeric that prompts and returns a float
+  CALL numeric_prompt that prompts and returns a float
 SHOW entered interest rate for user confirmation
 RETURN interest rate / 100
 ```
@@ -148,7 +148,7 @@ Anything
 ```
 #### Monthly Compounding Implementation
 ```
-CALL prompt_loan_duration
+CALL loan_duration_prompt
 ```
 
 ### Sub-procedure: method.payment
@@ -194,7 +194,7 @@ PRINT a welcome prompt
 
 REPEAT
   GET loan_amount as a float
-    CALL prompt_float with message and require a positive number
+    CALL float_prompt with message and require a positive number
 
   SET method from COMPOUND_METHODS constant
     Can swap different compount method interfaces here in the future

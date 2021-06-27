@@ -11,7 +11,7 @@ puts MESSAGES['welcome_message']
 print "\n"
 
 loop do
-  loan_amount = prompt_float(MESSAGES['loan_amount_prompt'], require_positive: true)
+  loan_amount = float_prompt(MESSAGES['loan_amount_prompt'], require_positive: true)
 
   # User would select compound method here
   method = COMPOUND_METHODS[:monthly]
@@ -24,6 +24,6 @@ loop do
   puts MESSAGES['result_header']
   method[:show_result].call(loan_amount, duration, payment)
 
-  show_prompt(MESSAGES['continue_prompt'])
+  prompt(MESSAGES['continue_prompt'])
   break unless gets.strip.downcase.start_with?('y')
 end
