@@ -8,6 +8,26 @@ def prompt(message)
   puts "=> #{message}"
 end
 
+# validate must raise an exception if input is not valid
+# Returns the value from get_input--if it needs to be converted, do that here
+def prompt_until_valid(
+  prompt,
+  get_input: -> { gets.chomp },
+  convert_input: ->(input) { input },
+  validate: ->(_value) { nil }
+)
+  prompt(prompt)
+  loop do
+    value = convert_input.call(get_input.call)
+    validate.call(value)
+    break value
+  rescue NumericInvalidError => e
+    prompt("#{e.message} #{prompt}")
+  rescue StandardError
+    prompt("#{MESSAGES['input_invalid_message']} #{prompt}")
+  end
+end
+
 def numeric_valid?(numeric, require_positive, require_zero_plus)
   (require_positive ? numeric.positive? : true) &&
     (require_zero_plus ? numeric.zero? || numeric.positive? : true)
@@ -24,26 +44,16 @@ def numeric_invalid_message(numeric, require_positive, require_zero_plus)
   message
 end
 
-def numeric_validate(numeric, require_positive, require_zero_plus)
-  unless numeric_valid?(numeric, require_positive, require_zero_plus)
-    raise NumericInvalidError,
-          numeric_invalid_message(numeric, require_positive, require_zero_plus)
-  end
-
-  nil
-end
-
 def numeric_prompt(prompt, convert, require_positive: false, require_zero_plus: false)
-  prompt(prompt)
-  loop do
-    numeric = convert.call(gets.strip)
-    numeric_validate(numeric, require_positive, require_zero_plus)
-    break numeric
-  rescue NumericInvalidError => e
-    prompt("#{e.message} #{prompt}")
-  rescue StandardError
-    prompt("#{MESSAGES['entry_invalid_message']} #{prompt}")
-  end
+  prompt_until_valid(
+    prompt,
+    get_input: -> { gets.strip }, convert_input: ->(input) { convert.call(input) },
+    validate: lambda do |numeric|
+      unless numeric_valid?(numeric, require_positive, require_zero_plus)
+        raise NumericInvalidError, numeric_invalid_message(numeric, require_positive, require_zero_plus)
+      end
+    end
+  )
 end
 
 def integer_prompt(prompt, require_positive: false, require_zero_plus: false)
@@ -68,16 +78,14 @@ def loan_duration_input_parse(input)
 end
 
 def loan_duration_prompt
-  prompt = MESSAGES['loan_duration_prompt']
-  prompt(prompt)
-
-  loop do
-    input = gets.strip
-    years, months = loan_duration_input_parse(input)
-    break (years * 12) + months unless years.zero? && months.zero?
-
-    prompt("#{MESSAGES['entry_invalid_message']} #{prompt}")
-  rescue StandardError
-    prompt("#{MESSAGES['entry_invalid_message']} #{prompt}")
-  end
+  prompt_until_valid(
+    MESSAGES['loan_duration_prompt'],
+    get_input: -> { gets.strip }, convert_input: lambda do |input|
+      years, months = loan_duration_input_parse(input)
+      (years * 12) + months
+    end,
+    validate: lambda do |months|
+      raise StandardError if months.zero?
+    end
+  )
 end
