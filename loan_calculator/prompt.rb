@@ -36,9 +36,9 @@ end
 def numeric_prompt(prompt, convert, require_positive: false, require_zero_plus: false)
   prompt(prompt)
   loop do
-    float = convert.call(gets.strip)
-    numeric_validate(float, require_positive, require_zero_plus)
-    break float
+    numeric = convert.call(gets.strip)
+    numeric_validate(numeric, require_positive, require_zero_plus)
+    break numeric
   rescue NumericInvalidError => e
     prompt("#{e.message} #{prompt}")
   rescue StandardError
