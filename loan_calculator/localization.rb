@@ -3,4 +3,4 @@
 require 'yaml'
 
 language = 'en-US'
-MESSAGES = YAML.load_file("messages_#{language}.yml")
+MESSAGES = YAML.load_file("messages_#{language}.yml").freeze
