@@ -131,12 +131,12 @@ UNTIL years and/or months is not zero
 ### Sub-procedure: method.interest_rate_prompt
 #### Interface
 ```
-- Output: float between 0 and 1
+- Output: Big Decimal between 0 and 1
 ```
 #### Monthly Compounding Implementation
 ```
 GET interest rate (APR) as a percentage, e.g., "6.5%" and convert to a number
-  CALL numeric_prompt that prompts and returns a float
+  CALL numeric_prompt that prompts and returns a Big Decimal
 SHOW entered interest rate for user confirmation
 RETURN interest rate / 100
 ```
@@ -154,7 +154,7 @@ CALL loan_duration_prompt
 ### Sub-procedure: method.payment
 #### Interface
 ```
-- Input: principal as Float, interest_rate as Float, duration as Integer
+- Input: principal as Big Decimal, interest_rate as Big Decimal, duration as Integer
 - Output: Float
 ```
 #### Monthly Compounding Implementation
@@ -193,13 +193,13 @@ START
 PRINT a welcome prompt
 
 REPEAT
-  GET loan_amount as a float
-    CALL float_prompt with message and require a positive number
+  GET loan_amount as a Big Decimal
+    CALL numeric_prompt with message and require a positive number
 
   SET method from COMPOUND_METHODS constant
     Can swap different compount method interfaces here in the future
 
-  GET interest_rate expressed as a percentage (float), e.g., 6.25
+  GET interest_rate expressed as a percentage (Big Decimal), e.g., 6.25
     CALL interest_rate_prompt on method
   GET duration as a number of months (integer)
     CALL duration_prompt on method to

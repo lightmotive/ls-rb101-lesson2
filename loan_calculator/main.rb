@@ -11,7 +11,7 @@ puts MESSAGES['welcome_message']
 print "\n"
 
 loop do
-  loan_amount = float_prompt(MESSAGES['loan_amount_prompt'], require_positive: true)
+  loan_amount = bigdecimal_prompt(MESSAGES['loan_amount_prompt'], require_positive: true)
 
   # User would select compound method here
   method = COMPOUND_METHODS[:monthly]

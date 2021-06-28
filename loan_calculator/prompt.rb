@@ -62,8 +62,8 @@ def integer_prompt(prompt, require_positive: false, require_zero_plus: false)
                  require_zero_plus: require_zero_plus)
 end
 
-def float_prompt(prompt, require_positive: false, require_zero_plus: false)
-  numeric_prompt(prompt, ConvertString.to_float,
+def bigdecimal_prompt(prompt, require_positive: false, require_zero_plus: false)
+  numeric_prompt(prompt, ConvertString.to_bigdecimal,
                  require_positive: require_positive,
                  require_zero_plus: require_zero_plus)
 end
