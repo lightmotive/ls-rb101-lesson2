@@ -8,8 +8,8 @@ def prompt(message)
   puts "=> #{message}"
 end
 
+# Returns the value from convert_input
 # validate must raise an exception if input is not valid
-# Returns the value from get_input--if it needs to be converted, do that here
 def prompt_until_valid(
   prompt,
   get_input: -> { gets.chomp },
