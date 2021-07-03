@@ -35,7 +35,7 @@ loop do
   player1_choice = nil
   loop do
     prompt("Choose one: #{choices_as_strings.join(', ')}")
-    player1_choice = Kernel.gets.chomp
+    player1_choice = Kernel.gets.chomp.downcase
     break if choice_valid?(player1_choice)
 
     prompt("That wasn't a valid choice. Please try again.")
@@ -45,6 +45,7 @@ loop do
   prompt("Computer: #{player2_choice}")
 
   game_result_print(game_result(player1_choice, player2_choice))
+  # Future tip: print the result for player2 by simply switching the choice arguments.
 
   puts("\n")
   prompt('Would you like to play again?')
