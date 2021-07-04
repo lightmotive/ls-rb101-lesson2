@@ -37,7 +37,7 @@ end
 loop do
   player1_choice = nil
   loop do
-    prompt("Choose one: #{choices_as_strings.join(', ')}")
+    prompt("Choose one: #{choices_as_strings.map(&:capitalize).join(', ')}")
     player1_choice = Kernel.gets.strip.downcase
     break if choice_valid?(player1_choice)
 
