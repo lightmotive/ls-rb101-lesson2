@@ -4,10 +4,13 @@ def prompt(message)
   Kernel.puts("=> #{message}")
 end
 
+# Shout out to the game creator that added Spock and Lizard :-): https://web.archive.org/web/20181217114425/http://www.samkass.com/theories/RPSSL.html
 CHOICES = {
-  rock: { beats: [:scissors] },
-  paper: { beats: [:rock] },
-  scissors: { beats: [:paper] }
+  rock: { beats: %i[scissors lizard] },
+  paper: { beats: %i[rock spock] },
+  scissors: { beats: %i[paper lizard] },
+  spock: { beats: %i[rock scissors] },
+  lizard: { beats: %i[paper spock] }
 }.freeze
 
 def choices_as_strings
