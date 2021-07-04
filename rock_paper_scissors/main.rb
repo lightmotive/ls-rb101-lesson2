@@ -93,13 +93,62 @@ def player1_choice_prompt
   end
 end
 
-loop do
+def score_new
+  { player1: 0, player2: 0 }
+end
+
+def score_update(score, player1_result)
+  case player1_result
+  when :win then score[:player1] += 1
+  when :lose then score[:player2] += 1
+  end
+end
+
+def score_print(score)
+  prompt("* Current Score: #{score[:player1]} (you) to #{score[:player2]}")
+end
+
+def score_final_print(score)
+  player1_score = score[:player1]
+  player2_score = score[:player2]
+  prompt("<- Series Result: #{player1_score > player2_score ? 'You won!' : 'You lost. Better luck next time!'} ->")
+  puts("You: #{player1_score}")
+  puts("Your opponent: #{player2_score}")
+end
+
+def game_play
   player1_key = choice_to_key(player1_choice_prompt)
   player2_key = CHOICES.keys.sample
   player1_result = game_result(player1_key, player2_key)
 
   game_result_print(player1_key, player2_key, player1_result)
   # Future tip: print the result for player2 by simply switching the key arguments.
+
+  player1_result
+end
+
+def series_play(_series_win_count)
+  score = score_new
+  game_count = 0
+  loop do
+    game_count += 1
+
+    print("\n")
+    prompt("<+ Game #{game_count} +>")
+    score_update(score, game_play)
+    score_print(score)
+
+    break score if score[:player1] == 3 || score[:player2] == 3
+  end
+end
+
+series_win_count = 3
+prompt("Let's play RPSSL!")
+
+loop do
+  prompt("First to #{series_win_count} wins.")
+  score_final = series_play(series_win_count)
+  score_final_print(score_final)
 
   puts("\n")
   prompt('Would you like to play again?')
