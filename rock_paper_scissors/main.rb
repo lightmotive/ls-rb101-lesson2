@@ -6,11 +6,21 @@ end
 
 # Game creator that added Spock and Lizard :-): https://web.archive.org/web/20181217114425/http://www.samkass.com/theories/RPSSL.html
 CHOICES = {
-  rock: { beats: %i[scissors lizard], short_choice: 'r' },
-  paper: { beats: %i[rock spock], short_choice: 'p' },
-  scissors: { beats: %i[paper lizard], short_choice: 'sc' },
-  spock: { beats: %i[rock scissors], short_choice: 'sp' },
-  lizard: { beats: %i[paper spock], short_choice: 'l' }
+  rock: { beats: { scissors: { win_explain: 'Rock crushes Scissors.' },
+                   lizard: { win_explain: 'Rock crushes Lizard.' } },
+          short_choice: 'r' },
+  paper: { beats: { rock: { win_explain: 'Paper covers Rock.' },
+                    spock: { win_explain: 'Paper disproves Spock.' } },
+           short_choice: 'p' },
+  scissors: { beats: { paper: { win_explain: 'Scissors cuts Paper.' },
+                       lizard: { win_explain: 'Scissors decapitate Lizard.' } },
+              short_choice: 'sc' },
+  spock: { beats: { rock: { win_explain: 'Spock vaporizes Rock.' },
+                    scissors: { win_explain: 'Spock smashes Scissors.' } },
+           short_choice: 'sp' },
+  lizard: { beats: { paper: { win_explain: 'Lizard eats Paper.' },
+                     spock: { win_explain: 'Lizard poisons Spock.' } },
+            short_choice: 'l' }
 }.freeze
 
 def choices_as_string_list
@@ -22,7 +32,7 @@ def choices_as_string_list
 end
 
 def choices_prompt
-  prompt("What's your throw? #{choices_as_string_list.join(', ')}")
+  prompt("What's your throw: #{choices_as_string_list.join(', ')}?")
 end
 
 # Convert choice string (full or short) to a symbol if not already a symbol.
@@ -49,24 +59,27 @@ def choice_valid?(choice)
   CHOICES.key?(choice_to_key(choice))
 end
 
+def game_result_explaination(winner_key, loser_key)
+  CHOICES.dig(winner_key, :beats, loser_key, :win_explain)
+end
+
 def game_result(player1_key, player2_key)
   return nil if player1_key.nil? || player2_key.nil?
 
   return :tie if player1_key == player2_key
-  return :win if CHOICES[player1_key][:beats].include?(player2_key)
+  return :win if CHOICES[player1_key][:beats].keys.include?(player2_key)
 
   :lose
 end
 
 def game_result_print(player1_key, player2_key, result)
-  prompt("You threw #{choice_key_to_display_string(player1_key)}")
-  prompt("Computer threw #{choice_key_to_display_string(player2_key)}")
-
+  prompt("You threw #{choice_key_to_display_string(player1_key)}.")
+  prompt("Computer threw #{choice_key_to_display_string(player2_key)}.")
   prompt(case result
-         when :win then 'You won!'
+         when :win then "#{game_result_explaination(player1_key, player2_key)} You won!"
          when :tie then 'Tie!'
-         when :lose then 'You lost.'
-         else 'Ooops, there was a game error :-('
+         when :lose then "#{game_result_explaination(player2_key, player1_key)} You lost."
+         else 'Sorry, there was a game error :-('
          end)
 end
 
