@@ -74,7 +74,7 @@ end
 
 def game_result_print(player1_key, player2_key, result)
   prompt("You threw #{choice_key_to_display_string(player1_key)}.")
-  prompt("Computer threw #{choice_key_to_display_string(player2_key)}.")
+  prompt("Your opponent threw #{choice_key_to_display_string(player2_key)}.")
   prompt(case result
          when :win then "#{game_result_explaination(player1_key, player2_key)} You won!"
          when :tie then 'Tie!'
@@ -95,10 +95,10 @@ loop do
 
   player1_key = choice_to_key(player1_choice)
   player2_key = CHOICES.keys.sample
-  result = game_result(player1_key, player2_key)
-  # Future tip: print the result for player2 by simply switching the key arguments.
+  player1_result = game_result(player1_key, player2_key)
 
-  game_result_print(player1_key, player2_key, result)
+  game_result_print(player1_key, player2_key, player1_result)
+  # Future tip: print the result for player2 by simply switching the key arguments.
 
   puts("\n")
   prompt('Would you like to play again?')
