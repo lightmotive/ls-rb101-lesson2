@@ -12,7 +12,7 @@ CHOICES = {
   paper: { beats: { rock: { win_explain: 'Paper covers Rock.' },
                     spock: { win_explain: 'Paper disproves Spock.' } },
            short_choice: 'p' },
-  scissors: { beats: { paper: { win_explain: 'Scissors cuts Paper.' },
+  scissors: { beats: { paper: { win_explain: 'Scissors cut Paper.' },
                        lizard: { win_explain: 'Scissors decapitate Lizard.' } },
               short_choice: 'sc' },
   spock: { beats: { rock: { win_explain: 'Spock vaporizes Rock.' },
@@ -73,14 +73,13 @@ def game_result(player1_key, player2_key)
 end
 
 def game_result_print(player1_key, player2_key, result)
-  prompt("You threw #{choice_key_to_display_string(player1_key)}.")
-  prompt("Your opponent threw #{choice_key_to_display_string(player2_key)}.")
-  prompt(case result
-         when :win then "#{game_result_explaination(player1_key, player2_key)} You won!"
-         when :tie then 'Tie!'
-         when :lose then "#{game_result_explaination(player2_key, player1_key)} You lost."
-         else 'Sorry, there was a game error :-('
-         end)
+  puts("You threw #{choice_key_to_display_string(player1_key)}. Your opponent threw #{choice_key_to_display_string(player2_key)}.")
+  puts(case result
+       when :win then "#{game_result_explaination(player1_key, player2_key)} You won!"
+       when :tie then 'Tie!'
+       when :lose then "#{game_result_explaination(player2_key, player1_key)} You lost."
+       else 'Sorry, there was a game error :-('
+       end)
 end
 
 def player1_choice_prompt
@@ -105,15 +104,13 @@ def score_update(score, player1_result)
 end
 
 def score_print(score)
-  prompt("* Current Score: #{score[:player1]} (you) to #{score[:player2]}")
+  puts("* Current Score: #{score[:player1]} (you) to #{score[:player2]} *")
 end
 
 def score_final_print(score)
-  player1_score = score[:player1]
-  player2_score = score[:player2]
-  prompt("<- Series Result: #{player1_score > player2_score ? 'You won!' : 'You lost. Better luck next time!'} ->")
-  puts("You: #{player1_score}")
-  puts("Your opponent: #{player2_score}")
+  puts("\n<- Series Result: #{score[:player1] > score[:player2] ? 'You won!' : 'You lost. Better luck next time!'} ->")
+  puts("You: #{score[:player1]}")
+  puts("Your opponent: #{score[:player2]}")
 end
 
 def game_play
@@ -133,12 +130,11 @@ def series_play(_series_win_count)
   loop do
     game_count += 1
 
-    print("\n")
-    prompt("<+ Game #{game_count} +>")
+    puts("\n<+ Game #{game_count} +>")
     score_update(score, game_play)
-    score_print(score)
-
     break score if score[:player1] == 3 || score[:player2] == 3
+
+    score_print(score)
   end
 end
 
