@@ -83,17 +83,18 @@ def game_result_print(player1_key, player2_key, result)
          end)
 end
 
-loop do
-  player1_choice = nil
+def player1_choice_prompt
   loop do
     choices_prompt
     player1_choice = Kernel.gets.strip.downcase
-    break if choice_valid?(player1_choice)
+    break player1_choice if choice_valid?(player1_choice)
 
     prompt("That wasn't a valid choice. Please try again.")
   end
+end
 
-  player1_key = choice_to_key(player1_choice)
+loop do
+  player1_key = choice_to_key(player1_choice_prompt)
   player2_key = CHOICES.keys.sample
   player1_result = game_result(player1_key, player2_key)
 
