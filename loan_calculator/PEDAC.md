@@ -80,7 +80,7 @@ SET numeric_is_valid
 IF numeric_is_valid
   RETURN nil
 ELSE
-  THROW NumericInvalidError that includes specific error message(s)
+  THROW ValidationError that includes specific error message(s)
 ENDIF
 ```
 
@@ -98,7 +98,7 @@ REPEAT
     CALL numeric_validate with numeric and require... options
     RETURN numeric
   EXCEPTION
-    WHEN NumericInvalidError
+    WHEN ValidationError
       SHOW the specific error message(s) followed by the prompt.
     WHEN any other error
       SHOW friendly error message like "That wasn't a valid number." followed by the prompt.

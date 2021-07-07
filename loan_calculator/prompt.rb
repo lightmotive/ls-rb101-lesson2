@@ -9,7 +9,8 @@ def prompt(message)
 end
 
 # Returns the value from convert_input
-# validate must raise an exception if input is not valid
+# validate must raise an exception if input is not valid.
+#   Raise ValidationError with helpful explanation (message) to prefix original prompt with custom message.
 def prompt_until_valid(
   prompt,
   get_input: -> { gets.chomp },
@@ -21,7 +22,7 @@ def prompt_until_valid(
     value = convert_input.call(get_input.call)
     validate.call(value)
     break value
-  rescue NumericInvalidError => e
+  rescue ValidationError => e
     prompt("#{e.message} #{prompt}")
   rescue StandardError
     prompt("#{MESSAGES['input_invalid_message']} #{prompt}")
@@ -50,7 +51,7 @@ def numeric_prompt(prompt, convert, require_positive: false, require_zero_plus: 
     get_input: -> { gets.strip }, convert_input: ->(input) { convert.call(input) },
     validate: lambda do |numeric|
       unless numeric_valid?(numeric, require_positive, require_zero_plus)
-        raise NumericInvalidError, numeric_invalid_message(numeric, require_positive, require_zero_plus)
+        raise ValidationError, numeric_invalid_message(numeric, require_positive, require_zero_plus)
       end
     end
   )
