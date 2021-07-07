@@ -9,6 +9,22 @@ def prompt(message)
   puts "=> #{message}"
 end
 
+def prompt_until_valid_local(
+  message,
+  get_input: -> { gets.chomp },
+  convert_input: ->(input) { input },
+  validate: ->(_input_converted) { nil }
+)
+  prompt_until_valid(
+    message,
+    prompt_with_format: ->(msg) { prompt(msg) },
+    input_invalid_default_message: MESSAGES['input_invalid_message'],
+    get_input: get_input,
+    convert_input: convert_input,
+    validate: validate
+  )
+end
+
 def numeric_valid?(numeric, require_positive, require_zero_plus)
   (require_positive ? numeric.positive? : true) &&
     (require_zero_plus ? numeric.zero? || numeric.positive? : true)
@@ -26,7 +42,7 @@ def numeric_invalid_message(numeric, require_positive, require_zero_plus)
 end
 
 def numeric_prompt(prompt, convert, require_positive: false, require_zero_plus: false)
-  prompt_until_valid(
+  prompt_until_valid_local(
     prompt,
     get_input: -> { gets.strip }, convert_input: ->(input) { convert.call(input) },
     validate: lambda do |numeric|
@@ -59,7 +75,7 @@ def loan_duration_input_parse(input)
 end
 
 def loan_duration_prompt
-  prompt_until_valid(
+  prompt_until_valid_local(
     MESSAGES['loan_duration_prompt'],
     get_input: -> { gets.strip }, convert_input: lambda do |input|
       years, months = loan_duration_input_parse(input)
