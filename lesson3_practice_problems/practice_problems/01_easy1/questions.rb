@@ -48,3 +48,26 @@ numbers = [1, 1, 1, 2, 3, 4, 5]
 numbers.delete_at(1)  # Delete the value at index 1 (second value)
 numbers.delete(1)     # Delete all values matching 1
 p numbers
+
+# ***
+# Question 5
+# Programmatically determine if 42 lies between 10 and 100.
+p (10..100).include?(42)
+
+# Imperatively:
+def range_contains?(range_start, range_end, find)
+  loop do
+    break true if find == range_start
+    break false if range_start == range_end
+
+    range_start += 1
+  end
+end
+
+puts range_contains?(10, 100, 42)
+
+# In this case, one could also just use use two comparisons:
+min = 10
+max = 100
+find = 42
+p find >= min && find <= max
