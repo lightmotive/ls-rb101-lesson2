@@ -33,3 +33,9 @@ puts numbers
 #   - Ruby convention indicating that the method will return a boolean value.
 # 6. put !! before something, like !!user_name
 #   - Double-negation, which can convert truthy and falsey values into booleans.
+
+# ***
+# Question 3
+# Replace the word "important" with "urgent" in this string:
+advice = 'Few things in life are as important as house training your pet dinosaur.'
+p advice.gsub('important', 'urgent')
