@@ -37,5 +37,14 @@ p numbers
 # ***
 # Question 3
 # Replace the word "important" with "urgent" in this string (mutate the original string):
-advice = 'Few things in life are as important as house training your pet dinosaur.'
+advice = String.new('Few things in life are as important as house training your pet dinosaur.')
 p advice.gsub!('important', 'urgent')
+
+# ***
+# Question 4
+numbers = [1, 1, 1, 2, 3, 4, 5]
+
+# What do the following method calls do (assume we reset numbers to the original array between method calls)?
+numbers.delete_at(1)  # Delete the value at index 1 (second value)
+numbers.delete(1)     # Delete all values matching 1
+p numbers
