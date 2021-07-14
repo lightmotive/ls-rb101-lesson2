@@ -79,3 +79,16 @@ p 'Four score and ' + famous_words
 p(famous_words.prepend('Four score and ').tap { |x| p x.object_id })
 famous_words = String.new('seven years ago...')
 p(famous_words.insert(0, 'Four score and '))
+
+# ***
+# Question 7
+puts 'Question 7:'
+# If we build an array like this:
+flintstones = %w[Fred Wilma]
+flintstones << %w[Barney Betty]
+flintstones << %w[BamBam Pebbles]
+# We will end up with this "nested" array:
+# ["Fred", "Wilma", ["Barney", "Betty"], ["BamBam", "Pebbles"]]
+
+# Make that into an un-nested array:
+p(flintstones.flatten!)
