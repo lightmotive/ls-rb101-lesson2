@@ -51,23 +51,14 @@ p numbers
 
 # ***
 # Question 5
+puts 'Question 5:'
 # Programmatically determine if 42 lies between 10 and 100.
-p (10..100).include?(42)
-
-# Imperatively:
-def range_contains?(range_start, range_end, find)
-  loop do
-    break true if find == range_start
-    break false if range_start == range_end
-
-    range_start += 1
-  end
-end
-
-puts range_contains?(10, 100, 42)
+p (10..100).cover?(42)
+# Range#cover? can also declaratively evaluate whether a range fits within another:
+p ('a'..'z').cover?(('c'..'m'))
 
 # In this case, one could also just use use two comparisons:
 min = 10
 max = 100
 find = 42
-p find >= min && find <= max
+p min <= find && find <= max
