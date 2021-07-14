@@ -2,6 +2,7 @@
 
 # ***
 # Question 1
+puts 'Question 1:'
 # What would you expect the code below to print out?
 
 numbers = [1, 2, 2, 3]
@@ -36,12 +37,14 @@ p numbers
 
 # ***
 # Question 3
+puts 'Question 3:'
 # Replace the word "important" with "urgent" in this string (mutate the original string):
 advice = String.new('Few things in life are as important as house training your pet dinosaur.')
 p advice.gsub!('important', 'urgent')
 
 # ***
 # Question 4
+puts 'Question 4:'
 numbers = [1, 1, 1, 2, 3, 4, 5]
 
 # What do the following method calls do (assume we reset numbers to the original array between method calls)?
