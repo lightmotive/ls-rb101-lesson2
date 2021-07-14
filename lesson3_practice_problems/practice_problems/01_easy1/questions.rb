@@ -92,3 +92,10 @@ flintstones << %w[BamBam Pebbles]
 
 # Make that into an un-nested array:
 p(flintstones.flatten!)
+
+# ***
+# Question 8
+puts 'Question 8:'
+flintstones = { 'Fred' => 0, 'Wilma' => 1, 'Barney' => 2, 'Betty' => 3, 'BamBam' => 4, 'Pebbles' => 5 }
+# Turn that into an array containing only two elements: Barney's name and Barney's number
+p flintstones.assoc('Barney')
