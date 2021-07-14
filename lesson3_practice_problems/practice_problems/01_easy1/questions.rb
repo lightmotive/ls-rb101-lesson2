@@ -65,3 +65,17 @@ min = 10
 max = 100
 find = 42
 p min <= find && find <= max
+
+# ***
+# Question 6
+puts 'Question 6:'
+famous_words = String.new('seven years ago...').tap { |x| p x.object_id }
+# Show two different ways to put the expected "Four score and " in front of it:
+# Non-mutating
+p "Four score and #{famous_words}"
+p 'Four score and ' + famous_words
+
+# Mutating
+p(famous_words.prepend('Four score and ').tap { |x| p x.object_id })
+famous_words = String.new('seven years ago...')
+p(famous_words.insert(0, 'Four score and '))
