@@ -8,7 +8,14 @@ puts "\n* Question 1 *"
 
 # ***
 puts "\n* Question 2 *"
-# ...
+# The result of the following statement would be an error:
+# puts "the value of 40 + 2 is " + (40 + 2)
+# Why is that and what are two possible ways to fix it?
+#   The cause: (40 + 2) evaluates to an integer;
+#   Ruby doesn't implicitly convert different types of operands with the + operator--good for safety.
+# Solutions: explicitly convert (40 + 2) to a string or use string interpolation
+puts 'the value of 40 + 2 is ' + (40 + 2).to_s
+puts "the value of 40 + 2 is #{40 + 2}"
 
 # ***
 puts "\n* Question 3 *"
