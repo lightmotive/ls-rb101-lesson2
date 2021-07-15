@@ -66,9 +66,9 @@ end
 # ***
 puts "\n* Question 5 *"
 # What's wrong with this code?
-limit = 15
-
-def fib(first_num, second_num)
+# The problem: the limit variable is not accessible inside the fib method, which creates a new scope.
+# The fix: pass limit to the method as an argument.
+def fib(first_num, second_num, limit)
   while first_num + second_num < limit
     sum = first_num + second_num
     first_num = second_num
@@ -77,7 +77,7 @@ def fib(first_num, second_num)
   sum
 end
 
-result = fib(0, 1)
+result = fib(0, 1, 15)
 puts "result is #{result}"
 
 # ***
