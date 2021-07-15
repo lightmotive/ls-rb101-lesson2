@@ -44,7 +44,24 @@ p factors(-9)
 
 # ***
 puts "\n* Question 4 *"
-# ...
+# Is there a difference between these two methods other than the operator used to add an element to the buffer?
+def rolling_buffer1(buffer, max_buffer_size, new_element)
+  buffer << new_element
+  buffer.shift if buffer.size > max_buffer_size
+  buffer
+end
+
+def rolling_buffer2(input_array, max_buffer_size, new_element)
+  buffer = input_array + [new_element]
+  buffer.shift if buffer.size > max_buffer_size
+  buffer
+end
+
+# Yes, there are two significant differences:
+# - 1 will add whole arrays if new_element is an array;
+#     2 will concatenate elements if new_element is an array.
+# - 1 will mutate the argument passed to the buffer parameter, returning the mutated buffer;
+#     2 will create a new buffer object, leaving input_array unchanged and returning the new buffer.
 
 # ***
 puts "\n* Question 5 *"
