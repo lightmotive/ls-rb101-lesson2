@@ -58,6 +58,7 @@ puts '* Question 7 *'
 # How can we add multiple items to our array? (Dino and Hoppy)
 flintstones.push('Dino', 'Hoppy')
 # Array#push alias: #append
+# Alternative method: flintstones.concat(%w[Dino Hoppy])
 p flintstones.uniq! # ...because Dino was added in exercise 6
 
 # ***
