@@ -50,12 +50,15 @@ p flintstones
 # ***
 puts '* Question 6 *'
 # How can we add the family pet "Dino" to our usual array:
-flintstones << 'Dino'
+p(flintstones << 'Dino')
 # Alternative: flintstones.push('Dino')
 
 # ***
 puts '* Question 7 *'
-# ...
+# How can we add multiple items to our array? (Dino and Hoppy)
+flintstones.push('Dino', 'Hoppy')
+# Array#push alias: #append
+p flintstones.uniq! # ...because Dino was added in exercise 6
 
 # ***
 puts '* Question 8 *'
