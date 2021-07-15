@@ -49,7 +49,9 @@ p flintstones
 
 # ***
 puts '* Question 6 *'
-# ...
+# How can we add the family pet "Dino" to our usual array:
+flintstones << 'Dino'
+# Alternative: flintstones.push('Dino')
 
 # ***
 puts '* Question 7 *'
