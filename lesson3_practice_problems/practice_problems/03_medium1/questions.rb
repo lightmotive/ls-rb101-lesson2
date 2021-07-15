@@ -126,7 +126,27 @@ p munsters
 
 # ***
 puts "\n* Question 8 *"
-# ...
+
+def rps(fist1, fist2)
+  if fist1 == 'rock'
+    fist2 == 'paper' ? 'paper' : 'rock'
+  elsif fist1 == 'paper'
+    fist2 == 'scissors' ? 'scissors' : 'paper'
+  else
+    fist2 == 'rock' ? 'rock' : 'scissors'
+  end
+end
+
+# What is the result of the following call?
+puts rps(rps(rps('rock', 'paper'), rps('rock', 'scissors')), 'rock')
+
+# Ruby uses strict evaluation, which means arguments are evaluated and converted to objects
+# before passing them to methods. So, let's break it down like Ruby would:
+# rps(rps(rps('rock', 'paper'), rps('rock', 'scissors')), 'rock')
+# rps(rps('paper', rps('rock', 'scissors')), 'rock')
+# rps(rps('paper', 'rock'), 'rock')
+# rps('paper', 'rock')
+# paper
 
 # ***
 puts "\n* Question 9 *"
