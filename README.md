@@ -4,7 +4,8 @@
 - Create Questions file with specified number of questions:
   
   ```ruby
-  touch 'questions.rb'  
+  touch 'questions.rb'
   printf "# frozen_string_literal: true" > "questions.rb"
-  for i in {1..10}; do printf "\n\n# ***\n# Question $i\n# " >> "questions.rb"; done
+  for i in {1..10}; do printf "\n\n# ***\n# Question $i\nputs '* Question $i *'\n# " >> "questions.rb"; done
   ```
+  
