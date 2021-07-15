@@ -3,16 +3,9 @@
 # ***
 puts '
 * Question 1 *'
-# Write a one-line program that prints "The Flintstones Rock!" 10 times with each subsequent line indented 1 space to the right:
-def print_message_art(message)
-  right_just_width = message.length
-  10.times do
-    puts message.rjust(right_just_width)
-    right_just_width += 1
-  end
-end
-
-print_message_art('The Flintstones Rock!')
+# Write a one-line program that prints "The Flintstones Rock!" 10 times with each subsequent line
+# indented 1 space to the right:
+10.times { |idx| puts "#{' ' * idx}The Flintstones Rock!" }
 
 # ***
 puts '
