@@ -19,7 +19,22 @@ puts "the value of 40 + 2 is #{40 + 2}"
 
 # ***
 puts "\n* Question 3 *"
-# ...
+# How can you make this work without using begin/end/until?
+# Note that we're not looking to find the factors for 0 or negative numbers, but we just want to handle it gracefully 
+# instead of raising an exception or going into an infinite loop.
+
+def factors(number)
+  divisor = number
+  factors = []
+  loop do
+    factors << number / divisor if number % divisor == 0
+    divisor -= 1
+    break if divisor.zero?
+  end
+  factors
+end
+
+p factors(9)
 
 # ***
 puts "\n* Question 4 *"
