@@ -68,6 +68,9 @@ puts '* Question 8 *'
 advice_prefix = advice.slice!('Few things in life are as important as ')
 p advice_prefix
 puts "#{advice_prefix}#{advice}"
+# Bonus: what happens if you use the String#slice method instead?
+# It would return a new matched string without modifying the original.
+p "#{advice_prefix}#{advice}".slice(advice_prefix)
 
 # ***
 puts '* Question 9 *'
