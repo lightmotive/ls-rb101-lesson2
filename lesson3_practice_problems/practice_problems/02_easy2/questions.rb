@@ -64,8 +64,13 @@ p flintstones.uniq! # ...because Dino was added in exercise 6
 # ***
 puts '* Question 8 *'
 # Shorten the advice variable contents as follows:
-# Make the return value "Few things in life are as important as ". But leave the advice variable as "house training your pet dinosaur.".
-advice_prefix = advice.slice!('Few things in life are as important as ')
+# Make the return value "Few things in life are as important as ".
+# Leave the advice variable as "house training your pet dinosaur.".
+advice_prefix_separator = 'as important as '
+advice_prefix = advice.slice!(
+  0,
+  (advice.index(advice_prefix_separator) + advice_prefix_separator.length)
+)
 p advice_prefix
 puts "#{advice_prefix}#{advice}"
 # Bonus: what happens if you use the String#slice method instead?
