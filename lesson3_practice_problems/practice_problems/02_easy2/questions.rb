@@ -26,7 +26,11 @@ p munsters_description.upcase
 
 # ***
 puts '* Question 3 *'
-# ...
+# We have most of the Munster family in our age hash. Add ages for Marilyn and Spot to the existing hash:
+additional_ages = { 'Marilyn' => 22, 'Spot' => 237 }
+
+ages.merge!(additional_ages)
+p ages
 
 # ***
 puts '* Question 4 *'
