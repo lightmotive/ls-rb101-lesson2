@@ -82,7 +82,20 @@ puts "result is #{result}"
 
 # ***
 puts "\n* Question 6 *"
-# ...
+# What is the output of the following code?
+
+answer = 42
+
+def mess_with_it(some_number)
+  some_number += 8
+end
+
+new_answer = mess_with_it(answer)
+
+p answer - 8
+# The output would be 34 (42 - 8); numbers are immutable in Ruby.
+# Also, mess_with_it wouldn't mutate any other types of values because assignments like that never mutate variables.
+# (Indexed assignments are different.)
 
 # ***
 puts "\n* Question 7 *"
