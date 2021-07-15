@@ -34,7 +34,11 @@ p ages
 
 # ***
 puts '* Question 4 *'
-# ...
+# Check if the name "Dino" appears in the string below:
+advice = 'Few things in life are as important as house training your pet dinosaur.'
+p advice.include?('Dino') # Find any sub-string
+p advice.match?(/\bDino\b/) # Find a separate word
+p advice.match?(/Dino/i) # Find a case-insensitive match
 
 # ***
 puts '* Question 5 *'
