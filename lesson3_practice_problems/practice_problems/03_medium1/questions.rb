@@ -150,8 +150,21 @@ puts rps(rps(rps('rock', 'paper'), rps('rock', 'scissors')), 'rock')
 
 # ***
 puts "\n* Question 9 *"
-# ...
 
-# ***
-puts "\n* Question 10 *"
-# ...
+def foo(_param = 'no')
+  'yes'
+end
+
+def bar(param = 'no')
+  param == 'no' ? 'yes' : 'no'
+end
+
+# What would be the return value of the following method invocation?
+p bar(foo)
+
+# Let's break it down like Ruby again:
+# bar(foo)
+# bar("yes")  # foo always returns "yes", regardless of the parameter
+# "no"        # param value in bar is not "no", so it returns "no"
+#   The ternary conditional expression's value is "no", which is assigned to param,
+#   which is also the result of the assignment expression.
