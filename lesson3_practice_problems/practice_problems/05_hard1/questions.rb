@@ -39,7 +39,58 @@ puts greetings # => { :a => 'hi there' }
 
 # ***
 puts "\n* Question 3 *"
-# ...
+# What will be printed by each of the code groups?
+
+# A)
+# def mess_with_vars(one, two, three)
+#   one = two
+#   two = three
+#   three = one
+# end
+#
+# one = "one"
+# two = "two"
+# three = "three"
+#
+# mess_with_vars(one, two, three)
+#
+# puts "one is: #{one}"
+# puts "two is: #{two}"
+# puts "three is: #{three}"
+
+# B)
+# def mess_with_vars(one, two, three)
+#   one = "two"
+#   two = "three"
+#   three = "one"
+# end
+#
+# one = "one"
+# two = "two"
+# three = "three"
+#
+# mess_with_vars(one, two, three)
+#
+# puts "one is: #{one}"
+# puts "two is: #{two}"
+# puts "three is: #{three}"
+
+# C)
+# def mess_with_vars(one, two, three)
+#   one.gsub!("one","two")
+#   two.gsub!("two","three")
+#   three.gsub!("three","one")
+# end
+#
+# one = "one"
+# two = "two"
+# three = "three"
+#
+# mess_with_vars(one, two, three)
+#
+# puts "one is: #{one}"
+# puts "two is: #{two}"
+# puts "three is: #{three}"
 
 # ***
 puts "\n* Question 4 *"
