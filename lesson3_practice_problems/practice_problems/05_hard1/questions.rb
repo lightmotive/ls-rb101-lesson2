@@ -54,9 +54,11 @@ puts "\n* Question 3 *"
 #
 # mess_with_vars(one, two, three)
 #
-# puts "one is: #{one}"
-# puts "two is: #{two}"
-# puts "three is: #{three}"
+# puts "one is: #{one}"     # one is: one
+# puts "two is: #{two}"     # two is: two
+# puts "three is: #{three}" # three is: three
+
+# Explanation for all outputs: methods create a new variable scope, and assignments never mutate variables.
 
 # B)
 # def mess_with_vars(one, two, three)
@@ -75,6 +77,8 @@ puts "\n* Question 3 *"
 # puts "two is: #{two}"
 # puts "three is: #{three}"
 
+# B has the same output for the same reasons.
+
 # C)
 # def mess_with_vars(one, two, three)
 #   one.gsub!("one","two")
@@ -88,9 +92,12 @@ puts "\n* Question 3 *"
 #
 # mess_with_vars(one, two, three)
 #
-# puts "one is: #{one}"
-# puts "two is: #{two}"
-# puts "three is: #{three}"
+# puts "one is: #{one}"     # one is: two
+# puts "two is: #{two}"     # two is: three
+# puts "three is: #{three}" # three is: one
+
+# Explanation for all outputs: String#gsub! mutates the caller; arguments passed to methods point to objects,
+# so mutating parameter variables within methods mutates the associated passed argument.
 
 # ***
 puts "\n* Question 4 *"
