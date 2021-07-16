@@ -102,7 +102,12 @@ fun_with_ids
 
 # ***
 puts "\n* Question 2 *"
-# ...
+# Let's look at object id's again from the perspective of a method call instead of a block.
+# If we took the contents of the 1.times block from the previous practice problem and moved it to a method to which we
+# pass all of our outer variables, how would the values and object ids change throughout the flow of the code?
+
+# Because the method would contain only assignments (no indexed assignments, concatenations, or other mutating methods),
+# the arguments passed to the method would remain unchanged outside the method. Everything else would be the same.
 
 # ***
 puts "\n* Question 3 *"
