@@ -36,7 +36,12 @@ def fun_with_ids
     a_outer = 22
     b_outer = 'thirty three'
     c_outer = [44]
+    # All of the assignments above will reassign the variables to different objects (will not mutate the original objects).
+    # Therefore, the object IDs for those variables will change.
     d_outer = c_outer[0]
+    # That will point d_outer to the same object stored in the c_outer array's first object (index 0).
+    # d_outer.object_id will match c_outer[0].object_id, but will be different from c_outer.object_id.
+    #   Array objects have an object ID, and each element in an array has a separate object ID.
 
     puts "a_outer inside after reassignment is #{a_outer} with an id of: #{a_outer_id} before and: #{a_outer.object_id} after."
     puts "b_outer inside after reassignment is #{b_outer} with an id of: #{b_outer_id} before and: #{b_outer.object_id} after."
@@ -47,7 +52,9 @@ def fun_with_ids
     a_inner = a_outer
     b_inner = b_outer
     c_inner = c_outer
+    # All three assignments above will result in inner variables that point to the same objects as the assigned outer variables.
     d_inner = c_inner[0]
+    # d_inner will point to the same object stored in c_inner[0] (the element, which is the number 44).
 
     a_inner_id = a_inner.object_id
     b_inner_id = b_inner.object_id
