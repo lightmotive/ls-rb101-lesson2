@@ -94,7 +94,11 @@ def fun_with_ids
   rescue StandardError
     puts 'ugh ohhhhh'
   end
+  # All of the *_inner references within the begin...rescue...end constructs above would raise NameError exceptions
+  # because they're inaccessible outside the block passed to the times method.
 end
+
+fun_with_ids
 
 # ***
 puts "\n* Question 2 *"
