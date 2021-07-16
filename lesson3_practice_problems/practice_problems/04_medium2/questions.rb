@@ -127,7 +127,19 @@ puts "My array looks like this now: #{my_array}"    # ...now: ["pumpkins", "ruta
 
 # ***
 puts "\n* Question 4 *"
-# ...
+# Modify the code above to swap which argument is mutated:
+
+def tricky_method_two(a_string_param, _an_array_param)
+  a_string_param << 'rutabaga'
+  an_array_param = %w[pumpkins rutabaga]
+end
+
+my_string = String.new('pumpkins')
+my_array = ['pumpkins']
+tricky_method_two(my_string, my_array)
+
+puts "My string looks like this now: #{my_string}"  # ...now: pumpkinsrutabaga
+puts "My array looks like this now: #{my_array}"    # ...now: ["pumpkins"]
 
 # ***
 puts "\n* Question 5 *"
