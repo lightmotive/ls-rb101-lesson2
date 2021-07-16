@@ -143,7 +143,26 @@ puts "My array looks like this now: #{my_array}"    # ...now: ["pumpkins"]
 
 # ***
 puts "\n* Question 5 *"
-# ...
+# How can we change tricky_method above to make the result easier to predict and easier for the next
+# programmer to maintain?
+
+# First, methods should do only one thing, and the method name should indicate what it's doing.
+# tricky_method is doing two unrelated things, so we'd want to create two separate methods
+# using Ruby conventions, e.g.:
+
+def append_rutabaga(to_object)
+  "#{to_object}rutabaga"
+end
+
+def append_rutabaga!(to_object)
+  to_object << 'rutabaga'
+end
+
+my_string = append_rutabaga(String.new('pumpkins'))
+my_array = append_rutabaga!(['pumpkins'])
+
+puts "My string looks like this now: #{my_string}"  # ...now: pumpkinsrutabaga
+puts "My array looks like this now: #{my_array}"    # ...now: ["pumpkins", "rutabaga"]
 
 # ***
 puts "\n* Question 6 *"
