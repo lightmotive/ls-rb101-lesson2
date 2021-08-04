@@ -111,6 +111,6 @@ def palindrome_substrings(string)
 end
 
 p palindrome_substrings('supercalifragilisticexpialidocious') == ['ili']
-p palindrome_substrings('abcddcbA') == %w[dd cddc bcddcb] # The order is different, but the elements are identical
+p(palindrome_substrings('abcddcbA').sort_by(&:length).reverse == %w[bcddcb cddc dd])
 p palindrome_substrings('palindrome') == []
 p palindrome_substrings('') == []
