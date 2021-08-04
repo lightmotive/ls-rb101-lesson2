@@ -29,7 +29,7 @@
 # * Algorithm *
 # Key methods:
 #   - substrings (extract all substrings from the string)
-#   - is_palindrome? (check whether the string is a palindrome)
+#   - palindrome? (check whether the string is a palindrome)
 #   - palindrome_substrings (convert string to substrings array; select and return palindrome substrings as array).
 #
 # Pseudocode:
@@ -54,7 +54,7 @@
 #
 # RETURN result
 #
-# Method: is_palindrome?(string)
+# Method: palindrome?(string)
 # ==============================
 # RETURN string == (string reversed, case-sensitive comparison)
 #
@@ -64,7 +64,7 @@
 # SET result = new array
 #
 # FOR each string in substring
-#   IF is_palindrome?(string)
+#   IF palindrome?(string)
 #     APPEND string to result array
 #   ENDIF
 # ENDFOR
@@ -95,7 +95,7 @@ def substrings(string)
   result
 end
 
-def is_palindrome?(string)
+def palindrome?(string)
   string == string.reverse
 end
 
@@ -104,7 +104,7 @@ def palindrome_substrings(string)
   result = []
 
   substrings.each do |substring|
-    result << substring if is_palindrome?(substring)
+    result << substring if palindrome?(substring)
   end
 
   result
