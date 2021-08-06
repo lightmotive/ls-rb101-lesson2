@@ -5,18 +5,18 @@
 # Imagine a sequence of consecutive even integers beginning with 2.
 # The integers are grouped in rows, with the first row containing one integer,
 # the second row two integers, the third row three integers, and so on.
-# Given an integer representing the number of a particular row, return an
+# Given an integer representing the row_number of a particular row, return an
 # integer representing the sum of all the integers in that row.
 
 # PEDAC, phase 1: Understand the problem
 # ======================================
-# Input: An integer that represents the row number of sequential.
+# Input: An integer that represents the row number of sequential numbers incrementing by 2.
 # Output: Integer that's the sum of the integers that row.
 #
 # Rules:
-#   - The first row has a single number: 2.
-#   - The second row has two numbers that continue the even number sequence (increment by 2): 4, 6
-#   - Each subsequent row contains a number of even integers equal to the row number and continue
+#   - The first row has a single row_number: 2.
+#   - The second row has two numbers that continue the even row_number sequence (increment by 2): 4, 6
+#   - Each subsequent row contains a row_number of even integers equal to the row number and continue
 #     that incremental sequence.
 #   - Example:
 #       Row 1: 2
@@ -46,8 +46,8 @@
 # =========================
 # High-level:
 # Given a row number as an integer, generate a sequence of even numbers up to the
-# - The first row contains the number 2.
-# - Each subsequent row continues the sequence and adds a number, with each number incrementing by 2.
+# - The first row contains the row_number 2.
+# - Each subsequent row continues the sequence and adds a row_number, with each row_number incrementing by 2.
 # - Generate rows up to the specified integer.
 # - Finally, sum the last row of numbers.
 #
@@ -75,9 +75,9 @@
 #
 # RETURN numbers[row_number].sum
 
-def row_numbers(numbers, row, sequence_increment)
+def row_numbers(numbers, row_number, sequence_increment)
   row_numbers = [numbers[-1][-1] + sequence_increment]
-  row_numbers.push(row_numbers[-1] + sequence_increment) while row_numbers.size < row
+  row_numbers.push(row_numbers[-1] + sequence_increment) while row_numbers.size < row_number
   row_numbers
 end
 
@@ -127,12 +127,18 @@ p sum_at_row_memory_optimized(4) == 68
 # Optimize with math:
 puts "\nMath-optimized algorithm:"
 # High-level math explanation:
-# The row number can tell us how many sequential numbers to generate.
-def sum_at_row_math(number)
+# The row_number can tell us how many sequential numbers to generate.
+# [
+#   [2],                       2
+#   [4, 6],                    4 * r + 2
+#   [8, 10, 12],               8 * r + 2 + (2*2)
+#   [14, 16, 18, 20],         14 * r + 2 + (2*2) + (2*3) -> same as f * r + (2 * (((r-1) * r) / 2))
+# ]
+def sum_at_row_math(row_number)
   # To add a sequence of numbers: http://www.themathworld.com/math-tricks/adding-sequence-of-numbers.php
-  previous_row_number_count = ((number - 1) * number) / 2
+  previous_row_number_count = ((row_number - 1) * row_number) / 2
   first_number = (previous_row_number_count + 1) * 2
-  first_number * number + (2 * (((number - 1) * number) / 2))
+  first_number * row_number + (2 * (((row_number - 1) * row_number) / 2))
 end
 
 p sum_at_row_math(1) == 2
