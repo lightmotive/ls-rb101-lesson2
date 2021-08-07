@@ -100,29 +100,50 @@ p sum_at_row(1) == 2
 p sum_at_row(2) == 10
 p sum_at_row(4) == 68
 
-# Now, one can optimize by either discarding previous rows or using math.
+# The problem statement doesn't specify anything about using each rows numbers in any way. Therefore,
+# the literal solution above could be optimized in at least a couple ways:
+# - Eliminate number storage (no arrays)
+# - Math
 
-# Optimize by discarding previous rows:
-puts "\nMemory-optimized algorithm"
-def sum_at_row_memory_optimized(row_number)
-  return 0 unless row_number.positive?
+# Increment and then sum at the specified 'row' - minimal memory requirements, but no access to generated numbers array.
+puts "\nOptimized algorithm - no arrays"
+def increment_row(number_last_row, row_number, increment)
+  incremented = number_last_row
 
-  numbers = [[2]]
-  sequence_increment = 2
-  current_row = 1
-
-  while current_row < row_number
-    current_row += 1
-    numbers.push(row_numbers(numbers, current_row, sequence_increment))
-    numbers.delete_at(0)
+  number_count = 0
+  while number_count < row_number
+    incremented += increment
+    yield(incremented) if block_given?
+    number_count += 1
   end
 
-  numbers.last.sum
+  incremented
 end
 
-p sum_at_row_memory_optimized(1) == 2
-p sum_at_row_memory_optimized(2) == 10
-p sum_at_row_memory_optimized(4) == 68
+def sum_row(number_last_row, row_number, increment)
+  sum = 0
+  increment_row(number_last_row, row_number, increment) { |incremented| sum += incremented }
+  sum
+end
+
+def sum_at_row_optimized(row_number)
+  return 0 unless row_number.positive?
+
+  number = 0
+  increment = 2
+  current_row = 0
+
+  loop do
+    current_row += 1
+    break sum_row(number, current_row, increment) if current_row == row_number
+
+    number = increment_row(number, current_row, increment)
+  end
+end
+
+p sum_at_row_optimized(1) == 2
+p sum_at_row_optimized(2) == 10
+p sum_at_row_optimized(4) == 68
 
 # Optimize with math:
 puts "\nMath-optimized algorithm:"
