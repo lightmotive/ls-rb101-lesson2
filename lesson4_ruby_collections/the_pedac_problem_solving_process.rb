@@ -40,7 +40,8 @@
 #   [8, 10, 12],
 #   ...
 # ]
-# One could basically generate each row, discarding previous rows (to minimize memory usage) until the specified row is reached.
+# One could basically generate each row, discarding previous rows (to minimize memory usage) until the specified row is
+# reached.
 
 # PEDAC, phase 4: Algorithm
 # =========================
