@@ -58,42 +58,42 @@
 #
 # RETURN 0 if row_number <= 0
 #
-# SET numbers = [[2]]
-# SET sequence_increment = 2
-# SET current_row = 1
+# SET rows = [[2]]
+# SET increment = 2
+# SET current_row_number = 1
 #
-# WHILE current_row < row_number
-#   INCREMENT current_row
+# WHILE current_row_number < row_number
+#   INCREMENT current_row_number
 #
-#   SET row_numbers = [numbers.last.last + sequence_increment]
-#   WHILE row_numbers.size < current_row
-#     APPEND (row_numbers.last + sequence_increment) to row_numbers
+#   SET row_numbers = [rows.last.last + increment]
+#   WHILE row_numbers.size < current_row_number
+#     APPEND (row_numbers.last + increment) to row_numbers
 #   ENDWHILE
 #
-#   APPEND row_numbers to numbers
+#   APPEND row_numbers to rows
 # ENDWHILE
 #
-# RETURN numbers[row_number].sum
+# RETURN rows[row_number].sum
 
-def row_numbers(numbers, row_number, sequence_increment)
-  row_numbers = [numbers.fetch(-1).fetch(-1) + sequence_increment]
-  row_numbers.push(row_numbers.fetch(-1) + sequence_increment) while row_numbers.size < row_number
+def row_numbers(rows, row_number, increment)
+  row_numbers = [rows.fetch(-1).fetch(-1) + increment]
+  row_numbers.push(row_numbers.fetch(-1) + increment) while row_numbers.size < row_number
   row_numbers
 end
 
 def sum_at_row(row_number)
   return 0 unless row_number.positive?
 
-  numbers = [[2]]
-  sequence_increment = 2
-  current_row = 1
+  rows = [[2]]
+  increment = 2
+  current_row_number = 1
 
-  while current_row < row_number
-    current_row += 1
-    numbers.push(row_numbers(numbers, current_row, sequence_increment))
+  while current_row_number < row_number
+    current_row_number += 1
+    rows.push(row_numbers(rows, current_row_number, increment))
   end
 
-  numbers.fetch(row_number - 1).sum
+  rows.fetch(row_number - 1).sum
 end
 
 p sum_at_row(1) == 2
@@ -113,8 +113,8 @@ p sum_at_row(4) == 68
 
 # Increment and then sum at the specified 'row' - minimal memory requirements, but no access to generated numbers array.
 puts "\nOptimized algorithm - no arrays"
-def increment_row(number_last_row, row_number, increment)
-  incremented = number_last_row
+def increment_row(last_number, row_number, increment)
+  incremented = last_number
 
   number_count = 0
   while number_count < row_number
@@ -126,9 +126,9 @@ def increment_row(number_last_row, row_number, increment)
   incremented
 end
 
-def sum_row(number_last_row, row_number, increment)
+def sum_row(last_number, row_number, increment)
   sum = 0
-  increment_row(number_last_row, row_number, increment) { |incremented| sum += incremented }
+  increment_row(last_number, row_number, increment) { |incremented| sum += incremented }
   sum
 end
 
@@ -137,13 +137,13 @@ def sum_at_row_optimized(row_number)
 
   number = 0
   increment = 2
-  current_row = 0
+  current_row_number = 0
 
   loop do
-    current_row += 1
-    break sum_row(number, current_row, increment) if current_row == row_number
+    current_row_number += 1
+    break sum_row(number, current_row_number, increment) if current_row_number == row_number
 
-    number = increment_row(number, current_row, increment)
+    number = increment_row(number, current_row_number, increment)
   end
 end
 
@@ -163,9 +163,9 @@ puts "\nMath-optimized algorithm:"
 # ]
 def sum_at_row_math(row_number)
   # To add a sequence of numbers: http://www.themathworld.com/math-tricks/adding-sequence-of-numbers.php
-  previous_row_number_count = ((row_number - 1) * row_number) / 2
-  first_number = (previous_row_number_count + 1) * 2
-  first_number * row_number + (2 * (((row_number - 1) * row_number) / 2))
+  previous_row_numbers_generated = ((row_number - 1) * row_number) / 2
+  row_first_number = (previous_row_numbers_generated + 1) * 2
+  row_first_number * row_number + (2 * (((row_number - 1) * row_number) / 2))
 end
 
 p sum_at_row_math(1) == 2
