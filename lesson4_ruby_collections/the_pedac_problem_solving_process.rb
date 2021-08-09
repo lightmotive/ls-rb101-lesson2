@@ -81,19 +81,21 @@ def row_numbers(rows, row_number, increment)
   row_numbers
 end
 
-def sum_at_row(row_number)
-  return 0 unless row_number.positive?
-
+def rows(rows_to_generate)
   rows = [[2]]
   increment = 2
   current_row_number = 1
 
-  while current_row_number < row_number
+  while current_row_number < rows_to_generate
     current_row_number += 1
     rows.push(row_numbers(rows, current_row_number, increment))
   end
+end
 
-  rows.fetch(row_number - 1).sum
+def sum_at_row(row_number)
+  return 0 unless row_number.positive?
+
+  rows(row_number).fetch(row_number - 1).sum
 end
 
 p sum_at_row(1) == 2
