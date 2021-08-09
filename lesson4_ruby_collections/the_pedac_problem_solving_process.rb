@@ -76,6 +76,8 @@
 #
 # RETURN rows[row_number].sum
 
+puts "'Literal' algorithm (generate array up to row number):"
+
 def row_numbers(last_number, row_number, increment)
   row_numbers = [last_number + increment]
   row_numbers.push(row_numbers.fetch(-1) + increment) while row_numbers.size < row_number
@@ -116,7 +118,7 @@ p sum_at_row(3000) == 27_000_003_000
 #     iterating solution.
 
 # Increment and then sum at the specified 'row' - minimal memory requirements, but no access to generated numbers array.
-puts "\nOptimized algorithm - no arrays"
+puts "\nOptimized algorithm - no arrays:"
 def increment_row(last_number, row_number, increment)
   incremented = last_number
 
