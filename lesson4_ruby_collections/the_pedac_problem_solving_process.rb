@@ -103,7 +103,13 @@ p sum_at_row(4) == 68
 # The problem statement doesn't specify anything about using each rows numbers in any way. Therefore,
 # the literal solution above could be optimized in at least a couple ways:
 # - Eliminate number storage (no arrays)
-# - Math
+#   - Pros: Low memory usage; logic to iterate through and capture numbers if they're needed for other purposes.
+#   - Cons: Iterating to add numbers requires more operations than a mathematical solution,
+#     especially for higher row numbers.
+# - Mathematical
+#   - Pros: As efficient as possible; minimal code.
+#   - Cons: None unless one needs to capture the "structure's" numbers, which would require writing a new
+#     iterating solution.
 
 # Increment and then sum at the specified 'row' - minimal memory requirements, but no access to generated numbers array.
 puts "\nOptimized algorithm - no arrays"
