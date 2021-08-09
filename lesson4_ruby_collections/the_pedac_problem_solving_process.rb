@@ -84,10 +84,8 @@ end
 
 def rows(rows_to_generate, increment)
   rows = []
-  current_row_number = 0
 
-  while current_row_number < rows_to_generate
-    current_row_number += 1
+  (1..rows_to_generate).each do |current_row_number|
     last_number = rows.empty? ? 0 : rows.fetch(-1).fetch(-1)
     rows.push(row_numbers(last_number, current_row_number, increment))
   end
@@ -104,6 +102,7 @@ end
 p sum_at_row(1) == 2
 p sum_at_row(2) == 10
 p sum_at_row(4) == 68
+p sum_at_row(3000) == 27_000_003_000
 
 # The problem statement doesn't specify anything about using each rows numbers in any way. Therefore,
 # the literal solution above could be optimized in at least a couple ways:
@@ -121,11 +120,9 @@ puts "\nOptimized algorithm - no arrays"
 def increment_row(last_number, row_number, increment)
   incremented = last_number
 
-  number_count = 0
-  while number_count < row_number
+  (1..row_number).each do |_number_count|
     incremented += increment
     yield(incremented) if block_given?
-    number_count += 1
   end
 
   incremented
@@ -142,10 +139,8 @@ def sum_at_row_optimized(row_number)
 
   number = 0
   increment = 2
-  current_row_number = 0
 
-  loop do
-    current_row_number += 1
+  (1..row_number).each do |current_row_number|
     break sum_row(number, current_row_number, increment) if current_row_number == row_number
 
     number = increment_row(number, current_row_number, increment)
@@ -155,6 +150,7 @@ end
 p sum_at_row_optimized(1) == 2
 p sum_at_row_optimized(2) == 10
 p sum_at_row_optimized(4) == 68
+p sum_at_row_optimized(3000) == 27_000_003_000
 
 # Optimize with math:
 puts "\nMath-optimized algorithm:"
@@ -176,3 +172,4 @@ end
 p sum_at_row_math(1) == 2
 p sum_at_row_math(2) == 10
 p sum_at_row_math(4) == 68
+p sum_at_row_math(3000) == 27_000_003_000
