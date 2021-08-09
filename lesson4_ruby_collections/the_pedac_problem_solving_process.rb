@@ -75,27 +75,29 @@
 #
 # RETURN rows[row_number].sum
 
-def row_numbers(rows, row_number, increment)
-  row_numbers = [rows.fetch(-1).fetch(-1) + increment]
+def row_numbers(last_number, row_number, increment)
+  row_numbers = [last_number + increment]
   row_numbers.push(row_numbers.fetch(-1) + increment) while row_numbers.size < row_number
   row_numbers
 end
 
-def rows(rows_to_generate)
-  rows = [[2]]
-  increment = 2
-  current_row_number = 1
+def rows(rows_to_generate, increment)
+  rows = []
+  current_row_number = 0
 
   while current_row_number < rows_to_generate
     current_row_number += 1
-    rows.push(row_numbers(rows, current_row_number, increment))
+    last_number = rows.empty? ? 0 : rows.fetch(-1).fetch(-1)
+    rows.push(row_numbers(last_number, current_row_number, increment))
   end
+
+  rows
 end
 
 def sum_at_row(row_number)
   return 0 unless row_number.positive?
 
-  rows(row_number).fetch(row_number - 1).sum
+  rows(row_number, 2).fetch(row_number - 1).sum
 end
 
 p sum_at_row(1) == 2
