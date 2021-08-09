@@ -76,8 +76,8 @@
 # RETURN numbers[row_number].sum
 
 def row_numbers(numbers, row_number, sequence_increment)
-  row_numbers = [numbers[-1][-1] + sequence_increment]
-  row_numbers.push(row_numbers[-1] + sequence_increment) while row_numbers.size < row_number
+  row_numbers = [numbers.fetch(-1).fetch(-1) + sequence_increment]
+  row_numbers.push(row_numbers.fetch(-1) + sequence_increment) while row_numbers.size < row_number
   row_numbers
 end
 
@@ -93,7 +93,7 @@ def sum_at_row(row_number)
     numbers.push(row_numbers(numbers, current_row, sequence_increment))
   end
 
-  numbers[row_number - 1].sum
+  numbers.fetch(row_number - 1).sum
 end
 
 p sum_at_row(1) == 2
