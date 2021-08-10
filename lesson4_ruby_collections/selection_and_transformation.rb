@@ -60,3 +60,20 @@ end
 
 my_numbers = [1, 4, 3, 7, 2, 6]
 p double_odd_indices(my_numbers) == [1, 8, 3, 14, 2, 12]
+
+# =============
+# Exercise: Try coding a method that allows you to multiply every array item by a specified value.
+
+def multiply(numbers, factor)
+  new_numbers = []
+  counter = 0
+
+  while counter < numbers.size
+    new_numbers << numbers[counter] * factor
+    counter += 1
+  end
+
+  new_numbers
+end
+
+p multiply([1, 4, 3, 7, 2, 6], 3) == [3, 12, 9, 21, 6, 18]
