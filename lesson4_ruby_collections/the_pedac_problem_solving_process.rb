@@ -76,6 +76,13 @@
 #
 # RETURN rows[row_number].sum
 
+TEST_DATA = {
+  row1: { input: 1, expected_output: 2 },
+  row2: { input: 2, expected_output: 10 },
+  row4: { input: 4, expected_output: 68 },
+  row2500: { input: 2500, expected_output: 15_625_002_500 }
+}.freeze
+
 puts "'Literal' algorithm (generate array up to row number):"
 
 def row_numbers(last_number, row_number, increment)
@@ -101,10 +108,9 @@ def sum_at_row(row_number)
   rows(row_number, 2).fetch(row_number - 1).sum
 end
 
-p sum_at_row(1) == 2
-p sum_at_row(2) == 10
-p sum_at_row(4) == 68
-p sum_at_row(3000) == 27_000_003_000
+TEST_DATA.each do |name, data|
+  puts "#{name}: #{sum_at_row(data[:input]) == data[:expected_output]}"
+end
 
 # The problem statement doesn't specify anything about using each rows numbers in any way. Therefore,
 # the literal solution above could be optimized in at least a couple ways:
@@ -149,10 +155,9 @@ def sum_at_row_optimized(row_number)
   end
 end
 
-p sum_at_row_optimized(1) == 2
-p sum_at_row_optimized(2) == 10
-p sum_at_row_optimized(4) == 68
-p sum_at_row_optimized(3000) == 27_000_003_000
+TEST_DATA.each do |name, data|
+  puts "#{name}: #{sum_at_row_optimized(data[:input]) == data[:expected_output]}"
+end
 
 # Optimize with math:
 puts "\nMath-optimized algorithm:"
@@ -171,7 +176,14 @@ def sum_at_row_math(row_number)
   row_first_number * row_number + (2 * (((row_number - 1) * row_number) / 2))
 end
 
-p sum_at_row_math(1) == 2
-p sum_at_row_math(2) == 10
-p sum_at_row_math(4) == 68
-p sum_at_row_math(3000) == 27_000_003_000
+TEST_DATA.each do |name, data|
+  puts "#{name}: #{sum_at_row_math(data[:input]) == data[:expected_output]}"
+end
+
+require '../../ruby-common/benchmark_report'
+
+benchmark_report(2, 5, TEST_DATA,
+                 [
+                   { label: 'Iteration', method: ->(number) { sum_at_row_optimized(number) } },
+                   { label: 'Math', method: ->(number) { sum_at_row_math(number) } }
+                 ])
