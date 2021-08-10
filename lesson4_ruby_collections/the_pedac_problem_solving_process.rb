@@ -184,6 +184,7 @@ require '../../ruby-common/benchmark_report'
 
 benchmark_report(2, 5, TEST_DATA,
                  [
-                   { label: 'Iteration', method: ->(number) { sum_at_row_optimized(number) } },
+                   { label: 'Full Array', method: ->(number) { sum_at_row(number) } },
+                   { label: 'Iteration - No Array', method: ->(number) { sum_at_row_optimized(number) } },
                    { label: 'Math', method: ->(number) { sum_at_row_math(number) } }
                  ])
