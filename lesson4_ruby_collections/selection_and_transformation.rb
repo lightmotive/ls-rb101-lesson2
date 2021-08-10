@@ -40,3 +40,23 @@ end
 my_numbers = [1, 4, 3, 7, 2, 6]
 double_numbers!(my_numbers) # => [2, 8, 6, 14, 4, 12]
 p my_numbers == [2, 8, 6, 14, 4, 12]
+
+# =============
+# Exercise: What if we wanted to transform the numbers based on their position in the array rather than their value?
+# Try coding a solution that doubles the numbers that have odd indices.
+
+def double_odd_indices(numbers)
+  new_numbers = []
+  counter = 0
+
+  loop do
+    break new_numbers if counter == numbers.size
+
+    new_numbers << (counter.odd? ? numbers[counter] * 2 : numbers[counter])
+
+    counter += 1
+  end
+end
+
+my_numbers = [1, 4, 3, 7, 2, 6]
+p double_odd_indices(my_numbers) == [1, 8, 3, 14, 2, 12]
