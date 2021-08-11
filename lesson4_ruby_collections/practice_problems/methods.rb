@@ -44,3 +44,14 @@ hash
 # [...].pop # => 'caterpillar'
 # 'caterpillar'.size # => 11
 # For that line, see docs String#size (alias for String#length)
+
+[1, 2, 3].any? do |num|
+  puts num
+  num.odd?
+end
+# Output (note that Enumerable#any? stops iterating after the first true block result):
+# 1
+# Return value (of the #any? method call):
+# true
+# The block's return value is true if the element (num) is odd; otherwise, false.
+# Enumerable#any? returns true if the block for any element returns true.
