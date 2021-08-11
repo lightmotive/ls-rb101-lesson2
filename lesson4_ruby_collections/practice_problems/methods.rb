@@ -37,3 +37,10 @@ hash
 # According to the docs (https://docs.ruby-lang.org/en/master/Hash.html#method-i-shift), "Removes the first hash entry
 # (see Entry Order); returns a 2-element Array containing the removed key and value...
 # Returns the default value if the hash is empty"
+
+%w[ant bear caterpillar].pop.size
+# => 11
+# Array#pop removes the last element of the array, which then calls size. To break it down:
+# [...].pop # => 'caterpillar'
+# 'caterpillar'.size # => 11
+# For that line, see docs String#size (alias for String#length)
