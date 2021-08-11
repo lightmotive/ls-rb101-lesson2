@@ -22,3 +22,9 @@ end
 # According to the docs (https://docs.ruby-lang.org/en/master/Array.html#method-i-reject), "Returns a new Array whose
 # elements are all those from self for which the block returns false or nil..."
 # "puts num" always returns nil
+
+%w[ant bear cat].each_with_object({}) do |value, hash|
+  hash[value[0]] = value
+end
+# => { 'a' => 'ant', 'b' => 'bear', 'c' => 'cat' }
+# Enumerable#each_with_object returns the object passed as an argument. The block mutates that argument.
