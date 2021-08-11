@@ -70,3 +70,13 @@ end
 # Enumerable#map returns a new array containing the values that the block returns.
 # When the if condition evaluates to true, the if expression returns the hash pair's value. Otherwise, it returns nil.
 # The block returns the if expression's value.
+
+[1, 2, 3].map do |num|
+  if num > 1
+    puts num
+  else
+    num
+  end
+end
+# => [1, nil, nil]
+# Logic is very similar to the last exercise.
