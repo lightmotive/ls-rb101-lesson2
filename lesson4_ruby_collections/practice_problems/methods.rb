@@ -40,7 +40,7 @@ hash
 
 %w[ant bear caterpillar].pop.size
 # => 11
-# Array#pop removes the last element of the array, which then calls size. To break it down:
+# Array#pop removes and returns the last element of the array, which then calls size. To break it down:
 # [...].pop # => 'caterpillar'
 # 'caterpillar'.size # => 11
 # For that line, see docs String#size (alias for String#length)
