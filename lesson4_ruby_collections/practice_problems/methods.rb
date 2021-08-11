@@ -62,3 +62,11 @@ arr.take(2)
 # The docs (https://docs.ruby-lang.org/en/master/Array.html#method-i-take) explains: "Returns a new Array containing the
 # first n element of self, where n is a non-negative Integer; does not modify self."
 # Therefore, it's not destructive.
+
+{ a: 'ant', b: 'bear' }.map do |_key, value|
+  value if value.size > 3
+end
+# => [nil, 'bear']
+# Enumerable#map returns a new array containing the values that the block returns.
+# When the if condition evaluates to true, the if expression returns the hash pair's value. Otherwise, it returns nil.
+# The block returns the if expression's value.
