@@ -14,3 +14,11 @@ end
 # "With no argument and a block given, calls the block with each element; returns the count of elements for which the
 # block returns a truthy value..."
 # https://docs.ruby-lang.org/en/master/Array.html#method-i-count
+
+[1, 2, 3].reject do |num|
+  puts num
+end
+# => [1, 2, 3]
+# According to the docs (https://docs.ruby-lang.org/en/master/Array.html#method-i-reject), "Returns a new Array whose
+# elements are all those from self for which the block returns false or nil..."
+# "puts num" always returns nil
