@@ -55,3 +55,10 @@ end
 # true
 # The block's return value is true if the element (num) is odd; otherwise, false.
 # Enumerable#any? returns true if the block for any element returns true.
+
+arr = [1, 2, 3, 4, 5]
+arr.take(2)
+# => [1, 2]
+# The docs (https://docs.ruby-lang.org/en/master/Array.html#method-i-take) explains: "Returns a new Array containing the
+# first n element of self, where n is a non-negative Integer; does not modify self."
+# Therefore, it's not destructive.
