@@ -41,7 +41,15 @@ p(flintstones.map! { |name| name[0, 3] })
 
 # ***
 puts "\n* Problem 7 *"
-# ...
+# Create a hash that expresses the frequency with which each letter occurs in this string:
+statement = 'The Flintstones Rock'
+
+char_occurrences = Hash.new(0)
+statement.delete('^A-Za-z').chars.each do |char|
+  char_occurrences[char] += 1
+end
+
+p(char_occurrences.sort_by { |_, value| value }.reverse.to_h)
 
 # ***
 puts "\n* Problem 8 *"
