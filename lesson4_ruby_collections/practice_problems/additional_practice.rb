@@ -17,7 +17,9 @@ p ages.values.sum
 
 # ***
 puts "\n* Problem 3 *"
-# ...
+ages = { 'Herman' => 32, 'Lily' => 30, 'Grandpa' => 402, 'Eddie' => 10 }
+ages.delete_if { |_, age| age >= 100 }
+p ages
 
 # ***
 puts "\n* Problem 4 *"
