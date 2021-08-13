@@ -76,8 +76,9 @@ end
 #   - numbers.shift(1) removes the first element of the array, so it becomes [3, 4].
 #   - Ruby stops iterating at this point. Looking at the source code...
 #     - for (i=0; i<RARRAY_LEN(ary); i++) { ...
-#     - ...one can see that Ruby checks the array length with each loop. At the next pass, i will be 2 (i++), which is equal to
-#     - RARRAY_LEN(ary). Therefore, the for loop exits.
+#     - ...one can see that Ruby checks the array length with each loop. At the next pass, i will be 2 (i++), which is
+#       equal to RARRAY_LEN(ary). Therefore, the for loop exits.
+#   - In other words, Ruby source iterates on a reference to the array, not a copy of it, so changes affect iteration.
 
 # What would be output by this code?
 numbers = [1, 2, 3, 4]
