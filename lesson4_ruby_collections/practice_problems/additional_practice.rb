@@ -53,7 +53,42 @@ p(char_occurrences.sort_by { |_, value| value }.reverse.to_h)
 
 # ***
 puts "\n* Problem 8 *"
-# ...
+# What happens when we modify an array while we are iterating over it?
+
+# Ruby docs and source code show that Array#each iterates by index/position and explicitly states that it allows
+# array modification during iteration.
+
+# What would be output by this code?
+numbers = [1, 2, 3, 4]
+numbers.each do |number|
+  p number
+  numbers.shift(1)
+end
+# Output:
+# 1
+# 3
+# Walkthrough:
+# Iteration 1:
+#   - #each index is 0; the element at that position is 1, so "p number" outputs 1.
+#   - numbers.shift(1) removes the first element of the array, so it becomes [2, 3, 4].
+# Iteration 2:
+#   - #each index is 1; the element at that position is 3, so "p number" outputs 3.
+#   - numbers.shift(1) removes the first element of the array, so it becomes [3, 4].
+#   - Ruby stops iterating at this point. Looking at the source code...
+#     - for (i=0; i<RARRAY_LEN(ary); i++) { ...
+#     - ...one can see that Ruby checks the array length with each loop. At the next pass, i will be 2 (i++), which is equal to
+#     - RARRAY_LEN(ary). Therefore, the for loop exits.
+
+# What would be output by this code?
+numbers = [1, 2, 3, 4]
+numbers.each do |number|
+  p number
+  numbers.pop(1)
+end
+# Output:
+# 1
+# 2
+# The walkthrough/explanation would be similar, except that the elements are removed from the end of the array.
 
 # ***
 puts "\n* Problem 9 *"
