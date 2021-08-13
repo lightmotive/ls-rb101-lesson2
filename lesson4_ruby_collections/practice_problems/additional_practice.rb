@@ -93,7 +93,14 @@ end
 
 # ***
 puts "\n* Problem 9 *"
-# ...
+# Write your own version of the rails titleize implementation.
+
+# A simplified titleize. A more robust implementation would not upcase certain words/positions and would be localized.
+def titleize(string)
+  string.split.map(&:capitalize).join(' ')
+end
+
+p titleize('the flintstones rock')
 
 # ***
 puts "\n* Problem 10 *"
