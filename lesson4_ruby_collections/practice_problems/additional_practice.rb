@@ -104,4 +104,27 @@ p titleize('the flintstones rock')
 
 # ***
 puts "\n* Problem 10 *"
-# ...
+# Modify the hash such that each member of the Munster family has an additional "age_group" key that has one of three
+# values describing the age group the family member is in (kid, adult, or senior).
+# A kid is in the age range 0 - 17, an adult is in the range 18 - 64 and a senior is aged 65+.
+
+munsters = {
+  'Herman' => { 'age' => 32, 'gender' => 'male' },
+  'Lily' => { 'age' => 30, 'gender' => 'female' },
+  'Grandpa' => { 'age' => 402, 'gender' => 'male' },
+  'Eddie' => { 'age' => 10, 'gender' => 'male' },
+  'Marilyn' => { 'age' => 23, 'gender' => 'female' }
+}
+
+munsters.each do |_, value|
+  value['age_group'] =
+    case value['age']
+    when 0..17 then 'kid'
+    when 18..64 then 'adult'
+    else 'senior'
+    end
+  # The case expression in Ruby use the '===' method to compare expression to patterns, so patterns can be
+  # ranges, regex, and anything else that responds to the === method. Nice way to keep code succinct!
+end
+
+p munsters
