@@ -76,12 +76,12 @@
 #
 # RETURN rows[row_number].sum
 
-TEST_DATA = {
-  row1: { input: 1, expected_output: 2 },
-  row2: { input: 2, expected_output: 10 },
-  row4: { input: 4, expected_output: 68 },
-  row2500: { input: 2500, expected_output: 15_625_002_500 }
-}.freeze
+TESTS = [
+  { label: 'row1', input: 1, expected_output: 2 },
+  { label: 'row2', input: 2, expected_output: 10 },
+  { label: 'row4', input: 4, expected_output: 68 },
+  { label: 'row2500', input: 2500, expected_output: 15_625_002_500 }
+].freeze
 
 puts "'Literal' algorithm (generate array up to row number):"
 
@@ -108,8 +108,8 @@ def sum_at_row(row_number)
   rows(row_number, 2).fetch(row_number - 1).sum
 end
 
-TEST_DATA.each do |name, data|
-  puts "#{name}: #{sum_at_row(data[:input]) == data[:expected_output]}"
+TESTS.each do |test|
+  puts "#{test[:label]}: #{sum_at_row(test[:input]) == test[:expected_output]}"
 end
 
 # The problem statement doesn't specify anything about using each rows numbers in any way. Therefore,
@@ -155,8 +155,8 @@ def sum_at_row_optimized(row_number)
   end
 end
 
-TEST_DATA.each do |name, data|
-  puts "#{name}: #{sum_at_row_optimized(data[:input]) == data[:expected_output]}"
+TESTS.each do |test|
+  puts "#{test[:label]}: #{sum_at_row_optimized(test[:input]) == test[:expected_output]}"
 end
 
 # Optimize with math:
@@ -176,13 +176,13 @@ def sum_at_row_math(row_number)
   row_first_number * row_number + (2 * (((row_number - 1) * row_number) / 2))
 end
 
-TEST_DATA.each do |name, data|
-  puts "#{name}: #{sum_at_row_math(data[:input]) == data[:expected_output]}"
+TESTS.each do |test|
+  puts "#{test[:label]}: #{sum_at_row_math(test[:input]) == test[:expected_output]}"
 end
 
 require '../../ruby-common/benchmark_report'
 
-benchmark_report(2, 5, TEST_DATA,
+benchmark_report(2, 5, TESTS,
                  [
                    { label: 'Full Array', method: ->(number) { sum_at_row(number) } },
                    { label: 'Iteration - No Array', method: ->(number) { sum_at_row_optimized(number) } },
