@@ -86,8 +86,6 @@ TESTS = [
   { label: 'row2500', input: 2500, expected_output: 15_625_002_500 }
 ].freeze
 
-puts "'Literal' algorithm (generate array up to row number):"
-
 def row_numbers(last_number, row_number, increment)
   row_numbers = [last_number + increment]
   row_numbers.push(row_numbers.fetch(-1) + increment) while row_numbers.size < row_number
@@ -111,7 +109,7 @@ def sum_at_row(row_number)
   rows(row_number, 2).fetch(row_number - 1).sum
 end
 
-run_tests(TESTS, ->(input) { sum_at_row(input) })
+run_tests('sum_at_row', TESTS, ->(input) { sum_at_row(input) })
 
 # The problem statement doesn't specify anything about using each rows numbers in any way. Therefore,
 # the literal solution above could be optimized in at least a couple ways:
@@ -125,7 +123,6 @@ run_tests(TESTS, ->(input) { sum_at_row(input) })
 #     iterating solution.
 
 # Increment and then sum at the specified 'row' - minimal memory requirements, but no access to generated numbers array.
-puts "\nOptimized algorithm - no arrays:"
 def increment_row(last_number, row_number, increment)
   incremented = last_number
 
@@ -156,11 +153,10 @@ def sum_at_row_optimized(row_number)
   end
 end
 
-run_tests(TESTS, ->(input) { sum_at_row_optimized(input) })
+run_tests('sum_at_row_optimized', TESTS, ->(input) { sum_at_row_optimized(input) })
 
 # Optimize with math:
-puts "\nMath-optimized algorithm:"
-# High-level math explanation:
+# High-level explanation:
 # The row_number can tell us how many sequential numbers to generate.
 # [
 #   [2],                       2
@@ -175,7 +171,7 @@ def sum_at_row_math(row_number)
   row_first_number * row_number + (2 * (((row_number - 1) * row_number) / 2))
 end
 
-run_tests(TESTS, ->(input) { sum_at_row_math(input) })
+run_tests('sum_at_row_math', TESTS, ->(input) { sum_at_row_math(input) })
 
 benchmark_report(2, 5, TESTS,
                  [
