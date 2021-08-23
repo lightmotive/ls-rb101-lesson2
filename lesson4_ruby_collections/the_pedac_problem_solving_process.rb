@@ -76,6 +76,9 @@
 #
 # RETURN rows[row_number].sum
 
+require_relative '../../ruby-common/benchmark_report'
+require_relative '../../ruby-common/test'
+
 TESTS = [
   { label: 'row1', input: 1, expected_output: 2 },
   { label: 'row2', input: 2, expected_output: 10 },
@@ -108,9 +111,7 @@ def sum_at_row(row_number)
   rows(row_number, 2).fetch(row_number - 1).sum
 end
 
-TESTS.each do |test|
-  puts "#{test[:label]}: #{sum_at_row(test[:input]) == test[:expected_output]}"
-end
+run_tests(TESTS, ->(input) { sum_at_row(input) })
 
 # The problem statement doesn't specify anything about using each rows numbers in any way. Therefore,
 # the literal solution above could be optimized in at least a couple ways:
@@ -155,9 +156,7 @@ def sum_at_row_optimized(row_number)
   end
 end
 
-TESTS.each do |test|
-  puts "#{test[:label]}: #{sum_at_row_optimized(test[:input]) == test[:expected_output]}"
-end
+run_tests(TESTS, ->(input) { sum_at_row_optimized(input) })
 
 # Optimize with math:
 puts "\nMath-optimized algorithm:"
@@ -176,11 +175,7 @@ def sum_at_row_math(row_number)
   row_first_number * row_number + (2 * (((row_number - 1) * row_number) / 2))
 end
 
-TESTS.each do |test|
-  puts "#{test[:label]}: #{sum_at_row_math(test[:input]) == test[:expected_output]}"
-end
-
-require '../../ruby-common/benchmark_report'
+run_tests(TESTS, ->(input) { sum_at_row_math(input) })
 
 benchmark_report(2, 5, TESTS,
                  [
