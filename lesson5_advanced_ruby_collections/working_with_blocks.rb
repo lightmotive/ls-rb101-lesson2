@@ -38,3 +38,23 @@ end
 #     - Array#each always returns the caller.
 # 4. The final result is the original array assigned to my_arr
 #     => [[18, 7], [3, 12]]
+
+# Example 5
+# =========
+[[1, 2], [3, 4]].map do |arr|
+  arr.map do |num|
+    num * 2
+  end
+end
+# - [[1, 2], [3, 4]] calls map and passes a block, which passes each element to the block.
+#   - Each element passed to the block is an array.
+#   - Each array calls map with a block, which passes each element to the block.
+#     - Each element is a number.
+#     - Each number is multiplied by 2 in the block; the block returns the results to arr.map, building an array.
+#       => [2, 4]
+#       => [6, 8]
+#     - The block returns each of those arrays to the first Array#map call.
+#   - The first Array#map method inserts each of those results into an array, which results in:
+#     => [[2, 4], [6, 8]]
+# - The final result is the array that the first Array#map method built:
+# => [[2, 4], [6, 8]]
