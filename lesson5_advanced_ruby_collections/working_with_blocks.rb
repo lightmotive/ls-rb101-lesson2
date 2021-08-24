@@ -58,3 +58,19 @@ end
 #     => [[2, 4], [6, 8]]
 # - The final result is the array that the first Array#map method built:
 # => [[2, 4], [6, 8]]
+
+# Example 6
+# =========
+[{ a: 'ant', b: 'elephant' }, { c: 'cat' }].select do |hash|
+  hash.all? do |key, value|
+    value[0] == key.to_s
+  end
+end
+# => [{ :c => "cat" }]
+
+# Summary breakdown:
+# An array of hashes calls select with a block. #select passes each hash in the array to the block.
+# In the block, the hash calls Enumerable#all? with a block that evaluates whether the first character of the value
+# equals the value's key for all key-value pairs. It passes the result to the select method.
+# #select adds the associated hash to a new array if it receives true from the block.
+# There are no side effects.
