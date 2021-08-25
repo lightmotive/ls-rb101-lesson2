@@ -63,7 +63,17 @@ p hsh2
 
 # ***
 puts "\n* Practice Problem 5 *"
-# ...
+# Figure out the total age of just the male members of the family:
+munsters = {
+  'Herman' => { 'age' => 32, 'gender' => 'male' },
+  'Lily' => { 'age' => 30, 'gender' => 'female' },
+  'Grandpa' => { 'age' => 402, 'gender' => 'male' },
+  'Eddie' => { 'age' => 10, 'gender' => 'male' },
+  'Marilyn' => { 'age' => 23, 'gender' => 'female' }
+}
+
+p(munsters.select { |_, data| data['gender'] == 'male' }.values
+  .inject(0) { |sum, data| sum + data['age'] })
 
 # ***
 puts "\n* Practice Problem 6 *"
