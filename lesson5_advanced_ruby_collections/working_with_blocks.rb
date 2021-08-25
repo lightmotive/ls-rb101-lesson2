@@ -97,13 +97,28 @@ end
 # Example 10
 # ==========
 [[[1, 2], [3, 4]], [5, 6]].map do |arr|
+  # Here, arr will be the first set of sub-arrays
+  #   - [[1, 2], [3, 4]]
+  #   - [5, 6]
   arr.map do |el|
-    if el.to_s.size == 1    # it's an integer
-      el + 1
-    else                    # it's an array
-      el.map do |n|
+    # Here, el will be what's within the arrays above:
+    #   - [1, 2], [3, 4]
+    #   - 5, 6
+    if el.to_s.size == 1 # it's an integer
+      el + 1 # This will return the integer values incremented by 1:
+      # => 6
+      # => 7
+    else # it's an array
+      el.map do |n| # Here, n will be the integers within the arrays above.
         n + 1
       end
+      # => [2, 3]
+      # => [4, 5]
     end
   end
+  # => [[2, 3], [4, 5]]
+  # => [6, 7]
 end
+# => [[[2, 3], [4, 5]], [6, 7]]
+# There will be no side effects because no methods or lines of code mutate the caller.
+#   - No setter methods, concatenation, or indexed assignment.
