@@ -93,3 +93,17 @@ end
 #     - We'd want to determine the desired result of the call to map before continuing.
 # - That array that map returns will have a different object ID than the caller, but it's elements will point to the
 #   same objects in memory as the objects within the calling array.
+
+# Example 10
+# ==========
+[[[1, 2], [3, 4]], [5, 6]].map do |arr|
+  arr.map do |el|
+    if el.to_s.size == 1    # it's an integer
+      el + 1
+    else                    # it's an array
+      el.map do |n|
+        n + 1
+      end
+    end
+  end
+end
