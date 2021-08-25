@@ -74,3 +74,22 @@ end
 # equals the value's key for all key-value pairs. It passes the result to the select method.
 # #select adds the associated hash to a new array if it receives true from the block.
 # There are no side effects.
+
+# Example 9
+# =========
+[[[1], [2], [3], [4]], [['a'], ['b'], ['c']]].map do |element1|
+  element1.each do |element2|
+    element2.partition do |element3|
+      element3.size > 0
+    end
+  end
+end
+# => [[[1], [2], [3], [4]], [["a"], ["b"], ["c"]]]
+
+# Breakdown:
+# - Level 1: Array with sub-arrays represented by element1
+#   - element1 calls each, which will return the original value of of element1 to map.
+#     - At this point, we can probably consider this a bug because the remaining calls have no program impact.
+#     - We'd want to determine the desired result of the call to map before continuing.
+# - That array that map returns will have a different object ID than the caller, but it's elements will point to the
+#   same objects in memory as the objects within the calling array.
