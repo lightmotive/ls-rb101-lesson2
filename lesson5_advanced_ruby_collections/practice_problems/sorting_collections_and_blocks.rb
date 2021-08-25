@@ -2,7 +2,12 @@
 
 # ***
 puts "\n* Practice Problem 1 *"
-# ...
+# How would you order this array of number strings by descending numeric value?
+arr = %w[10 11 9 7 8]
+
+p arr.sort_by(&:to_i).reverse
+# Enumerable#sort_by is more efficient than #sort with conversion because it results in fewer String#to_i calls.
+# https://docs.ruby-lang.org/en/master/Enumerable.html#:~:text=this%20is%20exactly%20what%20sort_by%20does%20internally.
 
 # ***
 puts "\n* Practice Problem 2 *"
