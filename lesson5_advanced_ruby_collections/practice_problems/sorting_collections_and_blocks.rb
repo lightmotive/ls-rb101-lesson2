@@ -26,7 +26,21 @@ p(books.sort_by { |hash| hash[:published].to_i })
 
 # ***
 puts "\n* Practice Problem 3 *"
-# ...
+# For each of these collection objects demonstrate how you would reference the letter 'g'.
+arr1 = ['a', 'b', ['c', %w[d e f g]]]
+p arr1[2][1][3]
+
+arr2 = [{ first: %w[a b c], second: %w[d e f] }, { third: %w[g h i] }]
+p arr2[1][:third][0]
+
+arr3 = [['abc'], ['def'], { third: ['ghi'] }]
+p arr3[2][:third][0][0]
+
+hsh1 = { 'a' => %w[d e], 'b' => %w[f g], 'c' => %w[h i] }
+p hsh1['b'][1]
+
+hsh2 = { first: { 'd' => 3 }, second: { 'e' => 2, 'f' => 1 }, third: { 'g' => 0 } }
+p hsh2[:third].key(0)
 
 # ***
 puts "\n* Practice Problem 4 *"
