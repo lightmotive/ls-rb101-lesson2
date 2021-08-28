@@ -104,7 +104,11 @@ end
 
 # ***
 puts "\n* Practice Problem 9 *"
-# ...
+# Given this data structure, return a new array of the same structure but with the sub arrays being ordered (alphabetically or numerically as appropriate) in descending order.
+arr = [%w[b c a], [2, 1, 3], %w[blue black green]]
+
+new_arr = arr.map(&:sort)
+p new_arr
 
 # ***
 puts "\n* Practice Problem 10 *"
