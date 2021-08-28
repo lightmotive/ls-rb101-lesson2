@@ -177,7 +177,7 @@ arr = [{ a: [1, 2, 3] }, { b: [2, 4, 6], c: [3, 6], d: [4] }, { e: [8], f: [6, 1
 # Iterate through each item in the array (hash)
 #   Iterate through each value of the hash (arrays of numbers)
 #     Iterate through each number; if any is odd, exclude the entire hash.
-# Ruby has methods for succinct and algorithmically efficient code.
+# Ruby has methods for succinct code and algorithmically efficient execution.
 #   any?(&:odd) will be more efficient than all?(&:even) because the former does not need to check all array values.
 
 p(arr.reject do |hsh|
