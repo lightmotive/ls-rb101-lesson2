@@ -77,7 +77,8 @@ p(munsters.select { |_, data| data['gender'] == 'male' }.values
 
 # ***
 puts "\n* Practice Problem 6 *"
-# ...
+# Print out the name, age and gender of each family member, e.g., "(Name) is a (age)-year-old (male or female)."
+munsters.each { |name, data| puts "#{name} is a #{data['age']}-year-old #{data['gender']}." }
 
 # ***
 puts "\n* Practice Problem 7 *"
