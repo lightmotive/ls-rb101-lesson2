@@ -93,7 +93,14 @@ arr[1][0] -= a # a = 2; arr[1][0] = 5; use indexed assignment to change value at
 
 # ***
 puts "\n* Practice Problem 8 *"
-# ...
+# Using the each method, write some code to output all of the vowels from the strings.
+hsh = { first: %w[the quick], second: %w[brown fox], third: ['jumped'], fourth: %w[over the lazy dog] }
+
+hsh.values do |words|
+  words.each do |word|
+    word.scan(/[aeiou]/i) { |char| puts char }
+  end
+end
 
 # ***
 puts "\n* Practice Problem 9 *"
