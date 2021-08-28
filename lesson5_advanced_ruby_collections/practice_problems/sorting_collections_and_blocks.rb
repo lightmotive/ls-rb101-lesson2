@@ -96,7 +96,7 @@ puts "\n* Practice Problem 8 *"
 # Using the each method, write some code to output all of the vowels from the strings.
 hsh = { first: %w[the quick], second: %w[brown fox], third: ['jumped'], fourth: %w[over the lazy dog] }
 
-hsh.values do |words|
+hsh.each_value do |words|
   words.each do |word|
     word.scan(/[aeiou]/i) { |char| puts char }
   end
