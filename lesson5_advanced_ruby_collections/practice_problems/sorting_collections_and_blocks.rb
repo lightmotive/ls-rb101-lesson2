@@ -180,9 +180,7 @@ arr = [{ a: [1, 2, 3] }, { b: [2, 4, 6], c: [3, 6], d: [4] }, { e: [8], f: [6, 1
 # Ruby has methods for succinct code and algorithmically efficient execution.
 #   any?(&:odd) will be more efficient than all?(&:even) because the former does not need to check all array values.
 
-p(arr.reject do |hsh|
-  hsh.values.map { |numbers| numbers.any?(&:odd?) }.any?(true)
-end)
+p(arr.reject { |hsh| hsh.values.any? { |numbers| numbers.any?(&:odd?) } })
 
 # ***
 puts "\n* Practice Problem 16 *"
