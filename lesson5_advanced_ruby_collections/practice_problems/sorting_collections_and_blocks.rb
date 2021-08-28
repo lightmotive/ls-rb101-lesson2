@@ -150,7 +150,22 @@ p(arr.sort_by { |sub_arr| sub_arr.select(&:odd?) })
 
 # ***
 puts "\n* Practice Problem 14 *"
-# ...
+# Given this data structure write some code to return an array containing the colors of the fruits and the sizes of the
+# vegetables. The sizes should be uppercase and the colors should be capitalized.
+hsh = {
+  'grape' => { type: 'fruit', colors: %w[red green], size: 'small' },
+  'carrot' => { type: 'vegetable', colors: ['orange'], size: 'medium' },
+  'apple' => { type: 'fruit', colors: %w[red green], size: 'medium' },
+  'apricot' => { type: 'fruit', colors: ['orange'], size: 'medium' },
+  'marrow' => { type: 'vegetable', colors: ['green'], size: 'large' }
+}
+
+p(hsh.each_value.map do |data|
+  case data[:type]
+  when 'fruit' then data[:colors].map(&:capitalize)
+  when 'vegetable' then data[:size].upcase
+  end
+end)
 
 # ***
 puts "\n* Practice Problem 15 *"
