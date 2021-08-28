@@ -82,7 +82,14 @@ munsters.each { |name, data| puts "#{name} is a #{data['age']}-year-old #{data['
 
 # ***
 puts "\n* Practice Problem 7 *"
-# ...
+# Given this code, what would be the final values of a and b? Try to work this out without running the code.
+a = 2
+b = [5, 8]
+arr = [a, b] # => [2, [5, 8]]
+
+arr[0] += 2  # => [4, [5, 8]]
+arr[1][0] -= a # a = 2; arr[1][0] = 5; use indexed assignment to change value at that position to 5 - 2
+# => [4, [3, 8]]
 
 # ***
 puts "\n* Practice Problem 8 *"
