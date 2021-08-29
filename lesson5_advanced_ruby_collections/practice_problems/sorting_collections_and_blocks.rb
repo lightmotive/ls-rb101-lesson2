@@ -216,8 +216,11 @@ puts "\n* Practice Problem 16 *"
 #   - Sample from the array of possible symbols.
 # - Map group_lengths array to generate strings, then join with the optionally specified separator.
 
+HEX_CHARS = '0'.upto('9').to_a.concat('a'.upto('f').to_a).freeze
+Ractor.make_shareable(HEX_CHARS)
+
 def random_hex_string(length)
-  '0'.upto('9').to_a.concat('a'.upto('f').to_a).sample(length).join
+  HEX_CHARS.sample(length).join
 end
 
 def uuid_v4(group_lengths: [8, 4, 4, 4, 12], separator: '-')
@@ -265,9 +268,10 @@ end
 
 def test_generate_duplicates(max, options = { threads: 1 })
   ractors = []
+  count_per_ractor = max / options[:threads]
 
   options[:threads].times do
-    ractors << Ractor.new(max / options[:threads]) do |count|
+    ractors << Ractor.new(count_per_ractor) do |count|
       generate_uuids(count)
     end
   end
@@ -277,17 +281,13 @@ def test_generate_duplicates(max, options = { threads: 1 })
 
   return "#{duplicates.size} duplicate(s) within #{uuids.size} UUIDs:\n#{duplicates}" unless duplicates.empty?
 
-  "No duplicates generated. Generations: #{max} | Threads: #{options[:threads]}."
+  "No duplicates generated. Generations: #{uuids.size} | Threads: #{options[:threads]}."
 end
 
 require_relative '../../../ruby-common/benchmark_report'
 require_relative '../../../ruby-common/test'
 
 TESTS = [
-  { label: '10k UUIDs, 1 thread', input: [10_000],
-    expected_output: 'No duplicates generated. Generations: 10000 | Threads: 1.' },
-  { label: '10k UUIDs, 8 threads', input: [10_000, { threads: 8 }],
-    expected_output: 'No duplicates generated. Generations: 10000 | Threads: 8.' },
   { label: '1m UUIDs, 1 thread', input: [1_000_000],
     expected_output: 'No duplicates generated. Generations: 1000000 | Threads: 1.' },
   { label: '1m UUIDs, 8 threads', input: [1_000_000, { threads: 8 }],
@@ -296,3 +296,11 @@ TESTS = [
 
 run_tests('test_generate_duplicates', TESTS, ->(input) { test_generate_duplicates(*input) })
 # All tests passed (no duplicates generated).
+
+benchmark_report(
+  1, 1,
+  [label: 'TESTS passthrough', input: TESTS, expected_output: 'N/A'],
+  TESTS.map.with_index do |_, idx|
+    { label: TESTS[idx][:label], method: ->(tests) { test_generate_duplicates(*tests[idx][:input]) } }
+  end
+)
