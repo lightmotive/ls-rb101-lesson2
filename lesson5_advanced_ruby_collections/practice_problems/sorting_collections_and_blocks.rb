@@ -216,10 +216,8 @@ puts "\n* Practice Problem 16 *"
 #   - Sample from the array of possible symbols.
 # - Map group_lengths array to generate strings, then join with the optionally specified separator.
 
-UUID_CHARS = '0'.upto('9').to_a.concat('a'.upto('f').to_a).freeze
-
 def random_hex_string(length)
-  UUID_CHARS.sample(length).join
+  '0'.upto('9').to_a.concat('a'.upto('f').to_a).sample(length).join
 end
 
 def uuid_v4(group_lengths: [8, 4, 4, 4, 12], separator: '-')
@@ -258,20 +256,34 @@ def generate_uuids(count)
   uuids
 end
 
-def test_generate_duplicates(max)
-  uuids = generate_uuids(max).sort
+def duplicates(uuids)
   duplicates = Hash.new(0)
 
   uuids.each_with_index do |uuid, index|
     duplicates[uuid] += 1 if uuid == uuids[index - 1]
   end
 
+  duplicates
+end
+
+def test_generate_duplicates(max, threads: 1)
+  ractors = []
+
+  threads.times do
+    ractors << Ractor.new(max / threads) do |count|
+      generate_uuids(count)
+    end
+  end
+
+  uuids = ractors.map(&:take).flatten.sort
+  duplicates = duplicates(uuids)
+
   return "#{duplicates.size} duplicate(s) within #{uuids.size} UUIDs:\n#{duplicates}" unless duplicates.empty?
 
-  "No duplicates generated after #{max} generations."
+  "No duplicates generated after #{uuids.size} generations."
 end
 
 max = 1_000_000
 puts "Test #{max} UUID generations..."
-puts test_generate_duplicates(max)
-# The test sometimes generated duplicates!
+puts test_generate_duplicates(max, threads: 8)
+# The test never generated duplicates
