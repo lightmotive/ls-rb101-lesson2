@@ -257,13 +257,10 @@ def generate_uuids(count)
 end
 
 def duplicates(uuids)
-  duplicates = Hash.new(0)
+  uuids_unique = uuids.uniq
+  return [] if uuids_unique.size == uuids.size
 
-  uuids.each_with_index do |uuid, index|
-    duplicates[uuid] += 1 if uuid == uuids[index - 1]
-  end
-
-  duplicates
+  uuids - uuids_unique
 end
 
 def test_generate_duplicates(max, threads: 1)
@@ -275,7 +272,7 @@ def test_generate_duplicates(max, threads: 1)
     end
   end
 
-  uuids = ractors.map(&:take).flatten.sort
+  uuids = ractors.map(&:take).flatten
   duplicates = duplicates(uuids)
 
   return "#{duplicates.size} duplicate(s) within #{uuids.size} UUIDs:\n#{duplicates}" unless duplicates.empty?
