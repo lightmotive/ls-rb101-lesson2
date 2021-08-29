@@ -269,7 +269,7 @@ def test_generate_duplicates(max, threads: 1)
 
   return "#{duplicates.size} duplicate(s) within #{uuids.size} UUIDs:\n#{duplicates}" unless duplicates.empty?
 
-  "No duplicates generated after #{uuids.size} generations."
+  "No duplicates generated with #{max} generations across #{threads} threads."
 end
 
 max = 1_000_000
