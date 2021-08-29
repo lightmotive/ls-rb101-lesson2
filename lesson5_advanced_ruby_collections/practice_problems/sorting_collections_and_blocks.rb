@@ -252,12 +252,17 @@ def uuid_duplicate?(uuids, new_uuid)
   # uuids.include?(new_uuid)
 end
 
-def test_generate_duplicate(max)
+def generate_uuids(count)
   uuids = []
-  uuids << uuid_v4 while uuids.size < max
+  uuids << uuid_v4 while uuids.size < count
+  uuids
+end
+
+def test_generate_duplicates(max)
+  uuids = generate_uuids(max).sort
   duplicates = Hash.new(0)
 
-  uuids.sort.each_with_index do |uuid, index|
+  uuids.each_with_index do |uuid, index|
     duplicates[uuid] += 1 if uuid == uuids[index - 1]
   end
 
@@ -268,5 +273,5 @@ end
 
 max = 1_000_000
 puts "Test #{max} UUID generations..."
-puts test_generate_duplicate(max)
+puts test_generate_duplicates(max)
 # The test sometimes generated duplicates!
