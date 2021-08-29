@@ -184,4 +184,48 @@ p(arr.reject { |hsh| hsh.values.any? { |numbers| numbers.any?(&:odd?) } })
 
 # ***
 puts "\n* Practice Problem 16 *"
-# ...
+# Generate a UUID (Version 4/random)
+
+# ** PEDAC **
+
+# 1. Understand the problem
+# ======================
+# Problem Domain: https://en.wikipedia.org/wiki/Universally_unique_identifier
+# - The problem statement describes a randomly generated UUID, which corresponds to Version 4.
+
+# - Input: none
+# - Output: randomly-generated UUID (Version 4)
+#   - Each UUID consists of 32 hexadecimal characters.
+#   - Typically broken into 5 sections like this 8-4-4-4-12.
+#   - Represented as a string.
+# Mental model: Generate '-'-separated groups of hexadecimal symbols. The number of symbols in each group: 8-4-4-4-12.
+
+# 2. Examples and test cases
+# ==========================
+# There's no input, and output is randomly generated. Just ensure the correct format:
+# "f65c57f6-a6aa-17a8-faa1-a67f2dc9fa91"
+#
+# 3. Data Structure
+# =================
+# - Array to represent the possible symbols.
+# - Array to represent group counts.
+#
+# 4. Algorithm
+# ============
+# - random_hex_string(length): method to generate (length) number of hex symbols as a string.
+#   - Sample from the array of possible symbols.
+# - Map group_lengths array to generate strings, then join with the optionally specified separator.
+
+UUID_CHARS = '0'.upto('9').to_a.concat('a'.upto('f').to_a).freeze
+
+def random_hex_string(length)
+  UUID_CHARS.sample(length).join
+end
+
+def uuid_v4(group_lengths: [8, 4, 4, 4, 12], separator: '-')
+  group_lengths.map { |length| random_hex_string(length) }.join(separator)
+end
+
+p uuid_v4
+# That's a fun exercise. In the real world, one should use SecureRandom#uuid or other RFC 4122-compliant implementation
+# to generate UUIDs.
