@@ -229,3 +229,44 @@ end
 p uuid_v4
 # That's a fun exercise. In the real world, one should use SecureRandom#uuid or other RFC 4122-compliant implementation
 # to generate UUIDs.
+
+# How many Version 4 UUIDs can we generate using the above super-basic implementation before getting a duplicate?
+# Let's test:
+def test_generate_duplicate_report(size, max, reported, report_interval: 5)
+  reported = 0 if reported.nil?
+  percent_complete = (size / max.to_f).floor(2) * 100
+
+  if percent_complete >= reported + report_interval
+    puts "#{reported + report_interval}% generated"
+    return percent_complete.to_i
+  end
+
+  reported
+end
+
+def uuid_duplicate?(uuids, new_uuid)
+  !uuids.sort!.bsearch do |uuid|
+    new_uuid <=> uuid
+  end.nil?
+
+  # uuids.include?(new_uuid)
+end
+
+def test_generate_duplicate(max)
+  uuids = []
+  uuids << uuid_v4 while uuids.size < max
+  duplicates = Hash.new(0)
+
+  uuids.sort.each_with_index do |uuid, index|
+    duplicates[uuid] += 1 if uuid == uuids[index - 1]
+  end
+
+  return "#{duplicates.size} duplicate(s) within #{uuids.size} UUIDs:\n#{duplicates}" unless duplicates.empty?
+
+  "No duplicates generated after #{max} generations."
+end
+
+max = 1_000_000
+puts "Test #{max} UUID generations..."
+puts test_generate_duplicate(max)
+# The test sometimes generated duplicates!
