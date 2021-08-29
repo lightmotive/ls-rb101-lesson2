@@ -255,11 +255,19 @@ def duplicates(uuids)
   uuids - uuids_unique
 end
 
-def test_generate_duplicates(max, threads: 1)
+# To check for dups across multiple threads:
+# - Pass uuid arrays generated in each ractor (don't flatten, just pass here).
+# - Loop through to compare each array to the other arrays. One Ractor per comparison. Ractor result: duplicate list.
+#   - Compare array1 to all arrays after it.
+#   - Compare array2 to all arrays after it.
+#   - ...and so on...
+# ** Perform benchmarks that compare different max and threads values
+
+def test_generate_duplicates(max, options = { threads: 1 })
   ractors = []
 
-  threads.times do
-    ractors << Ractor.new(max / threads) do |count|
+  options[:threads].times do
+    ractors << Ractor.new(max / options[:threads]) do |count|
       generate_uuids(count)
     end
   end
@@ -269,10 +277,22 @@ def test_generate_duplicates(max, threads: 1)
 
   return "#{duplicates.size} duplicate(s) within #{uuids.size} UUIDs:\n#{duplicates}" unless duplicates.empty?
 
-  "No duplicates generated with #{max} generations across #{threads} threads."
+  "No duplicates generated. Generations: #{max} | Threads: #{options[:threads]}."
 end
 
-max = 1_000_000
-puts "Test #{max} UUID generations..."
-puts test_generate_duplicates(max, threads: 8)
-# The test never generated duplicates
+require_relative '../../../ruby-common/benchmark_report'
+require_relative '../../../ruby-common/test'
+
+TESTS = [
+  { label: '10k UUIDs, 1 thread', input: [10_000],
+    expected_output: 'No duplicates generated. Generations: 10000 | Threads: 1.' },
+  { label: '10k UUIDs, 8 threads', input: [10_000, { threads: 8 }],
+    expected_output: 'No duplicates generated. Generations: 10000 | Threads: 8.' },
+  { label: '1m UUIDs, 1 thread', input: [1_000_000],
+    expected_output: 'No duplicates generated. Generations: 1000000 | Threads: 1.' },
+  { label: '1m UUIDs, 8 threads', input: [1_000_000, { threads: 8 }],
+    expected_output: 'No duplicates generated. Generations: 1000000 | Threads: 8.' }
+].freeze
+
+run_tests('test_generate_duplicates', TESTS, ->(input) { test_generate_duplicates(*input) })
+# All tests passed (no duplicates generated).
