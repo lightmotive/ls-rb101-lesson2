@@ -242,14 +242,6 @@ def test_generate_duplicate_report(size, max, reported, report_interval: 5)
   reported
 end
 
-def uuid_duplicate?(uuids, new_uuid)
-  !uuids.sort!.bsearch do |uuid|
-    new_uuid <=> uuid
-  end.nil?
-
-  # uuids.include?(new_uuid)
-end
-
 def generate_uuids(count)
   uuids = []
   uuids << uuid_v4 while uuids.size < count
