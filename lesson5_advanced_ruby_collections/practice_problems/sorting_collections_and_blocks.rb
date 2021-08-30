@@ -251,6 +251,19 @@ def generate_uuids(count)
   uuids
 end
 
+def generate_uuids_threaded(count, threads)
+  ractors = []
+  count_per_ractor = count / threads
+
+  threads.times do
+    ractors << Ractor.new(count_per_ractor) do |count|
+      generate_uuids(count)
+    end
+  end
+
+  ractors.map(&:take).flatten
+end
+
 def duplicates(uuids)
   uuids_unique = uuids.uniq
   return [] if uuids_unique.size == uuids.size
@@ -267,18 +280,9 @@ end
 # ** Perform benchmarks that compare different max and threads values
 
 def test_generate_duplicates(max, options = { threads: 1 })
-  ractors = []
-  count_per_ractor = max / options[:threads]
+  uuids = generate_uuids_threaded(max, options[:threads])
 
-  options[:threads].times do
-    ractors << Ractor.new(count_per_ractor) do |count|
-      generate_uuids(count)
-    end
-  end
-
-  uuids = ractors.map(&:take).flatten
   duplicates = duplicates(uuids)
-
   return "#{duplicates.size} duplicate(s) within #{uuids.size} UUIDs:\n#{duplicates}" unless duplicates.empty?
 
   "No duplicates generated. Generations: #{uuids.size} | Threads: #{options[:threads]}."
