@@ -225,11 +225,14 @@ end
 
 def uuid_v4(group_lengths: [8, 4, 4, 4, 12], separator: '-')
   group_lengths.map { |length| random_hex_string(length) }.join(separator)
+
+  # That's a fun exercise. In the real world, one should use SecureRandom#uuid or other RFC 4122-compliant
+  # implementation to generate UUIDs:
+  # require 'securerandom'
+  # SecureRandom.uuid
 end
 
 p uuid_v4
-# That's a fun exercise. In the real world, one should use SecureRandom#uuid or other RFC 4122-compliant implementation
-# to generate UUIDs.
 
 # How many Version 4 UUIDs can we generate using the above super-basic implementation before getting a duplicate?
 # Let's test:
