@@ -268,6 +268,18 @@ def duplicates?(uuids)
   uuids.uniq.size != uuids.size
 end
 
+# Find all duplicates
+def duplicates(array)
+  sorted = array.sort
+  sorted.select.with_index { |element, idx| element == sorted[idx - 1] }
+end
+
+def array_to_hash_count(array)
+  map = Hash.new(0)
+  array.each { |e| map[e] += 1 }
+  map
+end
+
 # To check for dups across multiple threads:
 # - Pass uuid arrays generated in each ractor (don't flatten, just pass here).
 # - Loop through to compare each array to the other arrays. One Ractor per comparison. Ractor result: duplicate list.
@@ -279,8 +291,11 @@ end
 def test_generate_duplicates(max, options = { threads: 1 })
   uuids = generate_uuids_threaded(max, options[:threads])
 
-  duplicates_found = duplicates?(uuids)
-  return "At least 1 duplicate found after generating #{uuids.size} UUIDs." if duplicates_found
+  if duplicates?(uuids)
+    duplicates = duplicates(uuids)
+    return "#{duplicates.size} duplicates found after generating #{uuids.size} UUIDs\n" \
+           "#{array_to_hash_count(duplicates)}"
+  end
 
   "No duplicates generated. Generations: #{uuids.size} | Threads: #{options[:threads]}."
 end
@@ -291,6 +306,8 @@ require_relative '../../../ruby-common/test'
 TESTS = [
   { label: '1m UUIDs, 1 thread', input: [1_000_000],
     expected_output: 'No duplicates generated. Generations: 1000000 | Threads: 1.' },
+  { label: '1m UUIDs, 4 threads', input: [1_000_000, { threads: 4 }],
+    expected_output: 'No duplicates generated. Generations: 1000000 | Threads: 4.' },
   { label: '1m UUIDs, 8 threads', input: [1_000_000, { threads: 8 }],
     expected_output: 'No duplicates generated. Generations: 1000000 | Threads: 8.' }
 ].freeze
