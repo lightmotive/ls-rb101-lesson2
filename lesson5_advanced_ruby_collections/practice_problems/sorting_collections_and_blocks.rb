@@ -264,11 +264,8 @@ def generate_uuids_threaded(count, threads)
   ractors.map(&:take).flatten
 end
 
-def duplicates(uuids)
-  uuids_unique = uuids.uniq
-  return [] if uuids_unique.size == uuids.size
-
-  uuids - uuids_unique
+def duplicates?(uuids)
+  uuids.uniq.size != uuids.size
 end
 
 # To check for dups across multiple threads:
@@ -282,8 +279,8 @@ end
 def test_generate_duplicates(max, options = { threads: 1 })
   uuids = generate_uuids_threaded(max, options[:threads])
 
-  duplicates = duplicates(uuids)
-  return "#{duplicates.size} duplicate(s) within #{uuids.size} UUIDs:\n#{duplicates}" unless duplicates.empty?
+  duplicates_found = duplicates?(uuids)
+  return "At least 1 duplicate found after generating #{uuids.size} UUIDs." if duplicates_found
 
   "No duplicates generated. Generations: #{uuids.size} | Threads: #{options[:threads]}."
 end
