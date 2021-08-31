@@ -328,10 +328,4 @@ TESTS = [
 run_tests('test_generate_duplicates', TESTS, ->(input) { test_generate_duplicates(*input) })
 # All tests passed (no duplicates generated).
 
-benchmark_report(
-  1, 1,
-  [label: 'TESTS passthrough', input: TESTS, expected_output: 'N/A'],
-  TESTS.map.with_index do |_, idx|
-    { label: TESTS[idx][:label], method: ->(tests) { test_generate_duplicates(*tests[idx][:input]) } }
-  end
-)
+benchmark_report_test_data(1, 1, TESTS, ->(input) { test_generate_duplicates(*input) })
