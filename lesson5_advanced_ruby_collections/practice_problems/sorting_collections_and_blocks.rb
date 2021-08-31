@@ -325,7 +325,7 @@ TESTS = [
     expected_output: 'No duplicates generated. Generations: 1000000 | Concurrency: 8.' }
 ].freeze
 
-# run_tests('test_generate_duplicates', TESTS, ->(input) { test_generate_duplicates(*input) })
+run_tests('test_generate_duplicates', TESTS, ->(input) { test_generate_duplicates(*input) })
 # All tests passed (no duplicates generated).
 
 benchmark_report(
