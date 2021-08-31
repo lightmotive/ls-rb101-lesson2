@@ -233,6 +233,9 @@ p uuid_v4
 
 # How many Version 4 UUIDs can we generate using the above super-basic implementation before getting a duplicate?
 # Let's test:
+require_relative '../../../ruby-common/benchmark_report'
+require_relative '../../../ruby-common/test'
+
 def test_generate_duplicate_report(size, count, reported, report_interval: 5)
   reported = 0 if reported.nil?
   percent_complete = (size / count.to_f).floor(2) * 100
@@ -286,7 +289,7 @@ end
 #   - Compare array1 to all arrays after it.
 #   - Compare array2 to all arrays after it.
 #   - ...and so on...
-# ** Perform benchmarks that compare different count and concurrency values
+# Wanted to work on that problem, but it's time to continue with the Launch School curriculum!
 
 def generate_uuids_with_options(count, options = { concurrency: 1 })
   return generate_uuids_threaded(count, options[:concurrency]).flatten if options[:concurrency] > 1
@@ -305,9 +308,6 @@ def test_generate_duplicates(count, options = { concurrency: 1 })
 
   "No duplicates generated. Generations: #{uuids.size} | Concurrency: #{options[:concurrency]}."
 end
-
-require_relative '../../../ruby-common/benchmark_report'
-require_relative '../../../ruby-common/test'
 
 TESTS = [
   { label: '1m UUIDs, Concurrency: 1', input: [1_000_000],
