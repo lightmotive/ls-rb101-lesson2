@@ -233,9 +233,9 @@ p uuid_v4
 
 # How many Version 4 UUIDs can we generate using the above super-basic implementation before getting a duplicate?
 # Let's test:
-def test_generate_duplicate_report(size, max, reported, report_interval: 5)
+def test_generate_duplicate_report(size, count, reported, report_interval: 5)
   reported = 0 if reported.nil?
-  percent_complete = (size / max.to_f).floor(2) * 100
+  percent_complete = (size / count.to_f).floor(2) * 100
 
   if percent_complete >= reported + report_interval
     puts "#{reported + report_interval}% generated"
@@ -286,10 +286,16 @@ end
 #   - Compare array1 to all arrays after it.
 #   - Compare array2 to all arrays after it.
 #   - ...and so on...
-# ** Perform benchmarks that compare different max and concurrency values
+# ** Perform benchmarks that compare different count and concurrency values
 
-def test_generate_duplicates(max, options = { concurrency: 1 })
-  uuids = options[:concurrency] > 1 ? generate_uuids_threaded(max, options[:concurrency]).flatten : generate_uuids(max)
+def generate_uuids_with_options(count, options = { concurrency: 1 })
+  return generate_uuids_threaded(count, options[:concurrency]).flatten if options[:concurrency] > 1
+
+  generate_uuids(count)
+end
+
+def test_generate_duplicates(count, options = { concurrency: 1 })
+  uuids = generate_uuids_with_options(count, options)
 
   if duplicates?(uuids)
     duplicates = duplicates(uuids)
@@ -304,7 +310,7 @@ require_relative '../../../ruby-common/benchmark_report'
 require_relative '../../../ruby-common/test'
 
 TESTS = [
-  { label: '1m UUIDs, Concurrency: Off', input: [1_000_000],
+  { label: '1m UUIDs, Concurrency: 1', input: [1_000_000],
     expected_output: 'No duplicates generated. Generations: 1000000 | Concurrency: 1.' },
   { label: '1m UUIDs, Concurrency: 2', input: [1_000_000, { concurrency: 2 }],
     expected_output: 'No duplicates generated. Generations: 1000000 | Concurrency: 2.' },
