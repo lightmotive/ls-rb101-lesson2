@@ -320,7 +320,7 @@ TESTS = [
   { label: '1m UUIDs, Concurrency: 4', input: [1_000_000, { concurrency: 4 }],
     expected_output: 'No duplicates generated. Generations: 1000000 | Concurrency: 4.' },
   { label: '1m UUIDs, Concurrency: 6', input: [1_000_000, { concurrency: 6 }],
-    expected_output: 'No duplicates generated. Generations: 1000000 | Concurrency: 6.' },
+    expected_output: 'No duplicates generated. Generations: 999996 | Concurrency: 6.' },
   { label: '1m UUIDs, Concurrency: 8', input: [1_000_000, { concurrency: 8 }],
     expected_output: 'No duplicates generated. Generations: 1000000 | Concurrency: 8.' }
 ].freeze
