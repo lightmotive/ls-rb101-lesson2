@@ -261,7 +261,7 @@ def generate_uuids_threaded(count, threads)
     end
   end
 
-  ractors.map(&:take).flatten
+  ractors.map(&:take)
 end
 
 def duplicates?(uuids)
@@ -289,7 +289,7 @@ end
 # ** Perform benchmarks that compare different max and threads values
 
 def test_generate_duplicates(max, options = { threads: 1 })
-  uuids = generate_uuids_threaded(max, options[:threads])
+  uuids = options[:threads] > 1 ? generate_uuids_threaded(max, options[:threads]).flatten : generate_uuids(max)
 
   if duplicates?(uuids)
     duplicates = duplicates(uuids)
