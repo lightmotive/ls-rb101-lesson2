@@ -58,6 +58,18 @@ def validate_move_coordinates(coordinates, board_state)
   nil
 end
 
+def available_move_coordinates(board_state)
+  available_moves = []
+
+  board_state.each_with_index do |row, row_idx|
+    row.each_with_index do |column, column_idx|
+      available_moves.append({ row: row_idx + 1, column: column_idx + 1 }) if column.nil?
+    end
+  end
+
+  available_moves
+end
+
 def board_mark!(user_id, coordinates, board_state)
   row_index, column_index = coordinates_to_indices(coordinates)
   board_state[row_index][column_index] = user_id
