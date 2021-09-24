@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative '../../../ruby-common/validation_error'
+
 SQUARE_WIDTH_PADDING = 2
 SQUARE_VERTICAL_PADDING = 1
 
@@ -33,4 +35,32 @@ def board_display(board_state)
   end
 
   puts row_strings.join("#{board_row_divider(board_state[0].size)}\n")
+end
+
+def coordinates_to_indices(coordinates)
+  row_index = coordinates[:row] - 1
+  column_index = coordinates[:column] - 1
+
+  [row_index, column_index]
+end
+
+# Ensure move coordinates are valid (within bounds, board square free)
+def validate_move_coordinates(coordinates, board_state)
+  bounds = 1..board_state.size
+
+  unless bounds.include?(coordinates[:row]) && bounds.include?(coordinates[:column])
+    raise ValidationError, "Row and Column should be between #{bounds.first} and #{bounds.last}."
+  end
+
+  row_index, column_index = coordinates_to_indices(coordinates)
+  raise ValidationError, 'Please choose an empty square.' unless board_state[row_index][column_index].nil?
+
+  nil
+end
+
+def board_mark!(user_id, coordinates, board_state)
+  row_index, column_index = coordinates_to_indices(coordinates)
+  board_state[row_index][column_index] = user_id
+
+  board_state
 end
