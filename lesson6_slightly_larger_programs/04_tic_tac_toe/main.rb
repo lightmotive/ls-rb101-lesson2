@@ -11,8 +11,6 @@ def display_winner(winning_mark, board_state, players)
   puts "#{players.select { |player| player[:mark] == winning_mark }.first[:name]} won!"
 end
 
-# p display_winner("X", [[nil, nil, nil],[nil, nil, nil], [nil, nil, nil]], [{}, {}]
-
 def end_game_winner?(board_state, players)
   winning_mark = winning_mark(board_state)
   unless winning_mark.nil?
