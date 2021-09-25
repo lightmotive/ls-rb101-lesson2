@@ -2,8 +2,8 @@
 
 require_relative '../../../ruby-common/validation_error'
 
-SQUARE_WIDTH_PADDING = 2
-SQUARE_VERTICAL_PADDING = 1
+SQUARE_WIDTH_PADDING = 1
+SQUARE_VERTICAL_PADDING = 0
 
 def board_state_empty(size: 3)
   Array.new(size) { Array.new(size, nil) }
@@ -20,9 +20,16 @@ def board_row_markers(columns)
 end
 
 def board_row_string(columns)
-  "#{SQUARE_VERTICAL_PADDING.times.map { board_row_padding(columns.size) }.join("\n")}\n" \
-  "#{board_row_markers(columns)}\n" \
-  "#{SQUARE_VERTICAL_PADDING.times.map { board_row_padding(columns.size) }.join("\n")}"
+  row_string = board_row_markers(columns)
+
+  if SQUARE_VERTICAL_PADDING.positive?
+    row_string =
+      "#{SQUARE_VERTICAL_PADDING.times.map { board_row_padding(columns.size) }.join("\n")}\n" \
+      "#{row_string}\n" \
+      "#{SQUARE_VERTICAL_PADDING.times.map { board_row_padding(columns.size) }.join("\n")}"
+  end
+
+  row_string
 end
 
 def board_row_divider(column_count)
