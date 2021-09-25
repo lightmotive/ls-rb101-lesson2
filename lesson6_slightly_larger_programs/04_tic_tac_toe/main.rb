@@ -8,7 +8,13 @@ require_relative 'board_evaluation'
 
 def display_winner(winning_mark, board_state, players)
   board_display(board_state)
-  puts "#{players.select { |player| player[:mark] == winning_mark }.first[:name]} won!"
+
+  winner = players.select { |player| player[:mark] == winning_mark }.first
+  no_computer_players = players.count { |player| player[:is_computer] }.zero?
+
+  if no_computer_players || winner[:is_computer] then puts "#{winner[:name]} won!"
+  else puts 'You won!'
+  end
 end
 
 def end_game_winner?(board_state, players)
@@ -80,7 +86,7 @@ def play_and_end_game?(board_state, players)
   end_game
 end
 
-def display_instructions
+def instructions_display
   puts 'Instructions:'
   puts "- Specify move as row,column coordinates, e.g. 1,3\n\n"
   puts 'Hit enter after reading instructions above.'
@@ -90,7 +96,6 @@ end
 def start_game(players)
   board_state = board_state_empty
   redraw(board_state, players)
-  display_instructions
 
   loop do
     end_game = play_and_end_game?(board_state, players)
@@ -98,13 +103,22 @@ def start_game(players)
   end
 end
 
-def play
+def welcome_players
   puts 'Welcome to Noughts and Crosses!'
   puts "What's your name?"
   player_name = gets.chomp
 
+  board_display(board_state_empty)
+  instructions_display
+
+  initialize_players([player_name, 'Computer'])
+end
+
+def play
+  players = welcome_players
+
   loop do
-    start_game(initialize_players([player_name, 'Computer']))
+    start_game(players)
 
     print "\nPlay again? (Y/N) "
     break puts 'Cheerio!' unless gets.strip.downcase.chars.first == 'y'
