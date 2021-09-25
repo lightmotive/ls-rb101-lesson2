@@ -11,7 +11,7 @@ def winning_line_mark(lines)
   nil
 end
 
-def winner(board_state)
+def winning_mark(board_state)
   winning_mark = winning_line_mark(board_state) # Check rows
   return winning_mark unless winning_mark.nil?
 

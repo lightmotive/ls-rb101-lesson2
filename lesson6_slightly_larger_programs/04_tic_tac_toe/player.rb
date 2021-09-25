@@ -7,7 +7,7 @@ def player_move_to_coordinates(move)
   { row: row, column: column }
 end
 
-def player_move!(board_state)
+def player_move!(mark, board_state)
   move_coordinates = prompt_until_valid(
     "What's your move? Specify row,column, e.g. '1,3'",
     get_input: -> { gets.strip },
@@ -15,5 +15,5 @@ def player_move!(board_state)
     validate: ->(coordinates) { validate_move_coordinates(coordinates, board_state) }
   )
 
-  board_mark!('U', move_coordinates, board_state)
+  board_mark!(mark, move_coordinates, board_state)
 end

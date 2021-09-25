@@ -13,14 +13,14 @@ def board_row_padding(column_count)
   column_count.times.map { ' ' * (SQUARE_WIDTH_PADDING * 2 + 1) }.join('|')
 end
 
-def board_row_markers(columns)
-  columns.map do |marker|
-    "#{' ' * SQUARE_WIDTH_PADDING}#{marker.nil? ? ' ' : marker}#{' ' * SQUARE_WIDTH_PADDING}"
+def board_row_marks(columns)
+  columns.map do |mark|
+    "#{' ' * SQUARE_WIDTH_PADDING}#{mark.nil? ? ' ' : mark}#{' ' * SQUARE_WIDTH_PADDING}"
   end.join('|')
 end
 
 def board_row_string(columns)
-  row_string = board_row_markers(columns)
+  row_string = board_row_marks(columns)
 
   if SQUARE_VERTICAL_PADDING.positive?
     row_string =
@@ -77,9 +77,9 @@ def available_move_coordinates(board_state)
   available_moves
 end
 
-def board_mark!(user_id, coordinates, board_state)
+def board_mark!(mark, coordinates, board_state)
   row_index, column_index = coordinates_to_indices(coordinates)
-  board_state[row_index][column_index] = user_id
+  board_state[row_index][column_index] = mark
 
   board_state
 end
