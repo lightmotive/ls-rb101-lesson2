@@ -34,7 +34,7 @@ def board_display(board_state)
     "#{board_row_string(columns)}\n"
   end
 
-  puts row_strings.join("#{board_row_divider(board_state[0].size)}\n")
+  puts "\n#{row_strings.join("#{board_row_divider(board_state[0].size)}\n")}\n"
 end
 
 def coordinates_to_indices(coordinates)
@@ -75,4 +75,16 @@ def board_mark!(user_id, coordinates, board_state)
   board_state[row_index][column_index] = user_id
 
   board_state
+end
+
+def board_columns(board_state)
+  board_state[0].zip(*board_state[1..-1])
+end
+
+def board_diagonals(board_state)
+  diagonal_by_index = ->(row, idx) { row[idx] }
+  top_left_diagonal = board_state.map.with_index(&diagonal_by_index)
+  bottom_left_diagonal = board_state.reverse.map.with_index(&diagonal_by_index)
+
+  [top_left_diagonal, bottom_left_diagonal]
 end
