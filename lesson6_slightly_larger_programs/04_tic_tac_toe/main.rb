@@ -59,6 +59,13 @@ def start_game
   end
 end
 
-start_game
+def play
+  loop do
+    start_game
 
-# TODO: add "Play again?" loop
+    print 'Play again? (Y/N) '
+    break unless gets.strip.downcase.chars.first == 'y'
+  end
+end
+
+play
