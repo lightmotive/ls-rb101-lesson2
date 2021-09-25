@@ -8,15 +8,15 @@ def player_move_to_coordinates(move)
   { row: row, column: column }
 end
 
-def player_move!(mark, board_state)
+def player_move!(player, board_state)
   move_coordinates = prompt_until_valid(
-    "What's your move? Specify row,column, e.g. '1,3'",
+    "#{player[:name]}, what's your move?",
     get_input: -> { gets.strip },
     convert_input: ->(input) { player_move_to_coordinates(input) },
     validate: ->(coordinates) { validate_move_coordinates(coordinates, board_state) }
   )
 
-  board_mark!(mark, move_coordinates, board_state)
+  board_mark!(player[:mark], move_coordinates, board_state)
 end
 
 def computer_move!(mark, board_state)

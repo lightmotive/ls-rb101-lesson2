@@ -3,8 +3,7 @@
 # Flowchart: https://app.terrastruct.com/diagrams/2101848647
 
 require_relative 'board'
-require_relative 'player'
-require_relative 'computer_player'
+require_relative 'players'
 require_relative 'board_evaluation'
 
 def display_winner(winning_mark, board_state, players)
@@ -71,7 +70,7 @@ def play_and_end_game?(board_state, players)
 
   players.each do |player|
     if player[:is_computer] then computer_move!(player[:mark], board_state)
-    else player_move!(player[:mark], board_state)
+    else player_move!(player, board_state)
     end
 
     redraw(board_state, players)
@@ -83,9 +82,17 @@ def play_and_end_game?(board_state, players)
   end_game
 end
 
+def display_instructions
+  puts 'Instructions:'
+  puts "- Specify move as row,column coordinates, e.g. 1,3\n\n"
+  puts 'Hit enter after reading instructions above.'
+  gets
+end
+
 def start_game(players)
   board_state = board_state_empty
   redraw(board_state, players)
+  display_instructions
 
   loop do
     end_game = play_and_end_game?(board_state, players)
