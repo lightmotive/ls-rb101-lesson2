@@ -13,7 +13,7 @@ def display_winner(winning_mark, board_state, players)
   no_computer_players = players.count { |player| player[:is_computer] }.zero?
 
   if no_computer_players || winner[:is_computer] then puts "#{winner[:name]} won!"
-  else puts 'You won!'
+  else puts "You won! (#{winner[:mark]})"
   end
 end
 
@@ -64,7 +64,7 @@ def players_display(players)
 end
 
 def redraw(board_state, players)
-  board_display(board_state)
+  board_display(board_state, include_move_values: true)
   players_display(players)
   puts
 end
@@ -86,13 +86,6 @@ def play_and_end_game?(board_state, players)
   end_game
 end
 
-def instructions_display
-  puts 'Instructions:'
-  puts "- When prompted to move, type the square number and hit enter.\n\n"
-  puts 'Hit enter after reading instructions above.'
-  gets
-end
-
 def start_game(players)
   board_state = board_state_empty
   redraw(board_state, players)
@@ -108,8 +101,7 @@ def welcome_players
   puts "What's your name?"
   player_name = gets.chomp
 
-  board_display(board_state_empty)
-  instructions_display
+  board_display(board_state_empty, include_move_values: true)
 
   initialize_players([player_name, 'Computer'])
 end

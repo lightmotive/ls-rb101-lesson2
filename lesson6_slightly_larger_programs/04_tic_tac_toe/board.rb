@@ -17,14 +17,16 @@ def board_row_padding(column_count)
   column_count.times.map { ' ' * (SQUARE_WIDTH_PADDING * 2 + 1) }.join('|')
 end
 
-def board_row_marks(columns)
-  columns.map do |mark|
+def board_row_marks(columns, include_move_values: false)
+  columns.map do |value|
+    mark = value
+    mark = ' ' if !include_move_values && move_value?(value)
     "#{' ' * SQUARE_WIDTH_PADDING}#{mark}#{' ' * SQUARE_WIDTH_PADDING}"
   end.join('|')
 end
 
-def board_row_string(columns)
-  row_string = board_row_marks(columns)
+def board_row_string(columns, include_move_values: false)
+  row_string = board_row_marks(columns, include_move_values: include_move_values)
 
   if SQUARE_VERTICAL_PADDING.positive?
     row_string =
@@ -40,9 +42,9 @@ def board_row_divider(column_count)
   column_count.times.map { '-' * (SQUARE_WIDTH_PADDING * 2 + 1) }.join('+')
 end
 
-def board_display(board_state)
+def board_display(board_state, include_move_values: false)
   row_strings = board_state.map do |columns|
-    "#{board_row_string(columns)}\n"
+    "#{board_row_string(columns, include_move_values: include_move_values)}\n"
   end
 
   puts "\n#{row_strings.join("#{board_row_divider(board_state[0].size)}\n")}\n"

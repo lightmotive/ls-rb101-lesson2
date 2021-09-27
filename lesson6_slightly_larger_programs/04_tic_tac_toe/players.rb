@@ -5,7 +5,7 @@ require_relative '../../../ruby-common/prompt'
 
 def player_move!(player, board_state)
   move_number = prompt_until_valid(
-    "#{player[:name]}, enter your move number:",
+    "#{player[:name]} (#{player[:mark]}), enter your move number:",
     get_input: -> { gets.strip },
     convert_input: ->(input) { input.to_i },
     validate: ->(number) { validate_move(number, board_state) }
