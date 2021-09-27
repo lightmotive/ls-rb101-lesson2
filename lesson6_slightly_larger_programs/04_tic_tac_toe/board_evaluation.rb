@@ -25,5 +25,5 @@ def winning_mark(board_state)
 end
 
 def board_full?(board_state)
-  available_move_coordinates(board_state).empty?
+  available_moves(board_state).empty?
 end

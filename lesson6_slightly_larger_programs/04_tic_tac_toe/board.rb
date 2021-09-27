@@ -5,8 +5,12 @@ require_relative '../../../ruby-common/validation_error'
 SQUARE_WIDTH_PADDING = 1
 SQUARE_VERTICAL_PADDING = 0
 
+def board_state_empty_row(size, input_number_start)
+  size.times.map { |idx| input_number_start + idx }
+end
+
 def board_state_empty(size: 3)
-  Array.new(size) { Array.new(size, nil) }
+  size.times.map { |idx| board_state_empty_row(size, idx * size + 1) }
 end
 
 def board_row_padding(column_count)
@@ -15,7 +19,7 @@ end
 
 def board_row_marks(columns)
   columns.map do |mark|
-    "#{' ' * SQUARE_WIDTH_PADDING}#{mark.nil? ? ' ' : mark}#{' ' * SQUARE_WIDTH_PADDING}"
+    "#{' ' * SQUARE_WIDTH_PADDING}#{mark}#{' ' * SQUARE_WIDTH_PADDING}"
   end.join('|')
 end
 
@@ -44,44 +48,45 @@ def board_display(board_state)
   puts "\n#{row_strings.join("#{board_row_divider(board_state[0].size)}\n")}\n"
 end
 
-def coordinates_to_indices(coordinates)
-  row_index = coordinates[:row] - 1
-  column_index = coordinates[:column] - 1
+def move_number_to_indices(move_number, board_state)
+  indices = []
 
-  [row_index, column_index]
+  board_state.each_with_index do |row, row_idx|
+    row.each_with_index do |value, column_idx|
+      break indices << row_idx << column_idx if value == move_number
+    end
+    break unless indices.empty?
+  end
+
+  indices
+end
+
+def move_value?(value)
+  value.is_a?(Integer)
 end
 
 # Ensure move coordinates are valid (within bounds, board square free)
-def validate_move_coordinates(coordinates, board_state)
-  bounds = 1..board_state.size
+def validate_move(move_number, board_state)
+  bounds = 1..board_state.size**2
 
-  unless bounds.include?(coordinates[:row]) && bounds.include?(coordinates[:column])
-    raise ValidationError, "Row and Column should be between #{bounds.first} and #{bounds.last}."
+  unless bounds.include?(move_number)
+    raise ValidationError, "Your move number should be between #{bounds.first} and #{bounds.last}."
   end
 
-  row_index, column_index = coordinates_to_indices(coordinates)
-  raise ValidationError, 'Please choose an empty square.' unless board_state[row_index][column_index].nil?
+  unless available_moves(board_state).include?(move_number)
+    raise ValidationError, 'Please choose an unmarked square (square with a number).'
+  end
 
   nil
 end
 
-def available_move_coordinates(board_state)
-  available_moves = []
-
-  board_state.each_with_index do |row, row_idx|
-    row.each_with_index do |column, column_idx|
-      available_moves.append({ row: row_idx + 1, column: column_idx + 1 }) if column.nil?
-    end
-  end
-
-  available_moves
+def available_moves(board_state)
+  board_state.map { |columns| columns.select { |column| move_value?(column) } }.flatten
 end
 
-def board_mark!(mark, coordinates, board_state)
-  row_index, column_index = coordinates_to_indices(coordinates)
+def board_mark!(mark, move_number, board_state)
+  row_index, column_index = move_number_to_indices(move_number, board_state)
   board_state[row_index][column_index] = mark
-
-  board_state
 end
 
 def board_columns(board_state)

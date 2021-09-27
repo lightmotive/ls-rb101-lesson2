@@ -88,7 +88,7 @@ end
 
 def instructions_display
   puts 'Instructions:'
-  puts "- Specify move as row,column coordinates, e.g. 1,3\n\n"
+  puts "- When prompted to move, type the square number and hit enter.\n\n"
   puts 'Hit enter after reading instructions above.'
   gets
 end
