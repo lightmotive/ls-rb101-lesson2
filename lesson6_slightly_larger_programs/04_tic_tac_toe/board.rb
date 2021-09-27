@@ -5,6 +5,10 @@ require_relative '../../../ruby-common/validation_error'
 SQUARE_WIDTH_PADDING = 1
 SQUARE_VERTICAL_PADDING = 0
 
+def move_value?(value)
+  value.is_a?(Integer)
+end
+
 def board_state_empty_row(size, input_number_start)
   size.times.map { |idx| input_number_start + idx }
 end
@@ -17,11 +21,22 @@ def board_row_padding(column_count)
   column_count.times.map { ' ' * (SQUARE_WIDTH_PADDING * 2 + 1) }.join('|')
 end
 
+def board_mark_with_padding(value, include_move_values)
+  mark = value
+  padding = ' ' * SQUARE_WIDTH_PADDING
+
+  if move_value?(value)
+    mark = "[#{mark}]"
+    padding.chop! if include_move_values
+    mark = ' ' unless include_move_values
+  end
+
+  "#{padding}#{mark}#{padding}"
+end
+
 def board_row_marks(columns, include_move_values: false)
   columns.map do |value|
-    mark = value
-    mark = ' ' if !include_move_values && move_value?(value)
-    "#{' ' * SQUARE_WIDTH_PADDING}#{mark}#{' ' * SQUARE_WIDTH_PADDING}"
+    board_mark_with_padding(value, include_move_values)
   end.join('|')
 end
 
@@ -61,10 +76,6 @@ def move_number_to_indices(move_number, board_state)
   end
 
   indices
-end
-
-def move_value?(value)
-  value.is_a?(Integer)
 end
 
 # Ensure move coordinates are valid (within bounds, board square free)
