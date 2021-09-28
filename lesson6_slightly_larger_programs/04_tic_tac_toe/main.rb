@@ -88,7 +88,7 @@ def play_and_end_game?(board_state, players)
 end
 
 def start_game(players)
-  board_state = board_state_empty
+  board_state = board_state_create
   redraw(board_state, players)
 
   loop do
@@ -102,7 +102,7 @@ def welcome_players
   puts "What's your name?"
   player_name = gets.chomp
 
-  board_display(board_state_empty, include_move_values: true)
+  board_display(board_state_create, include_move_values: true)
 
   initialize_players([player_name, 'Computer'])
 end

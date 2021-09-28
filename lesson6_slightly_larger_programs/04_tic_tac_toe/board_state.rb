@@ -2,7 +2,7 @@
 
 require_relative '../../../ruby-common/validation_error'
 
-def board_state_empty(size: 3)
+def board_state_create(size: 3)
   board = {}
 
   (1..size**2).each do |space_number|
