@@ -18,6 +18,7 @@ def round_score_display(players)
   players.sort_by { |player| player[:score] }.reverse.each do |player|
     puts "#{player[:name]}: #{player[:score]}"
   end
+  nil
 end
 
 def round_score_final_display(winning_player, _players)

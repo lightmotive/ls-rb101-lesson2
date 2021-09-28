@@ -2,15 +2,7 @@
 
 require_relative 'board_state'
 require_relative 'gameplay_score'
-require_relative 'gameplay_win'
-require_relative 'gameplay_tie'
-
-def end_game?(board_state, players)
-  return true if end_game_winner?(board_state, players)
-  return true if end_game_tie?(board_state)
-
-  false
-end
+require_relative 'game_state'
 
 def redraw(board_state, players)
   board_display(board_state, include_move_values: true)
@@ -18,21 +10,18 @@ def redraw(board_state, players)
   puts
 end
 
-def play_and_end_game?(board_state, players)
-  end_game = false
-
+def play!(board_state, players, game_state)
   players.each do |player|
     if player[:is_computer] then computer_move!(player[:mark], board_state)
     else player_move!(player, board_state)
     end
 
     redraw(board_state, players)
+    update_game_state!(board_state, players, game_state)
+    game_state_display(board_state, players, game_state)
 
-    end_game = end_game?(board_state, players)
-    break if end_game
+    break if end_game?(game_state)
   end
-
-  end_game
 end
 
 def board_size_prompt
@@ -43,12 +32,11 @@ end
 def start_game!(players, board_state)
   redraw(board_state, players)
 
+  game_state = game_state_create
   loop do
-    end_game = play_and_end_game?(board_state, players)
-    break round_score_display(players) if end_game
+    play!(board_state, players, game_state)
+    break round_score_display(players) if end_game?(game_state)
   end
-
-  nil
 end
 
 def start_round!(players)

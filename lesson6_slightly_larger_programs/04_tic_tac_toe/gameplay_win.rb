@@ -25,25 +25,19 @@ def winning_mark(board_state)
   nil
 end
 
-def player_won(winning_mark, board_state, players)
+def display_win(board_state, players, game_state)
   board_display(board_state)
 
-  winner = players.select { |player| player[:mark] == winning_mark }.first
   no_computer_players = players.count { |player| player[:is_computer] }.zero?
-
-  winner[:score] += 1
+  winner = game_state[:winner]
 
   if no_computer_players || winner[:is_computer] then puts "#{winner[:name]} won the game!"
   else puts "You won the game! (#{winner[:mark]})"
   end
 end
 
-def end_game_winner?(board_state, players)
-  winning_mark = winning_mark(board_state)
-  unless winning_mark.nil?
-    player_won(winning_mark, board_state, players)
-    return true
-  end
-
-  false
+def player_won!(winning_mark, players, game_state)
+  winner = players.select { |player| player[:mark] == winning_mark }.first
+  winner[:score] += 1
+  game_state[:winner] = winner
 end
