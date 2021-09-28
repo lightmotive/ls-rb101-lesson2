@@ -7,11 +7,11 @@ def game_state_create
   { win: false, tie: false, winner: nil }
 end
 
-def update_game_state!(board_state, players, game_state)
+def update_game_state!(board_state, players, game_state, round_state)
   winning_mark = winning_mark(board_state)
   unless winning_mark.nil?
     game_state[:win] = true
-    player_won!(winning_mark, players, game_state)
+    player_won!(winning_mark, players, game_state, round_state)
   end
 
   game_state[:tie] = !game_state[:win] && board_full?(board_state)

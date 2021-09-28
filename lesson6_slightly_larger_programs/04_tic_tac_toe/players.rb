@@ -1,15 +1,18 @@
 # frozen_string_literal: true
 
 require_relative 'board_state'
-require_relative 'players_computer'
 require_relative '../../../ruby-common/prompt'
+
+def player_id(player)
+  player[:name].to_sym
+end
 
 # Randomize first player and assign mark (X/O)
 def initialize_players(names)
   names = names.shuffle # Randomize first player
 
   names.map.with_index do |name, idx|
-    { name: name, mark: idx.zero? ? 'X' : 'O', score: 0, is_computer: name == COMPUTER_NAME }
+    { name: name, mark: idx.zero? ? 'X' : 'O', is_computer: name == COMPUTER_NAME }
   end
 end
 

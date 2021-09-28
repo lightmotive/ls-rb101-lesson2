@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative 'board_display'
+require_relative 'players'
 
 def winning_line_mark(spaces_rows)
   spaces_rows.each do |spaces|
@@ -36,8 +37,8 @@ def display_win(board_state, players, game_state)
   end
 end
 
-def player_won!(winning_mark, players, game_state)
+def player_won!(winning_mark, players, game_state, round_state)
   winner = players.select { |player| player[:mark] == winning_mark }.first
-  winner[:score] += 1
+  round_player_score_increment(winner, round_state)
   game_state[:winner] = winner
 end
