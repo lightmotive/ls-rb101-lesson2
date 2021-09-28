@@ -11,7 +11,7 @@ def play
   players = welcome_players
 
   loop do
-    start_game(players)
+    start_round!(players)
 
     print "\nPlay again? (Y/N) "
     break puts 'Cheerio!' unless gets.strip.downcase.chars.first == 'y'

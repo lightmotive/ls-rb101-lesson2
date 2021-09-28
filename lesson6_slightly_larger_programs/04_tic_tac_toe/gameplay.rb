@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative 'board_state'
+require_relative 'gameplay_score'
 
 def winning_line_mark(spaces_rows)
   spaces_rows.each do |spaces|
@@ -25,21 +26,23 @@ def winning_mark(board_state)
   nil
 end
 
-def display_winner(winning_mark, board_state, players)
+def player_won(winning_mark, board_state, players)
   board_display(board_state)
 
   winner = players.select { |player| player[:mark] == winning_mark }.first
   no_computer_players = players.count { |player| player[:is_computer] }.zero?
 
-  if no_computer_players || winner[:is_computer] then puts "#{winner[:name]} won!"
-  else puts "You won! (#{winner[:mark]})"
+  winner[:score] += 1
+
+  if no_computer_players || winner[:is_computer] then puts "#{winner[:name]} won the game!"
+  else puts "You won the game! (#{winner[:mark]})"
   end
 end
 
 def end_game_winner?(board_state, players)
   winning_mark = winning_mark(board_state)
   unless winning_mark.nil?
-    display_winner(winning_mark, board_state, players)
+    player_won(winning_mark, board_state, players)
     return true
   end
 
@@ -90,15 +93,40 @@ def play_and_end_game?(board_state, players)
   end_game
 end
 
-def start_game(players)
+def board_size_prompt
   puts 'Board Size (3-9)? '
-  size = gets.strip.to_i
-  board_state = board_state_create(size: size)
+  gets.strip.to_i
+end
 
+def start_game!(players, board_state)
   redraw(board_state, players)
 
   loop do
     end_game = play_and_end_game?(board_state, players)
-    break if end_game
+    break round_score_display(players) if end_game
+  end
+
+  nil
+end
+
+def end_round?(players, round_win_score)
+  round_winner = round_winner(players, round_win_score)
+
+  if round_winner.nil?
+    puts 'Press enter to continue the round...'
+    gets
+  else
+    break round_score_final_display(round_winner, players)
+  end
+end
+
+def start_round!(players)
+  size = board_size_prompt
+  round_win_score = round_win_score_prompt
+
+  loop do
+    board_state = board_state_create(size: size)
+    start_game!(players, board_state)
+    break if end_round?(players, round_win_score)
   end
 end

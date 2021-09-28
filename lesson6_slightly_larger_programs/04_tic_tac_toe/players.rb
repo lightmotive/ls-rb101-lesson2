@@ -8,7 +8,7 @@ def initialize_players(names)
   names = names.shuffle # Randomize first player
 
   names.map.with_index do |name, idx|
-    { name: name, mark: idx.zero? ? 'X' : 'O', is_computer: name == 'Computer' }
+    { name: name, mark: idx.zero? ? 'X' : 'O', score: 0, is_computer: name == 'Computer' }
   end
 end
 
