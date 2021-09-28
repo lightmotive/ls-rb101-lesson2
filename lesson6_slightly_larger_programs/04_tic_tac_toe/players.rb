@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative 'board_state'
+require_relative 'players_computer'
 require_relative '../../../ruby-common/prompt'
 
 # Randomize first player and assign mark (X/O)
@@ -8,7 +9,7 @@ def initialize_players(names)
   names = names.shuffle # Randomize first player
 
   names.map.with_index do |name, idx|
-    { name: name, mark: idx.zero? ? 'X' : 'O', score: 0, is_computer: name == 'Computer' }
+    { name: name, mark: idx.zero? ? 'X' : 'O', score: 0, is_computer: name == COMPUTER_NAME }
   end
 end
 
@@ -19,7 +20,7 @@ end
 
 def identify_players_single
   puts "What's your name?"
-  [].push(gets.strip, 'Computer')
+  [].push(gets.strip, COMPUTER_NAME)
 end
 
 def identify_players_multiple(player_count)
@@ -76,11 +77,4 @@ def player_move!(player, board_state)
   )
 
   board_mark!(player[:mark], move_number, board_state)
-end
-
-def computer_move!(mark, board_state)
-  move_number = available_moves(board_state).sample
-  # TODO: Add computer play intelligence
-  board_mark!(mark, move_number, board_state)
-  puts "Computer marked #{move_number}"
 end
