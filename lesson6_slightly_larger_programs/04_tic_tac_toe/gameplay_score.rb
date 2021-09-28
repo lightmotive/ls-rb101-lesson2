@@ -20,7 +20,6 @@ def round_score_display(players)
   end
 end
 
-def round_score_final_display(winning_player, players)
-  puts "** #{winning_player[:name]} won the round! **"
-  round_score_display(players)
+def round_score_final_display(winning_player, _players)
+  puts "\n** #{winning_player[:name]} won the round! **"
 end

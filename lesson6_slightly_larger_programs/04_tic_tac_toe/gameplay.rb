@@ -115,8 +115,10 @@ def end_round?(players, round_win_score)
   if round_winner.nil?
     puts 'Press enter to continue the round...'
     gets
+    false
   else
-    break round_score_final_display(round_winner, players)
+    round_score_final_display(round_winner, players)
+    true
   end
 end
 
