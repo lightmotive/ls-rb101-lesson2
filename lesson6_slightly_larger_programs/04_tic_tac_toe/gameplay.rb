@@ -48,5 +48,7 @@ def start_round!(players)
     board_state = board_state_create(size: size)
     start_game!(board_state, players, round_state)
     break if end_round?(players, round_state)
+
+    players.shuffle!    # Randomize starting player between games without changing mark.
   end
 end
