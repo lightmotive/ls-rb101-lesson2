@@ -5,7 +5,7 @@
 require_relative 'board_state'
 require_relative 'board_display'
 require_relative 'players'
-require_relative 'board_evaluation'
+require_relative 'winner_detection'
 
 def display_winner(winning_mark, board_state, players)
   board_display(board_state)
