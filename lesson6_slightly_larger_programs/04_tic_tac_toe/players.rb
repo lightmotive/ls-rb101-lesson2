@@ -17,8 +17,6 @@ def welcome_players
   puts "What's your name?"
   player_name = gets.chomp
 
-  board_display(board_state_create, include_move_values: true)
-
   initialize_players([player_name, 'Computer'])
 end
 

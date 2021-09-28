@@ -91,7 +91,10 @@ def play_and_end_game?(board_state, players)
 end
 
 def start_game(players)
-  board_state = board_state_create
+  puts 'Board Size (3-9)? '
+  size = gets.strip.to_i
+  board_state = board_state_create(size: size)
+
   redraw(board_state, players)
 
   loop do
