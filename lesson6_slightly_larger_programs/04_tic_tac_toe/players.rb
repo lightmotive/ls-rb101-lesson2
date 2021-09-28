@@ -28,6 +28,20 @@ def players_display(players)
   end
 end
 
+# Ensure move is valid: within bounds, board square free
+def validate_move(move_number, board_state)
+  keys = board_state.keys
+  unless keys.include?(move_number)
+    raise ValidationError, "Your move number should be between #{keys.first} and #{keys.last}."
+  end
+
+  unless available_moves(board_state).include?(move_number)
+    raise ValidationError, 'Please choose an unmarked square (square with a number).'
+  end
+
+  nil
+end
+
 def player_move!(player, board_state)
   move_number = prompt_until_valid(
     "#{player[:name]}, enter the number to mark (#{player[:mark]}):",
