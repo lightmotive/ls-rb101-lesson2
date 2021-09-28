@@ -12,12 +12,39 @@ def initialize_players(names)
   end
 end
 
+def prompt_multiplayer?
+  puts 'Multiplayer? (Y/N)'
+  gets.strip.downcase.chars.first == 'y'
+end
+
+def identify_players_single
+  puts "What's your name?"
+  [].push(gets.strip, 'Computer')
+end
+
+def identify_players_multiple(player_count)
+  players = []
+
+  player_count.times do |idx|
+    puts "What's Player #{idx + 1}'s name?"
+    players << gets.strip
+  end
+
+  players
+end
+
+def identify_players
+  player_count = prompt_multiplayer? ? 2 : 1
+
+  return identify_players_single if player_count == 1
+
+  identify_players_multiple(player_count)
+end
+
 def welcome_players
   puts 'Welcome to Noughts and Crosses!'
-  puts "What's your name?"
-  player_name = gets.chomp
 
-  initialize_players([player_name, 'Computer'])
+  initialize_players(identify_players)
 end
 
 def players_display(players)
