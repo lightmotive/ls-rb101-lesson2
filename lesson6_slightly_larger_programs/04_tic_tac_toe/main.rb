@@ -49,21 +49,6 @@ def end_game?(board_state, players)
   false
 end
 
-# Randomize first player and assign mark (X/O)
-def initialize_players(names)
-  names = names.shuffle   # Randomize first player
-
-  names.map.with_index do |name, idx|
-    { name: name, mark: idx.zero? ? 'X' : 'O', is_computer: name == 'Computer' }
-  end
-end
-
-def players_display(players)
-  players.each do |player|
-    puts "#{player[:mark]}: #{player[:name]}"
-  end
-end
-
 def redraw(board_state, players)
   board_display(board_state, include_move_values: true)
   players_display(players)
@@ -95,16 +80,6 @@ def start_game(players)
     end_game = play_and_end_game?(board_state, players)
     break if end_game
   end
-end
-
-def welcome_players
-  puts 'Welcome to Noughts and Crosses!'
-  puts "What's your name?"
-  player_name = gets.chomp
-
-  board_display(board_state_create, include_move_values: true)
-
-  initialize_players([player_name, 'Computer'])
 end
 
 def play

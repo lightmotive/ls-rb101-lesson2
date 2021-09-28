@@ -3,6 +3,31 @@
 require_relative 'board_state'
 require_relative '../../../ruby-common/prompt'
 
+# Randomize first player and assign mark (X/O)
+def initialize_players(names)
+  names = names.shuffle # Randomize first player
+
+  names.map.with_index do |name, idx|
+    { name: name, mark: idx.zero? ? 'X' : 'O', is_computer: name == 'Computer' }
+  end
+end
+
+def welcome_players
+  puts 'Welcome to Noughts and Crosses!'
+  puts "What's your name?"
+  player_name = gets.chomp
+
+  board_display(board_state_create, include_move_values: true)
+
+  initialize_players([player_name, 'Computer'])
+end
+
+def players_display(players)
+  players.each do |player|
+    puts "#{player[:mark]}: #{player[:name]}"
+  end
+end
+
 def player_move!(player, board_state)
   move_number = prompt_until_valid(
     "#{player[:name]}, enter the number to mark (#{player[:mark]}):",
