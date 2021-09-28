@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative 'board'
+require_relative 'board_state'
 require_relative '../../../ruby-common/prompt'
 
 def player_move!(player, board_state)

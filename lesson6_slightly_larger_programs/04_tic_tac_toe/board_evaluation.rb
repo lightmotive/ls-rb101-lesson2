@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative 'board'
+require_relative 'board_state'
 
 def winning_line_mark(spaces_rows)
   spaces_rows.each do |spaces|
@@ -23,8 +23,4 @@ def winning_mark(board_state)
   return winning_mark unless winning_mark.nil?
 
   nil
-end
-
-def board_full?(board_state)
-  available_moves(board_state).empty?
 end
