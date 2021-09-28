@@ -6,14 +6,14 @@ def board_state_create(size: 3)
   board = {}
 
   (1..size**2).each do |space_number|
-    board[space_number] = { mark: '' }
+    board[space_number] = { mark: nil }
   end
 
   board
 end
 
 def space_available?(mark)
-  mark.empty?
+  mark.nil?
 end
 
 def available_moves(board_state)

@@ -6,7 +6,7 @@ def winning_line_mark(spaces_rows)
   spaces_rows.each do |spaces|
     marks = spaces.map { |space| space[:mark] }
     unique_marks = marks.uniq
-    return unique_marks.first if unique_marks.size == 1 && !unique_marks.first.empty?
+    return unique_marks.first if unique_marks.size == 1 && !space_available?(unique_marks.first)
   end
 
   nil
