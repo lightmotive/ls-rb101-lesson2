@@ -5,28 +5,30 @@ require_relative '../../../ruby-common/validation_error'
 SQUARE_WIDTH_PADDING = 1
 SQUARE_VERTICAL_PADDING = 0
 
-def move_value?(value)
-  value.is_a?(Integer)
-end
-
-def board_state_empty_row(size, input_number_start)
-  size.times.map { |idx| input_number_start + idx }
-end
-
 def board_state_empty(size: 3)
-  size.times.map { |idx| board_state_empty_row(size, idx * size + 1) }
+  board = {}
+
+  (1..size**2).each do |space_number|
+    board[space_number] = { mark: '' }
+  end
+
+  board
+end
+
+def space_available?(mark)
+  mark.empty?
 end
 
 def board_row_padding(column_count)
   column_count.times.map { ' ' * (SQUARE_WIDTH_PADDING * 2 + 1) }.join('|')
 end
 
-def board_mark_with_padding(value, include_move_values)
-  mark = value
+def board_mark_with_padding(space, include_move_values)
+  mark = space[:mark]
   padding = ' ' * SQUARE_WIDTH_PADDING
 
-  if move_value?(value)
-    mark = "[#{mark}]"
+  if space_available?(mark)
+    mark = "[#{space[:space]}]"
     padding.chop! if include_move_values
     mark = ' ' unless include_move_values
   end
@@ -34,20 +36,20 @@ def board_mark_with_padding(value, include_move_values)
   "#{padding}#{mark}#{padding}"
 end
 
-def board_row_marks(columns, include_move_values: false)
-  columns.map do |value|
-    board_mark_with_padding(value, include_move_values)
+def board_row_marks(spaces, include_move_values: false)
+  spaces.map do |space|
+    board_mark_with_padding(space, include_move_values)
   end.join('|')
 end
 
-def board_row_string(columns, include_move_values: false)
-  row_string = board_row_marks(columns, include_move_values: include_move_values)
+def board_row_string(spaces, include_move_values: false)
+  row_string = board_row_marks(spaces, include_move_values: include_move_values)
 
   if SQUARE_VERTICAL_PADDING.positive?
     row_string =
-      "#{SQUARE_VERTICAL_PADDING.times.map { board_row_padding(columns.size) }.join("\n")}\n" \
+      "#{SQUARE_VERTICAL_PADDING.times.map { board_row_padding(spaces.size) }.join("\n")}\n" \
       "#{row_string}\n" \
-      "#{SQUARE_VERTICAL_PADDING.times.map { board_row_padding(columns.size) }.join("\n")}"
+      "#{SQUARE_VERTICAL_PADDING.times.map { board_row_padding(spaces.size) }.join("\n")}"
   end
 
   row_string
@@ -58,32 +60,19 @@ def board_row_divider(column_count)
 end
 
 def board_display(board_state, include_move_values: false)
-  row_strings = board_state.map do |columns|
-    "#{board_row_string(columns, include_move_values: include_move_values)}\n"
+  rows = board_rows(board_state)
+  row_strings = rows.map do |spaces|
+    "#{board_row_string(spaces, include_move_values: include_move_values)}\n"
   end
 
-  puts "\n#{row_strings.join("#{board_row_divider(board_state[0].size)}\n")}\n"
-end
-
-def move_number_to_indices(move_number, board_state)
-  indices = []
-
-  board_state.each_with_index do |row, row_idx|
-    row.each_with_index do |value, column_idx|
-      break indices << row_idx << column_idx if value == move_number
-    end
-    break unless indices.empty?
-  end
-
-  indices
+  puts "\n#{row_strings.join("#{board_row_divider(rows[0].size)}\n")}\n"
 end
 
 # Ensure move coordinates are valid (within bounds, board square free)
 def validate_move(move_number, board_state)
-  bounds = 1..board_state.size**2
-
-  unless bounds.include?(move_number)
-    raise ValidationError, "Your move number should be between #{bounds.first} and #{bounds.last}."
+  keys = board_state.keys
+  unless keys.include?(move_number)
+    raise ValidationError, "Your move number should be between #{keys.first} and #{keys.last}."
   end
 
   unless available_moves(board_state).include?(move_number)
@@ -94,22 +83,39 @@ def validate_move(move_number, board_state)
 end
 
 def available_moves(board_state)
-  board_state.map { |columns| columns.select { |column| move_value?(column) } }.flatten
+  board_state.select { |_, data| space_available?(data[:mark]) }.keys
 end
 
 def board_mark!(mark, move_number, board_state)
-  row_index, column_index = move_number_to_indices(move_number, board_state)
-  board_state[row_index][column_index] = mark
+  board_state[move_number][:mark] = mark
+end
+
+# Determine board square size (row count)
+def board_size(board_state)
+  Math.sqrt(board_state.size).to_i
+end
+
+def board_rows(board_state)
+  size = board_size(board_state)
+  keys = board_state.keys
+  size.times.map do
+    size.times.map do
+      key = keys.shift
+      { space: key }.merge(board_state[key])
+    end
+  end
 end
 
 def board_columns(board_state)
-  board_state[0].zip(*board_state[1..-1])
+  board_rows = board_rows(board_state)
+  board_rows[0].zip(*board_rows[1..-1])
 end
 
 def board_diagonals(board_state)
   diagonal_by_index = ->(row, idx) { row[idx] }
-  top_left_diagonal = board_state.map.with_index(&diagonal_by_index)
-  bottom_left_diagonal = board_state.reverse.map.with_index(&diagonal_by_index)
+  board_rows = board_rows(board_state)
+  top_left_diagonal = board_rows.map.with_index(&diagonal_by_index)
+  bottom_left_diagonal = board_rows.reverse.map.with_index(&diagonal_by_index)
 
   [top_left_diagonal, bottom_left_diagonal]
 end
