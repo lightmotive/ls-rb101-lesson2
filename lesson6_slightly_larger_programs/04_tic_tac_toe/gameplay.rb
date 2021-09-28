@@ -3,20 +3,7 @@
 require_relative 'board_state'
 require_relative 'gameplay_score'
 require_relative 'gameplay_win'
-
-def display_tie(board_state)
-  board_display(board_state)
-  puts 'Tie!'
-end
-
-def end_game_tie?(board_state)
-  if board_full?(board_state)
-    display_tie(board_state)
-    return true
-  end
-
-  false
-end
+require_relative 'gameplay_tie'
 
 def end_game?(board_state, players)
   return true if end_game_winner?(board_state, players)
