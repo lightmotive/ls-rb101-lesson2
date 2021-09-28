@@ -109,19 +109,6 @@ def start_game!(players, board_state)
   nil
 end
 
-def end_round?(players, round_win_score)
-  round_winner = round_winner(players, round_win_score)
-
-  if round_winner.nil?
-    puts 'Press enter to continue the round...'
-    gets
-    false
-  else
-    round_score_final_display(round_winner, players)
-    true
-  end
-end
-
 def start_round!(players)
   size = board_size_prompt
   round_win_score = round_win_score_prompt
