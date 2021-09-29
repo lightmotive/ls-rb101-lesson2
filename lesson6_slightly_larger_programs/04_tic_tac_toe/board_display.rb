@@ -6,7 +6,7 @@ SQUARE_WIDTH_PADDING = 1
 SQUARE_VERTICAL_PADDING = 0
 
 def board_row_padding(column_count)
-  column_count.times.map { ' ' * (SQUARE_WIDTH_PADDING * 2 + 1) }.join('|')
+  Array.new(column_count, ' ' * (SQUARE_WIDTH_PADDING * 2 + 1)).join('|')
 end
 
 def board_mark_with_padding(space, include_move_values)
@@ -32,17 +32,18 @@ def board_row_string(spaces, include_move_values: false)
   row_string = board_row_marks(spaces, include_move_values: include_move_values)
 
   if SQUARE_VERTICAL_PADDING.positive?
+    vertical_padding = Array.new(SQUARE_VERTICAL_PADDING, board_row_padding(spaces.size)).join("\n")
     row_string =
-      "#{SQUARE_VERTICAL_PADDING.times.map { board_row_padding(spaces.size) }.join("\n")}\n" \
+      "#{vertical_padding}\n" \
       "#{row_string}\n" \
-      "#{SQUARE_VERTICAL_PADDING.times.map { board_row_padding(spaces.size) }.join("\n")}"
+      "#{vertical_padding}"
   end
 
   row_string
 end
 
 def board_row_divider(column_count)
-  column_count.times.map { '-' * (SQUARE_WIDTH_PADDING * 2 + 1) }.join('+')
+  Array.new(column_count, '-' * (SQUARE_WIDTH_PADDING * 2 + 1)).join('+')
 end
 
 def board_display(board_state, include_move_values: false)

@@ -36,6 +36,7 @@ end
 def board_rows(board_state)
   size = board_size(board_state)
   keys = board_state.keys
+
   size.times.map do
     size.times.map do
       key = keys.shift
