@@ -72,7 +72,7 @@ def board_middle_square_sets(sets, board_state)
   end
 end
 
-def board_center_squares(board_state, empty_only: true)
+def board_center_squares(board_state, empty_only: false)
   middle_rows = board_middle_square_sets(board_rows(board_state), board_state)
   middle_columns = board_middle_square_sets(board_columns(board_state), board_state)
 
