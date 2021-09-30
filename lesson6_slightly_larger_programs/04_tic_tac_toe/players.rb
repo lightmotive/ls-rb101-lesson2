@@ -60,13 +60,13 @@ def players_display(players)
 end
 
 # Ensure move is valid: within bounds, board square free
-def validate_move(move_number, board_state)
+def validate_move(space_number, board_state)
   keys = board_state.keys
-  unless keys.include?(move_number)
+  unless keys.include?(space_number)
     raise ValidationError, "Your move number should be between #{keys.first} and #{keys.last}."
   end
 
-  unless available_moves(board_state).include?(move_number)
+  unless available_spaces(board_state).include?(space_number)
     raise ValidationError, 'Please choose an unmarked square (square with a number).'
   end
 
@@ -79,18 +79,18 @@ def opponent(player, players)
 end
 
 def player_move!(player, board_state)
-  move_number = prompt_until_valid(
+  space_number = prompt_until_valid(
     "#{player[:name]}, enter the number to mark (#{player[:mark]}):",
     get_input: -> { gets.strip },
     convert_input: ->(input) { input.to_i },
     validate: ->(number) { validate_move(number, board_state) }
   )
 
-  board_mark!(player[:mark], move_number, board_state)
+  board_mark!(player[:mark], space_number, board_state)
 end
 
 def computer_move!(mark, opponent_mark, board_state)
-  move_number = computer_move_select(mark, opponent_mark, board_state)
-  board_mark!(mark, move_number, board_state)
-  puts "#{COMPUTER_NAME} marked #{move_number}"
+  space_number = computer_move_select(mark, opponent_mark, board_state)
+  board_mark!(mark, space_number, board_state)
+  puts "#{COMPUTER_NAME} marked #{space_number}"
 end

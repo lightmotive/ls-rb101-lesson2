@@ -16,16 +16,16 @@ def space_available?(mark)
   mark.nil?
 end
 
-def available_moves(board_state)
+def available_spaces(board_state)
   board_state.select { |_, data| space_available?(data[:mark]) }.keys
 end
 
 def board_full?(board_state)
-  available_moves(board_state).empty?
+  available_spaces(board_state).empty?
 end
 
-def board_mark!(mark, move_number, board_state)
-  board_state[move_number][:mark] = mark
+def board_mark!(mark, space_number, board_state)
+  board_state[space_number][:mark] = mark
 end
 
 # Determine board square side length (squares per side)

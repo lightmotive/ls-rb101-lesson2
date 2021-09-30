@@ -3,8 +3,8 @@
 require_relative 'board_display'
 require_relative 'players'
 
-def winning_line_mark(spaces_rows)
-  spaces_rows.each do |spaces|
+def winning_line_mark(spaces_sets)
+  spaces_sets.each do |spaces|
     marks = spaces.map { |space| space[:mark] }
     unique_marks = marks.uniq
     return unique_marks.first if unique_marks.size == 1 && !space_available?(unique_marks.first)
