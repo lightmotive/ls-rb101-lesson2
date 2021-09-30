@@ -3,6 +3,8 @@
 require_relative 'board_state'
 require_relative '../../../ruby-common/prompt'
 
+COMPUTER_NAME = 'Computer'
+
 def player_id(player)
   player[:name].to_sym
 end
@@ -80,4 +82,11 @@ def player_move!(player, board_state)
   )
 
   board_mark!(player[:mark], move_number, board_state)
+end
+
+def computer_move!(mark, board_state)
+  move_number = available_moves(board_state).sample
+  # TODO: Add computer play intelligence
+  board_mark!(mark, move_number, board_state)
+  puts "#{COMPUTER_NAME} marked #{move_number}"
 end
