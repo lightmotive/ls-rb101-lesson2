@@ -3,7 +3,7 @@
 require_relative 'board_state'
 require_relative 'gameplay_score'
 require_relative 'game_state'
-require_relative 'computer_ai'
+require_relative 'computer_logic'
 
 def redraw(board_state, players)
   board_display(board_state, include_move_values: true)
