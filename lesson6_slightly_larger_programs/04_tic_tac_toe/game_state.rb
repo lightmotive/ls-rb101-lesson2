@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require_relative 'board_state'
 require_relative 'gameplay_win'
 require_relative 'gameplay_tie'
 
@@ -9,7 +10,7 @@ end
 
 def update_game_state!(board_state, players, game_state, round_state)
   winning_mark = winning_mark(board_state)
-  unless winning_mark.nil?
+  unless space_available?(winning_mark)
     game_state[:win] = true
     player_won!(winning_mark, players, game_state, round_state)
   end

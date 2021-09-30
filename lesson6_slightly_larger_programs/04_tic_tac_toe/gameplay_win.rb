@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require_relative 'board_state'
 require_relative 'board_display'
 require_relative 'players'
 
@@ -15,13 +16,13 @@ end
 
 def winning_mark(board_state)
   winning_mark = winning_line_mark(board_rows(board_state)) # Check rows
-  return winning_mark unless winning_mark.nil?
+  return winning_mark unless space_available?(winning_mark)
 
   winning_mark = winning_line_mark(board_columns(board_state))
-  return winning_mark unless winning_mark.nil?
+  return winning_mark unless space_available?(winning_mark)
 
   winning_mark = winning_line_mark(board_diagonals(board_state))
-  return winning_mark unless winning_mark.nil?
+  return winning_mark unless space_available?(winning_mark)
 
   nil
 end
@@ -51,7 +52,7 @@ def _private_square_numbers_to_win(mark, spaces_sets, board_state)
     spaces.count { |space| space[:mark] == mark } == size - 1
   end
 
-  completion_sets.flatten.select { |space| space[:mark].nil? }.map { |space| space[:space_number] }
+  completion_sets.flatten.select { |space| space_available?(space[:mark]) }.map { |space| space[:space_number] }
 end
 
 def square_numbers_to_win(for_mark, board_state)
