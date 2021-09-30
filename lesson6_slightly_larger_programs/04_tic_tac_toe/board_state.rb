@@ -58,3 +58,22 @@ def board_diagonals(board_state)
 
   [top_left_diagonal, bottom_left_diagonal]
 end
+
+def _private_board_squares_that_complete_line(mark, spaces_sets, board_state)
+  size = board_size(board_state)
+
+  completion_sets = spaces_sets.select do |spaces|
+    spaces.count { |space| space[:mark] == mark } == size - 1
+  end
+
+  completion_sets.flatten.select { |space| space[:mark].nil? }.map { |space| space[:space] }
+end
+
+# Get square numbers that would complete a line for a specific mark (immediate threat/win).
+def board_squares_that_complete_line(mark, board_state)
+  rows = _private_board_squares_that_complete_line(mark, board_rows(board_state), board_state)
+  columns = _private_board_squares_that_complete_line(mark, board_columns(board_state), board_state)
+  diagonals = _private_board_squares_that_complete_line(mark, board_diagonals(board_state), board_state)
+
+  rows.concat(columns, diagonals)
+end
