@@ -73,6 +73,11 @@ def validate_move(move_number, board_state)
   nil
 end
 
+# Get a player's opponent (player). Assumes only 2 players/marks.
+def opponent(player, players)
+  players.reject { |p| p[:mark] == player[:mark] }.first
+end
+
 def player_move!(player, board_state)
   move_number = prompt_until_valid(
     "#{player[:name]}, enter the number to mark (#{player[:mark]}):",
@@ -84,9 +89,8 @@ def player_move!(player, board_state)
   board_mark!(player[:mark], move_number, board_state)
 end
 
-def computer_move!(mark, board_state)
-  move_number = available_moves(board_state).sample
-  # TODO: Add computer play intelligence
+def computer_move!(mark, opponent_mark, board_state)
+  move_number = computer_move_select(mark, opponent_mark, board_state)
   board_mark!(mark, move_number, board_state)
   puts "#{COMPUTER_NAME} marked #{move_number}"
 end

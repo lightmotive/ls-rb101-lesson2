@@ -3,7 +3,7 @@
 require_relative 'board_state'
 require_relative 'gameplay_score'
 require_relative 'game_state'
-require_relative 'players_computer'
+require_relative 'computer_ai'
 
 def redraw(board_state, players)
   board_display(board_state, include_move_values: true)
@@ -13,7 +13,7 @@ end
 
 def play!(board_state, players, game_state, round_state)
   players.each do |player|
-    if player[:is_computer] then computer_move!(player[:mark], board_state)
+    if player[:is_computer] then computer_move!(player[:mark], opponent(player, players)[:mark], board_state)
     else player_move!(player, board_state)
     end
 
