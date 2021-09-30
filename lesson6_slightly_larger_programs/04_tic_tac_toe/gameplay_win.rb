@@ -45,7 +45,7 @@ def player_won!(winning_mark, players, game_state, round_state)
 end
 
 # Get square numbers that would complete a line for a specific mark (immediate threat/win).
-def _private_square_numbers_to_win(mark, spaces_sets, board_state)
+def _private_space_numbers_to_win(mark, spaces_sets, board_state)
   size = board_size(board_state)
 
   completion_sets = spaces_sets.select do |spaces|
@@ -55,10 +55,10 @@ def _private_square_numbers_to_win(mark, spaces_sets, board_state)
   completion_sets.flatten.select { |space| space_available?(space[:mark]) }.map { |space| space[:space_number] }
 end
 
-def square_numbers_to_win(for_mark, board_state)
-  rows = _private_square_numbers_to_win(for_mark, board_rows(board_state), board_state)
-  columns = _private_square_numbers_to_win(for_mark, board_columns(board_state), board_state)
-  diagonals = _private_square_numbers_to_win(for_mark, board_diagonals(board_state), board_state)
+def space_numbers_to_win(for_mark, board_state)
+  rows = _private_space_numbers_to_win(for_mark, board_rows(board_state), board_state)
+  columns = _private_space_numbers_to_win(for_mark, board_columns(board_state), board_state)
+  diagonals = _private_space_numbers_to_win(for_mark, board_diagonals(board_state), board_state)
 
   rows.concat(columns, diagonals)
 end
