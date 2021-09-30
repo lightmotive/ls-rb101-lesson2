@@ -40,7 +40,7 @@ def board_rows(board_state)
   size.times.map do
     size.times.map do
       key = keys.shift
-      { space: key }.merge(board_state[key])
+      { space_number: key }.merge(board_state[key])
     end
   end
 end
@@ -66,7 +66,7 @@ def _private_board_squares_that_complete_line(mark, spaces_sets, board_state)
     spaces.count { |space| space[:mark] == mark } == size - 1
   end
 
-  completion_sets.flatten.select { |space| space[:mark].nil? }.map { |space| space[:space] }
+  completion_sets.flatten.select { |space| space[:mark].nil? }.map { |space| space[:space_number] }
 end
 
 # Get square numbers that would complete a line for a specific mark (immediate threat/win).

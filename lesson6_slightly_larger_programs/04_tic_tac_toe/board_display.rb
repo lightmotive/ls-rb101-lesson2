@@ -14,7 +14,7 @@ def board_mark_with_padding(space, include_move_values)
   padding = ' ' * SQUARE_WIDTH_PADDING
 
   if space_available?(mark)
-    mark = space[:space].to_s.rjust(3, '* ')
+    mark = space[:space_number].to_s.rjust(3, '* ')
     padding.chop! if include_move_values
     mark = ' ' unless include_move_values
   end
