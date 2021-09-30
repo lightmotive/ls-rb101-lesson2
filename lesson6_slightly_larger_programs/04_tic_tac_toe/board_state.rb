@@ -60,7 +60,6 @@ def board_diagonals(board_state)
 end
 
 def board_middle_square_sets(sets, board_state)
-  # To get middle(s): (if board size is odd, get at index [size / 2]; if even, get at index [size / 2 - 1] and [size / 2])
   board_size = board_size(board_state)
 
   if board_size.odd?
