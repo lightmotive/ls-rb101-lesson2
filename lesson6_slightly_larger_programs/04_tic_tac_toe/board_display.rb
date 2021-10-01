@@ -1,23 +1,32 @@
 # frozen_string_literal: true
 
 require_relative 'board_state'
+require_relative '../../../ruby-common/stdout_format'
 
 SPACE_WIDTH_PADDING = 1
 SPACE_VERTICAL_PADDING = 0
+SPACE_WIDTH = (SPACE_WIDTH_PADDING * 2) + 1
 
 def board_row_padding(column_count)
-  Array.new(column_count, ' ' * ((SPACE_WIDTH_PADDING * 2) + 1)).join('|')
+  Array.new(column_count, ' ' * SPACE_WIDTH).join('|')
+end
+
+def board_mark_space_number(space)
+  space[:space_number].to_s.rjust(SPACE_WIDTH, ' ').italic.gray
 end
 
 def board_mark_with_padding(space, include_space_numbers)
-  mark = space[:mark]
   padding = ' ' * SPACE_WIDTH_PADDING
 
-  if space_available?(mark)
-    mark = space[:space_number].to_s.rjust(3, '* ')
-    padding.chop! if include_space_numbers
-    mark = ' ' unless include_space_numbers
+  mark = space[:mark]
+  mark = mark.bold unless space_available?(mark)
+
+  if space_available?(mark) && include_space_numbers
+    mark = board_mark_space_number(space)
+    padding.replace('')
   end
+
+  mark = ' ' if space_available?(mark) && !include_space_numbers
 
   "#{padding}#{mark}#{padding}"
 end
@@ -44,7 +53,7 @@ def board_row_string(spaces, include_space_numbers: false)
 end
 
 def board_row_divider(column_count)
-  Array.new(column_count, '-' * ((SPACE_WIDTH_PADDING * 2) + 1)).join('+')
+  Array.new(column_count, '-' * SPACE_WIDTH).join('+')
 end
 
 def board_display(board_state, include_space_numbers: false)
