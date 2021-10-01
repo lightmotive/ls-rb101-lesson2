@@ -4,12 +4,14 @@
 
 ### ruby-common
 
-Clone *ruby-common* to this project's parent directory: ```https://github.com/lightmotive/ruby-common.git```
+Clone *[ruby-common](https://github.com/lightmotive/ruby-common.git)* to this project's parent directory.
 
-- That project's files will eventually be converted into gems to obviate the need for "require_relative" and avoid "dependency hell".
+- The ruby-common project's files will eventually be converted and published as gems to avoid "dependency hell".
 
 ## Helpful shell scripts
+
 - Create Questions file with specified number of questions:
+
   ```bash
   touch 'questions.rb'
   printf "# frozen_string_literal: true\n" > "questions.rb"
