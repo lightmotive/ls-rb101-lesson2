@@ -3,6 +3,9 @@
 require_relative '../../../ruby-common/validation_error'
 
 def board_state_create(size: 3)
+  size = 3 if size < 3
+  size = 9 if size > 9
+
   board = {}
 
   (1..size**2).each do |space_number|
