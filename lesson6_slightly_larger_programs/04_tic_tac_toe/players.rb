@@ -2,6 +2,7 @@
 
 require_relative 'board_state'
 require_relative '../../../ruby-common/prompt'
+require_relative 'messages'
 
 COMPUTER_NAME = 'Computer'
 
@@ -48,7 +49,9 @@ def identify_players
 end
 
 def welcome_players
-  puts 'Welcome to Noughts and Crosses!'
+  puts
+  messages_bordered_display('Welcome to Noughts and Crosses!', 'xo')
+  puts
 
   initialize_players(identify_players)
 end

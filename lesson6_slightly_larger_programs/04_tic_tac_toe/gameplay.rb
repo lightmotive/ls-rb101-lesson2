@@ -6,6 +6,7 @@ require_relative 'game_state'
 require_relative 'computer_logic'
 
 def redraw(board_state, players)
+  puts
   board_display(board_state, include_space_numbers: true)
   players_display(players)
   puts

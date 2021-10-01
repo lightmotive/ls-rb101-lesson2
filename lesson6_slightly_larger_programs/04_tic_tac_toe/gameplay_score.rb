@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative 'players'
+require_relative 'messages'
 
 def round_state_create(players, win_score)
   round_state = { win_score: win_score, scores: {} }
@@ -34,15 +35,18 @@ def round_winner(players, round_state)
 end
 
 def round_score_display(players, round_state)
-  puts "\n-- Round Scoreboard --"
-  players.sort_by { |player| round_player_score(player, round_state) }.reverse.each do |player|
-    puts "#{player[:name]}: #{round_player_score(player, round_state)}"
-  end
-  nil
+  puts
+  messages_bordered_display(
+    players.sort_by { |player| round_player_score(player, round_state) }.reverse.map do |player|
+      "#{player[:name]}: #{round_player_score(player, round_state)}"
+    end,
+    '=', header: 'Round Scoreboard'
+  )
 end
 
-def round_score_final_display(winning_player, _players)
-  puts "\n** #{winning_player[:name]} won the round! **"
+def round_score_final_display(winning_player)
+  puts
+  messages_bordered_display("#{winning_player[:name]} won the round!", '*')
 end
 
 def end_round?(players, round_state)
@@ -53,7 +57,7 @@ def end_round?(players, round_state)
     gets
     false
   else
-    round_score_final_display(round_winner, players)
+    round_score_final_display(round_winner)
     true
   end
 end

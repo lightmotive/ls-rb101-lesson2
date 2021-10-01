@@ -52,5 +52,5 @@ def board_display(board_state, include_space_numbers: false)
     "#{board_row_string(spaces, include_space_numbers: include_space_numbers)}\n"
   end
 
-  puts "\n#{row_strings.join("#{board_row_divider(rows[0].size)}\n")}\n"
+  puts row_strings.join("#{board_row_divider(rows[0].size)}\n").to_s
 end

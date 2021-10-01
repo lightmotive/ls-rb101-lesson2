@@ -2,8 +2,6 @@
 
 # Flowchart: https://app.terrastruct.com/diagrams/2101848647
 
-require_relative 'board_state'
-require_relative 'board_display'
 require_relative 'players'
 require_relative 'gameplay'
 

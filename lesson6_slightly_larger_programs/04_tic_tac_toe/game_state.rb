@@ -2,7 +2,6 @@
 
 require_relative 'board_state'
 require_relative 'gameplay_win'
-require_relative 'gameplay_tie'
 
 def game_state_create
   { win: false, tie: false, winner: nil }
@@ -24,5 +23,5 @@ end
 
 def game_state_display(board_state, players, game_state)
   display_win(board_state, players, game_state) if game_state[:win]
-  display_tie(board_state) if game_state[:tie]
+  messages_bordered_display('Tie!', '-') if game_state[:tie]
 end

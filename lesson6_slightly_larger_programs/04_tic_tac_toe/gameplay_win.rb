@@ -3,6 +3,7 @@
 require_relative 'board_state'
 require_relative 'board_display'
 require_relative 'players'
+require_relative 'messages'
 
 def winning_line_mark(spaces_sets)
   spaces_sets.each do |spaces|
@@ -27,15 +28,15 @@ def winning_mark(board_state)
   nil
 end
 
-def display_win(board_state, players, game_state)
-  board_display(board_state)
-
+def display_win(_board_state, players, game_state)
   no_computer_players = players.count { |player| player[:is_computer] }.zero?
   winner = game_state[:winner]
 
-  if no_computer_players || winner[:is_computer] then puts "#{winner[:name]} won the game!"
-  else puts "You won the game! (#{winner[:mark]})"
-  end
+  winner_message = if no_computer_players || winner[:is_computer] then "#{winner[:name]} won the game!"
+                   else 'You won the game!'
+                   end
+
+  messages_bordered_display("#{winner_message} (#{winner[:mark]})", '-')
 end
 
 def player_won!(winning_mark, players, game_state, round_state)
