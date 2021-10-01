@@ -2,16 +2,16 @@
 
 require_relative 'board_state'
 
-SQUARE_WIDTH_PADDING = 1
-SQUARE_VERTICAL_PADDING = 0
+SPACE_WIDTH_PADDING = 1
+SPACE_VERTICAL_PADDING = 0
 
 def board_row_padding(column_count)
-  Array.new(column_count, ' ' * (SQUARE_WIDTH_PADDING * 2 + 1)).join('|')
+  Array.new(column_count, ' ' * ((SPACE_WIDTH_PADDING * 2) + 1)).join('|')
 end
 
 def board_mark_with_padding(space, include_space_numbers)
   mark = space[:mark]
-  padding = ' ' * SQUARE_WIDTH_PADDING
+  padding = ' ' * SPACE_WIDTH_PADDING
 
   if space_available?(mark)
     mark = space[:space_number].to_s.rjust(3, '* ')
@@ -29,27 +29,32 @@ def board_row_marks(spaces, include_space_numbers: false)
 end
 
 def board_row_string(spaces, include_space_numbers: false)
-  row_string = board_row_marks(spaces, include_space_numbers: include_space_numbers)
+  row_string = board_row_marks(
+    spaces, include_space_numbers: include_space_numbers
+  )
 
-  if SQUARE_VERTICAL_PADDING.positive?
-    vertical_padding = Array.new(SQUARE_VERTICAL_PADDING, board_row_padding(spaces.size)).join("\n")
-    row_string =
-      "#{vertical_padding}\n" \
-      "#{row_string}\n" \
-      "#{vertical_padding}"
-  end
+  return row_string unless SPACE_VERTICAL_PADDING.positive?
 
-  row_string
+  vertical_padding = Array.new(
+    SPACE_VERTICAL_PADDING,
+    board_row_padding(spaces.size)
+  ).join("\n")
+
+  "#{vertical_padding}\n#{row_string}\n#{vertical_padding}"
 end
 
 def board_row_divider(column_count)
-  Array.new(column_count, '-' * (SQUARE_WIDTH_PADDING * 2 + 1)).join('+')
+  Array.new(column_count, '-' * ((SPACE_WIDTH_PADDING * 2) + 1)).join('+')
 end
 
 def board_display(board_state, include_space_numbers: false)
   rows = board_rows(board_state)
+
   row_strings = rows.map do |spaces|
-    "#{board_row_string(spaces, include_space_numbers: include_space_numbers)}\n"
+    "#{board_row_string(
+      spaces,
+      include_space_numbers: include_space_numbers
+    )}\n"
   end
 
   puts row_strings.join("#{board_row_divider(rows[0].size)}\n").to_s

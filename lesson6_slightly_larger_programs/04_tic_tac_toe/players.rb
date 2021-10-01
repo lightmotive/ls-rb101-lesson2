@@ -15,7 +15,8 @@ def initialize_players(names)
   names = names.shuffle # Randomize first player
 
   names.map.with_index do |name, idx|
-    { name: name, mark: idx.zero? ? 'X' : 'O', is_computer: name == COMPUTER_NAME }
+    { name: name, mark: idx.zero? ? 'X' : 'O',
+      is_computer: name == COMPUTER_NAME }
   end
 end
 
@@ -62,14 +63,19 @@ def players_display(players)
   end
 end
 
-# Ensure play is valid: within bounds, board square free
+# Ensure play is valid: within bounds, board space free
 def validate_play(space_number, board_state)
   keys = board_state.keys
+
   unless keys.include?(space_number)
-    raise ValidationError, "Your space number should be between #{keys.first} and #{keys.last}."
+    raise ValidationError,
+          "Your space number should be between #{keys.first} and #{keys.last}."
   end
 
-  raise ValidationError, 'Please choose an unmarked space.' unless available_spaces(board_state).include?(space_number)
+  unless available_spaces(board_state).include?(space_number)
+    raise ValidationError,
+          'Please choose an unmarked space.'
+  end
 
   nil
 end

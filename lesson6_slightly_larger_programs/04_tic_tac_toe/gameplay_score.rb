@@ -31,17 +31,28 @@ def round_win_score_prompt
 end
 
 def round_winner(players, round_state)
-  players.select { |player| round_player_score(player, round_state) == round_state[:win_score] }.first
+  players.select do |player|
+    round_player_score(player, round_state) == round_state[:win_score]
+  end.first
+end
+
+def players_by_top_score(players, round_state)
+  players_by_score =
+    players.sort_by do |player|
+      round_player_score(player, round_state)
+    end
+
+  players_by_score.reverse
 end
 
 def round_score_display(players, round_state)
+  players_by_top_score = players_by_top_score(players, round_state)
+  messages = players_by_top_score.map do |player|
+    "#{player[:name]}: #{round_player_score(player, round_state)}"
+  end
+
   puts
-  messages_bordered_display(
-    players.sort_by { |player| round_player_score(player, round_state) }.reverse.map do |player|
-      "#{player[:name]}: #{round_player_score(player, round_state)}"
-    end,
-    '=', header: 'Round Scoreboard'
-  )
+  messages_bordered_display(messages, '=', header: 'Round Scoreboard')
 end
 
 def round_score_final_display(winning_player)

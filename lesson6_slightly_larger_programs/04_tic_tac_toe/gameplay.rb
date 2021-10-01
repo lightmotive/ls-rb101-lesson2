@@ -12,11 +12,17 @@ def redraw(board_state, players)
   puts
 end
 
+def player_type_play!(player, players, board_state)
+  if player[:is_computer]
+    computer_play!(player[:mark], opponent(player, players)[:mark], board_state)
+  else
+    player_play!(player, board_state)
+  end
+end
+
 def play!(board_state, players, game_state, round_state)
   players.each do |player|
-    if player[:is_computer] then computer_play!(player[:mark], opponent(player, players)[:mark], board_state)
-    else player_play!(player, board_state)
-    end
+    player_type_play!(player, players, board_state)
 
     redraw(board_state, players)
     update_game_state!(board_state, players, game_state, round_state)
@@ -50,6 +56,7 @@ def start_round!(players)
     start_game!(board_state, players, round_state)
     break if end_round?(players, round_state)
 
-    players.shuffle!    # Randomize starting player between games without changing mark.
+    # Randomize starting player between games without changing mark:
+    players.shuffle!
   end
 end

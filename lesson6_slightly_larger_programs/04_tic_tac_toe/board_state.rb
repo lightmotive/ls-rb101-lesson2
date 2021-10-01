@@ -31,7 +31,7 @@ def board_mark!(mark, space_number, board_state)
   board_state[space_number][:mark] = mark
 end
 
-# Determine board square side length (squares per side)
+# Determine board space side length (spaces per side)
 def board_size(board_state)
   Math.sqrt(board_state.size).to_i
 end
@@ -62,23 +62,29 @@ def board_diagonals(board_state)
   [top_left_diagonal, bottom_left_diagonal]
 end
 
-def board_middle_square_sets(sets, board_state)
+def board_center_space_sets(sets, board_state)
   board_size = board_size(board_state)
 
   if board_size.odd?
     [] << sets[board_size / 2]
   else
-    first_middle = sets[board_size / 2 - 1]
+    first_middle = sets[(board_size / 2) - 1]
     last_middle = sets[board_size / 2]
     [first_middle, last_middle]
   end
 end
 
-def board_center_squares(board_state, empty_only: false)
-  middle_rows = board_middle_square_sets(board_rows(board_state), board_state)
-  middle_columns = board_middle_square_sets(board_columns(board_state), board_state)
+def board_center_spaces(board_state, empty_only: false)
+  middle_rows = board_center_space_sets(board_rows(board_state), board_state)
+  middle_columns = board_center_space_sets(
+    board_columns(board_state), board_state
+  )
 
-  middle_squares = middle_rows.flatten.intersection(middle_columns.flatten)
+  center_spaces = middle_rows.flatten.intersection(middle_columns.flatten)
 
-  empty_only ? middle_squares.select { |square| space_available?(square[:mark]) } : middle_squares
+  if empty_only
+    return center_spaces.select { |space| space_available?(space[:mark]) }
+  end
+
+  center_spaces
 end
