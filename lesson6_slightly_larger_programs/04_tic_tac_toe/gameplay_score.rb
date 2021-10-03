@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require_relative 'players'
-require_relative 'messages'
+require_relative '../../../ruby-common/messages'
 
 def round_state_create(players, win_score)
   round_state = { win_score: win_score, scores: {} }

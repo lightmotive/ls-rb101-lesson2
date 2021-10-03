@@ -2,7 +2,7 @@
 
 require_relative 'board_state'
 require_relative '../../../ruby-common/prompt'
-require_relative 'messages'
+require_relative '../../../ruby-common/messages'
 
 COMPUTER_NAME = 'Computer'
 

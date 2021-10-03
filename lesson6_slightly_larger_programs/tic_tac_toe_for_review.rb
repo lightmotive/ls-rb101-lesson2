@@ -145,7 +145,7 @@ def prompt_until_valid(
 end
 
 # ***********
-# messages.rb
+# /ruby-common/messages.rb
 # ***********
 def messages_bordered_display(messages, border_char, header: '')
   messages = [messages] unless messages.is_a?(Array)

@@ -3,7 +3,7 @@
 require_relative 'board_state'
 require_relative 'board_display'
 require_relative 'players'
-require_relative 'messages'
+require_relative '../../../ruby-common/messages'
 
 def winning_line_mark(spaces_sets)
   spaces_sets.each do |spaces|

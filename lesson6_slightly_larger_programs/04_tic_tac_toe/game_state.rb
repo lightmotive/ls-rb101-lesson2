@@ -2,6 +2,7 @@
 
 require_relative 'board_state'
 require_relative 'gameplay_win'
+require_relative '../../../ruby-common/messages'
 
 def game_state_create
   { win: false, tie: false, winner: nil }
