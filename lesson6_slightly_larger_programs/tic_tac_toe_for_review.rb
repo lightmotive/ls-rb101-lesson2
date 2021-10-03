@@ -94,6 +94,12 @@ class String
   end
 end
 
+# ********************************
+# /ruby_common/validation_error.rb
+# ********************************
+class ValidationError < StandardError
+end
+
 # **********************
 # /ruby-common/prompt.rb
 # **********************
