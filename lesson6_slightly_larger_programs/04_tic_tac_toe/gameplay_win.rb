@@ -7,11 +7,9 @@ require_relative '../../../ruby-common/messages'
 
 def winning_line_mark(spaces_sets)
   spaces_sets.each do |spaces|
-    marks = spaces.map { |space| space[:mark] }
-    unique_marks = marks.uniq
-    if unique_marks.size == 1 && !space_available?(unique_marks.first)
-      return unique_marks.first
-    end
+    mark = spaces.first[:mark]
+    next if space_available?(mark)
+    return mark if spaces.all? { |space| space[:mark] == mark }
   end
 
   nil
