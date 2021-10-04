@@ -49,8 +49,7 @@ def board_rows(board_state)
 end
 
 def board_columns(board_state)
-  board_rows = board_rows(board_state)
-  board_rows[0].zip(*board_rows[1..-1])
+  board_rows(board_state).transpose
 end
 
 def board_diagonals(board_state)
