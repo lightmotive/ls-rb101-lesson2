@@ -19,6 +19,10 @@ def players_create(names)
   end
 end
 
+def human_player_count(players)
+  players.count { |player| !player[:is_computer] }
+end
+
 def assign_player_markers!(players)
   players.each_with_index do |player, idx|
     player[:mark] = idx.zero? ? 'X' : 'O'
@@ -62,6 +66,14 @@ def indentify_player_names
   indentify_player_names_multiple(player_count)
 end
 
+# Identify whether a player should be addressed as "You" or by name
+def player_name_with_player_count_awareness(player, players)
+  if human_player_count(players) > 1 || player[:is_computer]
+    player[:name]
+  else 'You'
+  end
+end
+
 def welcome_players
   messages_bordered_display('Welcome to Noughts and Crosses!', 'xo')
   puts
@@ -77,7 +89,8 @@ def players_display(players, game_state: nil)
   last_mark = game_state[:mark_history].last unless game_state.nil?
 
   players.each do |player|
-    player_display = "#{player[:mark]}: #{player[:name]}"
+    player_name = player_name_with_player_count_awareness(player, players)
+    player_display = "#{player[:mark]}: #{player_name}"
 
     last_mark_display = ""
     if !last_mark.nil? && last_mark[:mark] == player[:mark]

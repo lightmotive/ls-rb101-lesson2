@@ -29,15 +29,13 @@ def winning_mark(board_state)
 end
 
 def display_win(players, game_state)
-  no_computer_players = players.count { |player| player[:is_computer] }.zero?
   winning_player = game_state[:winning_player]
 
-  player_name = player_name_for_identification(winning_player, players)
+  winning_player_name = player_name_with_player_count_awareness(
+    winning_player, players
+  )
 
-  winning_player_message = if no_computer_players || winning_player[:is_computer]
-                             "#{winning_player[:name]} won the game!"
-                           else 'You won the game!'
-                           end
+  winning_player_message = "#{winning_player_name} won the game!"
 
   messages_bordered_display(
     "#{winning_player_message} (#{winning_player[:mark]})", '-'

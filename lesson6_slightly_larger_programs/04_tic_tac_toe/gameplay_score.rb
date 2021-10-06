@@ -58,16 +58,22 @@ end
 def round_score_display(players, round_state)
   players_by_top_score = players_by_top_score(players, round_state)
   messages = players_by_top_score.map do |player|
-    "#{player[:name]}: #{round_player_score(player, round_state)}"
+    player_name = player_name_with_player_count_awareness(player, players)
+    "#{player_name}: #{round_player_score(player, round_state)}"
   end
 
   puts
   messages_bordered_display(messages, '=', header: 'Round Scoreboard')
 end
 
-def round_score_final_display(winning_player)
+def round_score_final_display(winning_player, players)
   puts
-  messages_bordered_display("#{winning_player[:name]} won the round!", '*')
+  winning_player_name = player_name_with_player_count_awareness(
+    winning_player, players
+  )
+  messages_bordered_display(
+    "#{winning_player_name} won the round!", '*'
+  )
 end
 
 def end_round?(players, round_state)
@@ -78,7 +84,7 @@ def end_round?(players, round_state)
     gets
     false
   else
-    round_score_final_display(round_winning_player)
+    round_score_final_display(round_winning_player, players)
     true
   end
 end
