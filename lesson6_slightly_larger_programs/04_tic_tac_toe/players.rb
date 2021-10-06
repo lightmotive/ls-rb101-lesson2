@@ -119,7 +119,7 @@ def player_play!(player, board_state, game_state)
   )
 
   board_mark!(player[:mark], space_number, board_state)
-  player_played!(mark, space_number, game_state)
+  player_played!(player[:mark], space_number, game_state)
 end
 
 def computer_play!(mark, opponent_mark, board_state, game_state)
