@@ -80,7 +80,8 @@ def end_round?(players, round_state)
   round_winning_player = round_winning_player(players, round_state)
 
   if round_winning_player.nil?
-    puts 'Press enter to continue the round...'
+    puts 'Press enter to continue the round ' \
+         "(first to #{round_state[:win_score]} wins)..."
     gets
     false
   else
