@@ -10,13 +10,18 @@ def player_id(player)
   player[:name].to_sym
 end
 
-# Randomize first player and assign mark (X/O)
-def initialize_players(names)
-  names = names.shuffle # Randomize first player
+def players_create(names)
+  names = names.shuffle
 
-  names.map.with_index do |name, idx|
-    { name: name, mark: idx.zero? ? 'X' : 'O',
+  names.map.with_index do |name, _idx|
+    { name: name, mark: nil,
       is_computer: name == COMPUTER_NAME }
+  end
+end
+
+def assign_player_markers!(players)
+  players.each_with_index do |player, idx|
+    player[:mark] = idx.zero? ? 'X' : 'O'
   end
 end
 
@@ -33,12 +38,12 @@ def prompt_multiplayer?
   ) == 'y'
 end
 
-def identify_players_single
+def indentify_player_names_single
   puts "What's your name?"
   [].push(gets.strip, COMPUTER_NAME)
 end
 
-def identify_players_multiple(player_count)
+def indentify_player_names_multiple(player_count)
   players = []
 
   player_count.times do |idx|
@@ -49,19 +54,23 @@ def identify_players_multiple(player_count)
   players
 end
 
-def identify_players
+def indentify_player_names
   player_count = prompt_multiplayer? ? 2 : 1
 
-  return identify_players_single if player_count == 1
+  return indentify_player_names_single if player_count == 1
 
-  identify_players_multiple(player_count)
+  indentify_player_names_multiple(player_count)
 end
 
 def welcome_players
   messages_bordered_display('Welcome to Noughts and Crosses!', 'xo')
   puts
 
-  initialize_players(identify_players)
+  player_names = indentify_player_names
+  players = players_create(player_names)
+  assign_player_markers!(players)
+
+  players
 end
 
 def players_display(players, game_state: nil)
