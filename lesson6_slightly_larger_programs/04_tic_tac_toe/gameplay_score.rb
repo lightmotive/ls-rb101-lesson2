@@ -40,7 +40,7 @@ def round_win_score_prompt
 end
 # rubocop:enable Metrics/MethodLength
 
-def round_winner(players, round_state)
+def round_winning_player(players, round_state)
   players.select do |player|
     round_player_score(player, round_state) == round_state[:win_score]
   end.first
@@ -71,14 +71,14 @@ def round_score_final_display(winning_player)
 end
 
 def end_round?(players, round_state)
-  round_winner = round_winner(players, round_state)
+  round_winning_player = round_winning_player(players, round_state)
 
-  if round_winner.nil?
+  if round_winning_player.nil?
     puts 'Press enter to continue the round...'
     gets
     false
   else
-    round_score_final_display(round_winner)
+    round_score_final_display(round_winning_player)
     true
   end
 end

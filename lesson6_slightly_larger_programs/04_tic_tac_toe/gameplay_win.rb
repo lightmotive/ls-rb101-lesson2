@@ -30,20 +30,26 @@ end
 
 def display_win(players, game_state)
   no_computer_players = players.count { |player| player[:is_computer] }.zero?
-  winner = game_state[:winner]
+  winning_player = game_state[:winning_player]
 
-  winner_message = if no_computer_players || winner[:is_computer]
-                     "#{winner[:name]} won the game!"
-                   else 'You won the game!'
-                   end
+  player_name = player_name_for_identification(winning_player, players)
 
-  messages_bordered_display("#{winner_message} (#{winner[:mark]})", '-')
+  winning_player_message = if no_computer_players || winning_player[:is_computer]
+                             "#{winning_player[:name]} won the game!"
+                           else 'You won the game!'
+                           end
+
+  messages_bordered_display(
+    "#{winning_player_message} (#{winning_player[:mark]})", '-'
+  )
 end
 
 def player_won!(winning_mark, players, game_state, round_state)
-  winner = players.select { |player| player[:mark] == winning_mark }.first
-  round_player_score_increment(winner, round_state)
-  game_state[:winner] = winner
+  winning_player = players.select do |player|
+    player[:mark] == winning_mark
+  end.first
+  round_player_score_increment(winning_player, round_state)
+  game_state[:winning_player] = winning_player
 end
 
 # Get space numbers that would complete a line for a specific mark

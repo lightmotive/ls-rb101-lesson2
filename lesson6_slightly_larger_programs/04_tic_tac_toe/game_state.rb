@@ -5,7 +5,7 @@ require_relative 'gameplay_win'
 require_relative '../../../ruby-common/messages'
 
 def game_state_create
-  { win: false, tie: false, winner: nil, mark_history: [] }
+  { win: false, tie: false, winning_player: nil, mark_history: [] }
 end
 
 def update_game_state!(board_state, players, game_state, round_state)
