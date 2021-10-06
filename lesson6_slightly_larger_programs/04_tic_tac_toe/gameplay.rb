@@ -28,7 +28,7 @@ def play!(board_state, players, game_state, round_state)
 
     redraw(board_state, players, game_state: game_state)
     update_game_state!(board_state, players, game_state, round_state)
-    game_state_display(board_state, players, game_state)
+    game_state_display(players, game_state)
 
     break if end_game?(game_state)
   end

@@ -28,7 +28,7 @@ def winning_mark(board_state)
   nil
 end
 
-def display_win(_board_state, players, game_state)
+def display_win(players, game_state)
   no_computer_players = players.count { |player| player[:is_computer] }.zero?
   winner = game_state[:winner]
 

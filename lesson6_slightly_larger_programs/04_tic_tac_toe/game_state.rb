@@ -26,7 +26,7 @@ def end_game?(game_state)
   game_state[:win] || game_state[:tie]
 end
 
-def game_state_display(board_state, players, game_state)
-  display_win(board_state, players, game_state) if game_state[:win]
+def game_state_display(players, game_state)
+  display_win(players, game_state) if game_state[:win]
   messages_bordered_display('Tie!', '-') if game_state[:tie]
 end
