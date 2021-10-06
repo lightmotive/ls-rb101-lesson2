@@ -29,17 +29,8 @@ def assign_player_markers!(players)
   end
 end
 
-def prompt_multiplayer?
-  prompt_until_valid(
-    "Multiplayer? (Y/N)",
-    get_input: -> { gets.strip },
-    convert_input: ->(input) { input.downcase },
-    validate: lambda do |input|
-      unless %w(y n).include?(input)
-        raise ValidationError, "Please enter either y or n."
-      end
-    end
-  ) == 'y'
+def multiplayer_prompt?
+  prompt_yes_or_no("Multiplayer?") == 'y'
 end
 
 def indentify_player_names_single
@@ -59,7 +50,7 @@ def indentify_player_names_multiple(player_count)
 end
 
 def indentify_player_names
-  player_count = prompt_multiplayer? ? 2 : 1
+  player_count = multiplayer_prompt? ? 2 : 1
 
   return indentify_player_names_single if player_count == 1
 

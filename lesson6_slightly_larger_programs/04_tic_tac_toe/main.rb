@@ -4,6 +4,7 @@
 
 require_relative 'players'
 require_relative 'gameplay'
+require_relative '../../../ruby-common/prompt'
 require 'io/console'
 
 def play
@@ -14,8 +15,8 @@ def play
   loop do
     start_round!(players)
 
-    print "\nPlay again? (Y/N) "
-    break puts 'Cheerio!' unless gets.strip.downcase.chars.first == 'y'
+    break puts 'Cheerio!' unless prompt_yes_or_no("Play another round?") == 'y'
+    $stdout.clear_screen
   end
 end
 
