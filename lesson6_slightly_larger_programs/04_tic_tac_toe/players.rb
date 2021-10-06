@@ -57,9 +57,18 @@ def welcome_players
   initialize_players(identify_players)
 end
 
-def players_display(players)
+def players_display(players, game_state: nil)
+  last_mark = game_state[:mark_history].last unless game_state.nil?
+
   players.each do |player|
-    puts "#{player[:mark]}: #{player[:name]}"
+    player_display = "#{player[:mark]}: #{player[:name]}"
+
+    last_mark_display = ""
+    if !last_mark.nil? && last_mark[:mark] == player[:mark]
+      last_mark_display = " | just marked #{last_mark[:space_number]}"
+    end
+
+    puts "#{player_display}#{last_mark_display}"
   end
 end
 
@@ -85,7 +94,7 @@ def opponent(player, players)
   players.reject { |p| p[:mark] == player[:mark] }.first
 end
 
-def player_play!(player, board_state)
+def player_play!(player, board_state, game_state)
   space_number = prompt_until_valid(
     "#{player[:name]}, enter the number to mark (#{player[:mark]}):",
     get_input: -> { gets.strip },
@@ -94,10 +103,11 @@ def player_play!(player, board_state)
   )
 
   board_mark!(player[:mark], space_number, board_state)
+  player_played!(mark, space_number, game_state)
 end
 
-def computer_play!(mark, opponent_mark, board_state)
+def computer_play!(mark, opponent_mark, board_state, game_state)
   space_number = computer_space_number_select(mark, opponent_mark, board_state)
   board_mark!(mark, space_number, board_state)
-  puts "#{COMPUTER_NAME} marked #{space_number}"
+  player_played!(mark, space_number, game_state)
 end

@@ -5,7 +5,7 @@ require_relative 'gameplay_win'
 require_relative '../../../ruby-common/messages'
 
 def game_state_create
-  { win: false, tie: false, winner: nil }
+  { win: false, tie: false, winner: nil, mark_history: [] }
 end
 
 def update_game_state!(board_state, players, game_state, round_state)
@@ -16,6 +16,10 @@ def update_game_state!(board_state, players, game_state, round_state)
   end
 
   game_state[:tie] = !game_state[:win] && board_full?(board_state)
+end
+
+def player_played!(mark, space_number, game_state)
+  game_state[:mark_history].push({ space_number: space_number, mark: mark })
 end
 
 def end_game?(game_state)

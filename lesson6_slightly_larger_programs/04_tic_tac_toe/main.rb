@@ -4,8 +4,11 @@
 
 require_relative 'players'
 require_relative 'gameplay'
+require 'io/console'
 
 def play
+  $stdout.clear_screen
+
   players = welcome_players
 
   loop do
