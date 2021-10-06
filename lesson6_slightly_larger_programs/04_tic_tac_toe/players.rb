@@ -76,7 +76,7 @@ end
 
 def welcome_players
   messages_bordered_display('Welcome to Noughts and Crosses!', 'xo')
-  puts
+  display_empty_line
 
   player_names = indentify_player_names
   players = players_create(player_names)

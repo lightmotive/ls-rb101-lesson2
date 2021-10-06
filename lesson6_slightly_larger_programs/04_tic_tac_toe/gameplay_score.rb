@@ -62,12 +62,12 @@ def round_score_display(players, round_state)
     "#{player_name}: #{round_player_score(player, round_state)}"
   end
 
-  puts
+  display_empty_line
   messages_bordered_display(messages, '=', header: 'Round Scoreboard')
 end
 
 def round_score_final_display(winning_player, players)
-  puts
+  display_empty_line
   winning_player_name = player_name_with_player_count_awareness(
     winning_player, players
   )

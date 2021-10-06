@@ -4,6 +4,7 @@ require_relative 'board_state'
 require_relative 'gameplay_score'
 require_relative 'game_state'
 require_relative 'computer_logic'
+require_relative '../../../ruby-common/messages'
 require 'io/console'
 
 def redraw(board_state, players, game_state: nil)
@@ -13,7 +14,7 @@ def redraw(board_state, players, game_state: nil)
 end
 
 def player_type_play!(player, players, board_state, game_state)
-  puts
+  display_empty_line
   if player[:is_computer]
     computer_play!(player[:mark], opponent(player, players)[:mark],
                    board_state, game_state)
