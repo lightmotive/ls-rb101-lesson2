@@ -21,8 +21,16 @@ def initialize_players(names)
 end
 
 def prompt_multiplayer?
-  puts 'Multiplayer? (Y/N)'
-  gets.strip.downcase.chars.first == 'y'
+  prompt_until_valid(
+    "Multiplayer? (Y/N)",
+    get_input: -> { gets.strip },
+    convert_input: ->(input) { input.downcase },
+    validate: lambda do |input|
+      unless %w(y n).include?(input)
+        raise ValidationError, "Please enter either y or n."
+      end
+    end
+  ) == 'y'
 end
 
 def identify_players_single
@@ -50,7 +58,6 @@ def identify_players
 end
 
 def welcome_players
-  puts
   messages_bordered_display('Welcome to Noughts and Crosses!', 'xo')
   puts
 

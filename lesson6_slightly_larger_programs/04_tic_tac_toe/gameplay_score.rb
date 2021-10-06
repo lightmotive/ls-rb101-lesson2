@@ -21,14 +21,24 @@ def round_player_score_increment(player, round_state)
   round_state[:scores][player_id(player)] += 1
 end
 
+# rubocop:disable Metrics/MethodLength
 def round_win_score_prompt
-  puts 'Games to win (default: 5)?'
-  win_score = gets.chomp
-
-  return 5 if win_score.empty?
-
-  win_score.to_i
+  prompt_until_valid(
+    "Games to win (default: 5)?",
+    get_input: -> { gets.strip },
+    convert_input: lambda do |input|
+      return 5 if input.empty?
+      input.to_i
+    end,
+    validate: lambda do |input|
+      unless input.positive?
+        raise ValidationError, "Please enter a number greater than 0 " \
+                               "or hit enter to accept the default."
+      end
+    end
+  )
 end
+# rubocop:enable Metrics/MethodLength
 
 def round_winner(players, round_state)
   players.select do |player|

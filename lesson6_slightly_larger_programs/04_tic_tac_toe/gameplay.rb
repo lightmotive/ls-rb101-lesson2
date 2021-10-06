@@ -35,8 +35,16 @@ def play!(board_state, players, game_state, round_state)
 end
 
 def board_size_prompt
-  puts 'Board Size (3-9)? '
-  gets.strip.to_i
+  prompt_until_valid(
+    "Board Size (3-9)?",
+    get_input: -> { gets.strip },
+    convert_input: ->(input) { input.to_i },
+    validate: lambda do |input|
+      unless (3..9).include?(input)
+        raise ValidationError, "Please enter a number between 3 and 9."
+      end
+    end
+  )
 end
 
 def start_game!(board_state, players, round_state)
