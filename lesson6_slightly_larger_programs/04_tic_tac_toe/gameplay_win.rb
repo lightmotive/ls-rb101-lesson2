@@ -63,7 +63,7 @@ def _private_space_numbers_to_win(mark, spaces_sets, board_state)
     space_available?(space[:mark])
   end
 
-  empty_completion_spaces.map { |space| space[:space_number] }
+  empty_completion_spaces.map { |space| space[:number] }
 end
 
 def space_numbers_to_win(for_mark, board_state)

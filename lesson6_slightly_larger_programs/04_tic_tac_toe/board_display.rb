@@ -12,7 +12,7 @@ def board_row_padding(column_count)
 end
 
 def board_mark_space_number(space)
-  space[:space_number].to_s.rjust(SPACE_WIDTH, ' ').italic.gray
+  space[:number].to_s.rjust(SPACE_WIDTH, ' ').italic.gray
 end
 
 def board_mark_with_padding(space, include_space_numbers)

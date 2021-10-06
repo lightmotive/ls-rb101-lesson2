@@ -19,7 +19,7 @@ def space_number_to_play(board_state)
   empty_center_spaces = board_center_spaces(board_state, empty_only: true)
   return nil if center_spaces.size > 1 || empty_center_spaces.empty?
 
-  empty_center_spaces.sample[:space_number]
+  empty_center_spaces.sample[:number]
 end
 
 def computer_space_number_select(mark, opponent_mark, board_state)

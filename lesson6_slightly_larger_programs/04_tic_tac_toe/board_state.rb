@@ -43,7 +43,7 @@ def board_rows(board_state)
   size.times.map do
     size.times.map do
       key = keys.shift
-      { space_number: key }.merge(board_state[key])
+      { number: key }.merge(board_state[key])
     end
   end
 end
