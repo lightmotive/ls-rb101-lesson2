@@ -7,9 +7,9 @@ require_relative 'computer_logic'
 require_relative '../../../ruby-common/messages'
 require 'io/console'
 
-def redraw(board_state, players, game_state: nil)
+def redraw(board_state, players, game_state: nil, include_space_numbers: true)
   $stdout.clear_screen
-  board_display(board_state, include_space_numbers: true)
+  board_display(board_state, include_space_numbers: include_space_numbers)
   players_display(players, game_state: game_state)
 end
 
@@ -27,8 +27,10 @@ def play!(board_state, players, game_state, round_state)
   players.each do |player|
     player_type_play!(player, players, board_state, game_state)
 
-    redraw(board_state, players, game_state: game_state)
     update_game_state!(board_state, players, game_state, round_state)
+    redraw(board_state, players,
+           game_state: game_state,
+           include_space_numbers: !end_game?(game_state))
     game_state_display(players, game_state)
 
     break if end_game?(game_state)
