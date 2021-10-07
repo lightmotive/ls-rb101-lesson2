@@ -5,10 +5,9 @@
 require_relative 'players'
 require_relative 'gameplay'
 require_relative '../../../ruby-common/prompt'
-require 'io/console'
 
 def play
-  $stdout.clear_screen
+  clear_console
 
   players = welcome_players
 
@@ -16,7 +15,7 @@ def play
     start_round!(players)
 
     break puts 'Cheerio!' unless prompt_yes_or_no("Play another round?") == 'y'
-    $stdout.clear_screen
+    clear_console
   end
 end
 

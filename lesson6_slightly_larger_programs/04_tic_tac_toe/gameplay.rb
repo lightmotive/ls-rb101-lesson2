@@ -4,11 +4,11 @@ require_relative 'board_state'
 require_relative 'gameplay_score'
 require_relative 'game_state'
 require_relative 'computer_logic'
+require_relative '../../../ruby-common/prompt'
 require_relative '../../../ruby-common/messages'
-require 'io/console'
 
 def redraw(board_state, players, game_state: nil, include_space_numbers: true)
-  $stdout.clear_screen
+  clear_console
   board_display(board_state, include_space_numbers: include_space_numbers)
   players_display(players, game_state: game_state)
 end
@@ -69,7 +69,7 @@ def start_round!(players)
     start_game!(board_state, players, round_state)
     break if end_round?(players, round_state)
 
-    $stdout.clear_screen
+    clear_console
 
     # Randomize starting player between games without changing mark:
     players.shuffle!
