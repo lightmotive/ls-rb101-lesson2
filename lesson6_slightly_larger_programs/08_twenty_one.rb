@@ -34,6 +34,11 @@
 
 # P5: Implementation
 
+require_relative '../../ruby-common/prompt'
+require_relative '../../ruby-common/validation_error'
+HIT_INPUT = 'h'
+STAY_INPUT = 's'
+
 def cards_create
   cards = []
 
@@ -47,24 +52,61 @@ def cards_create
   cards
 end
 
-def draw_table(game_state)
+def cards_value(cards)
+  # ** Calculate hand value **
+  # Sum all values as follows:
+  # - 2-10: face value
+  # - Jack, Queen, King: 10
+  # - Ace: depends on hand value...
+  #   - If hand value is <= 21 when ace is 11, then ace is 11.
+  #   - Otherwise, aces are worth 1.
+end
+
+def table_draw(game_state)
   # Draw dealer and player hands
   # "#{card[:suit]}#{card[:value]}"
 end
 
-def player_strategy_create
-  # Player goes first: they can hit as long as they don't bust (exceed 21),
-  # or stay.
+def player_strategy(_game_state)
+  prompt_until_valid(
+    "Hit (#{HIT_INPUT}) or stay (#{STAY_INPUT})?",
+    convert_input: ->(input) { input.downcase },
+    validate: lambda do |input|
+      unless %W(#{HIT_INPUT} #{STAY_INPUT}).include?(input)
+        raise ValidationError,
+              "Please enter either #{HIT_INPUT} or #{STAY_INPUT}."
+      end
+    end
+  )
 end
 
-def dealer_strategy_create
-  # Dealer goes second if player doesn't bust.
-  # - Dealer (computer) play rules:
-  #   - Hit until value is >= 17.
+def dealer_strategy(game_state)
+  cards = game_state.dig(:table, :dealer, :cards)
+  value = cards_value(cards)
+
+  return HIT_INPUT if value < 17
+
+  STAY_INPUT
+end
+
+def table_create
+  {
+    dealer: { cards: [] },
+    player: { cards: [] }
+  }
 end
 
 def game_state_create
-  # Return new game state with players and a shuffled deck of cards
+  state = {}
+
+  state[:players] = {
+    dealer: { strategy: dealer_strategy },
+    player: { strategy: player_strategy }
+  }
+  state[:deck] = cards_create.shuffle.shuffle.shuffle
+  state[:table] = table_create
+
+  state
 end
 
 def deal_cards!(game_state)
@@ -75,16 +117,7 @@ end
 
 def turn!(player_key, game_state)
   # Get player and execute strategy
-end
-
-def hand_value(hand)
-  # ** Calculate hand value **
-  # Sum all values as follows:
-  # - 2-10: face value
-  # - Jack, Queen, King: 10
-  # - Ace: depends on hand value...
-  #   - If hand value is <= 21 when ace is 11, then ace is 11.
-  #   - Otherwise, aces are worth 1.
+  # After each, draw table
 end
 
 def continue_game?(game_state)
