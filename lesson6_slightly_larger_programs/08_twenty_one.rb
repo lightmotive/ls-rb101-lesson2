@@ -65,12 +65,12 @@ end
 
 def game_state_create
   # Return new game state with players and a shuffled deck of cards
-  # With a player and a dealer, deal cards from a standard 52-card deck.
-  # - Start with 2 cards face up for player, and 1 up/1 down for the dealer.
 end
 
 def deal_cards!(game_state)
   # Flowchart: https://app.terrastruct.com/diagrams/465606234
+  # With a player and a dealer, deal cards from a standard 52-card deck.
+  # - Start with 2 cards face up for player, and 1 up/1 down for the dealer.
 end
 
 def turn!(player_key, game_state)
