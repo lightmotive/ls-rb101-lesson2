@@ -67,28 +67,6 @@ def table_draw(game_state)
   # "#{card[:suit]}#{card[:value]}"
 end
 
-def player_strategy(_game_state)
-  prompt_until_valid(
-    "Hit (#{HIT_INPUT}) or stay (#{STAY_INPUT})?",
-    convert_input: ->(input) { input.downcase },
-    validate: lambda do |input|
-      unless %W(#{HIT_INPUT} #{STAY_INPUT}).include?(input)
-        raise ValidationError,
-              "Please enter either #{HIT_INPUT} or #{STAY_INPUT}."
-      end
-    end
-  )
-end
-
-def dealer_strategy(game_state)
-  cards = game_state.dig(:table, :dealer, :cards)
-  value = cards_value(cards)
-
-  return HIT_INPUT if value < 17
-
-  STAY_INPUT
-end
-
 def table_create
   {
     dealer: { cards: [] },
@@ -96,7 +74,7 @@ def table_create
   }
 end
 
-def game_state_create
+def game_state_create(dealer_strategy, player_strategy)
   state = {}
 
   state[:players] = {
@@ -129,12 +107,34 @@ def display_winner(game_state)
   # First, check for bust. If no busts, compare value.
 end
 
-def play
-  game_state = game_state_create
+def play(dealer_strategy, player_strategy)
+  game_state = game_state_create(dealer_strategy, player_strategy)
   deal_cards!(game_state)
   turn!(:player, game_state)
   turn!(:dealer, game_state) if continue_game?(game_state)
   display_winner(game_state)
 end
 
-# play
+dealer_strategy = lambda do |game_state|
+  cards = game_state.dig(:table, :dealer, :cards)
+  value = cards_value(cards)
+
+  return HIT_INPUT if value < 17
+
+  STAY_INPUT
+end
+
+player_strategy = lambda do |_game_state|
+  prompt_until_valid(
+    "Hit (#{HIT_INPUT}) or stay (#{STAY_INPUT})?",
+    convert_input: ->(input) { input.downcase },
+    validate: lambda do |input|
+      unless %W(#{HIT_INPUT} #{STAY_INPUT}).include?(input)
+        raise ValidationError,
+              "Please enter either #{HIT_INPUT} or #{STAY_INPUT}."
+      end
+    end
+  )
+end
+
+# play(dealer_strategy, player_strategy)
