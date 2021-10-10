@@ -21,7 +21,7 @@
 # ** Cards **
 # Array of hashes; one hash for each card; hash includes:
 # - suit (hearts, diamonds, clubs, spades)
-# - value (2-10, j, q, k, ace)
+# - value (A, 2-10, J, Q, K)
 
 # P4: Algorithm
 # ** Calculate hand value **
@@ -35,10 +35,21 @@
 # P5: Implementation
 
 def cards_create
-  # ** Cards **
-  # Array of hashes; one hash for each card; hash includes:
-  # - suit (hearts-\u2665, diamonds-\u2666, clubs-\u2663, spades-\u2660)
-  # - value (2-10, j, q, k, ace)
+  cards = []
+
+  suits = ["\u2660", "\u2663", "\u2665", "\u2666"]
+  values = %w(A J Q K) + (2..10).to_a
+
+  suits.each do |suit|
+    values.each { |value| cards.push({ suit: suit, value: value }) }
+  end
+
+  cards
+end
+
+def draw_table(game_state)
+  # Draw dealer and player hands
+  # "#{card[:suit]}#{card[:value]}"
 end
 
 def player_strategy_create
@@ -89,8 +100,8 @@ def play
   game_state = game_state_create
   deal_cards!(game_state)
   turn!(:player, game_state)
-  turn!(:dealer, game_state) if continue_hand?(game_state)
+  turn!(:dealer, game_state) if continue_game?(game_state)
   display_winner(game_state)
 end
 
-play
+# play
