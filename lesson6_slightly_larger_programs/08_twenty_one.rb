@@ -62,35 +62,33 @@ def cards_value(cards)
   #   - Otherwise, aces are worth 1.
 end
 
-def table_draw(game_state)
+def game_redraw(game_state)
   # Draw dealer and player hands
   # "#{card[:suit]}#{card[:value]}"
 end
 
-def table_create
-  {
-    dealer: { cards: [] },
-    player: { cards: [] }
-  }
+def table_create(players)
+  { players: players.map { |player| { cards: [] }.merge(player) } }
 end
 
-def game_state_create(dealer_strategy, player_strategy)
-  state = {}
-
-  state[:players] = {
-    dealer: { strategy: dealer_strategy },
-    player: { strategy: player_strategy }
+def game_state_create(players)
+  {
+    players: players,
+    deck: cards_create.shuffle.shuffle.shuffle,
+    table: table_create(players)
   }
-  state[:deck] = cards_create.shuffle.shuffle.shuffle
-  state[:table] = table_create
-
-  state
 end
 
 def deal_cards!(game_state)
-  # Flowchart: https://app.terrastruct.com/diagrams/465606234
-  # With a player and a dealer, deal cards from a standard 52-card deck.
-  # - Start with 2 cards face up for player, and 1 up/1 down for the dealer.
+  players = game_state.dig(:table, :players)
+  players_dealer_last = players.sort_by { |player| player[:is_dealer] ? 1 : 0 }
+  2.times do |card_idx|
+    players_dealer_last.each do |player|
+      cards = player[:cards]
+      face_up = player[:is_dealer] && card_idx == 1
+      cards.push({ card: game_state[:deck].shift, face_up: face_up })
+    end
+  end
 end
 
 def turn!(player_key, game_state)
@@ -107,9 +105,37 @@ def display_winner(game_state)
   # First, check for bust. If no busts, compare value.
 end
 
+def players_prompt(player_strategy)
+  players = []
+
+  # TODO: Add prompt for name(s)...
+  players.push({
+                 name: "Player 1",
+                 is_dealer: false,
+                 strategy: player_strategy
+               })
+
+  players
+end
+
+def players_append_dealer!(players, dealer_strategy)
+  players.push({
+                 name: "Dealer",
+                 is_dealer: true,
+                 strategy: dealer_strategy
+               })
+end
+
 def play(dealer_strategy, player_strategy)
-  game_state = game_state_create(dealer_strategy, player_strategy)
+  players = players_prompt(player_strategy)
+  players_append_dealer!(players, dealer_strategy)
+
+  game_state = game_state_create(players)
   deal_cards!(game_state)
+
+  require 'pp'
+  pp game_state # Validate progress thus far.
+
   turn!(:player, game_state)
   turn!(:dealer, game_state) if continue_game?(game_state)
   display_winner(game_state)
@@ -137,4 +163,4 @@ player_strategy = lambda do |_game_state|
   )
 end
 
-# play(dealer_strategy, player_strategy)
+play(dealer_strategy, player_strategy)
