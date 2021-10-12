@@ -62,9 +62,19 @@ def cards_value(cards)
   #   - Otherwise, aces are worth 1.
 end
 
+def cards_for_display(cards)
+  cards.map do |card|
+    card[:face_up] ? "#{card[:suit]}#{card[:value]}" : "\u{1F0A0}"
+  end
+end
+
 def game_redraw(game_state)
-  # Draw dealer and player hands
-  # "#{card[:suit]}#{card[:value]}"
+  table_players = game_state.dig(:table, :players)
+
+  table_players.each do |player|
+    cards = player[:cards]
+    puts "#{player[:name]}: #{cards_for_display(cards).join(' | ')}"
+  end
 end
 
 def table_create(players)
@@ -73,7 +83,6 @@ end
 
 def game_state_create(players)
   {
-    players: players,
     deck: cards_create.shuffle.shuffle.shuffle,
     table: table_create(players)
   }
@@ -85,15 +94,16 @@ def deal_cards!(game_state)
   2.times do |card_idx|
     players_dealer_last.each do |player|
       cards = player[:cards]
-      face_up = player[:is_dealer] && card_idx == 1
-      cards.push({ card: game_state[:deck].shift, face_up: face_up })
+      face_up = !player[:is_dealer] || (player[:is_dealer] && card_idx == 0)
+      cards.push(game_state[:deck].shift.merge({ face_up: face_up }))
     end
   end
 end
 
-def turn!(player_key, game_state)
+def turn!(_player_key, game_state)
   # Get player and execute strategy
-  # After each, draw table
+
+  # game_redraw(game_state)
 end
 
 def continue_game?(game_state)
@@ -106,6 +116,8 @@ def display_winner(game_state)
 end
 
 def players_prompt(player_strategy)
+  puts "Welcome to Twenty-One!"
+
   players = []
 
   # TODO: Add prompt for name(s)...
@@ -132,9 +144,10 @@ def play(dealer_strategy, player_strategy)
 
   game_state = game_state_create(players)
   deal_cards!(game_state)
+  game_redraw(game_state)
 
-  require 'pp'
-  pp game_state # Validate progress thus far.
+  # require 'pp'
+  # pp game_state # Validate progress thus far.
 
   turn!(:player, game_state)
   turn!(:dealer, game_state) if continue_game?(game_state)
