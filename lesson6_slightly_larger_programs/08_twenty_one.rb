@@ -212,6 +212,7 @@ end
 
 def winners(game_state)
   players = players_by_top_score(game_state)
+  return [] if players.empty?
 
   winner = players.first
   winning_score = cards_value(winner[:cards])
