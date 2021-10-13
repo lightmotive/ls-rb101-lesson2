@@ -54,6 +54,8 @@ def cards_create
 end
 
 def cards_value(_cards)
+  # TODO:
+
   # ** Calculate hand value **
   # Sum all values as follows:
   # - 2-10: face value
@@ -126,6 +128,7 @@ def turn!(player, game_state)
 end
 
 def display_winner(game_state)
+  # TODO:
   # Determine winner based on hand value
   # First, check for bust. If no busts, compare value.
 end
@@ -135,9 +138,10 @@ def players_prompt(player_strategy)
 
   players = []
 
-  # TODO: Add prompt for name(s)...
+  # TODO: Extra features - Prompt for player count (up to 3) and names for each.
+  puts "What's your name?"
   players.push({
-                 name: "Player 1",
+                 name: gets.strip,
                  is_dealer: false,
                  strategy: player_strategy
                })
