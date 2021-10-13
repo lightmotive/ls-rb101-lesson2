@@ -89,7 +89,8 @@ def game_table_lines(game_state)
   game_state.dig(:table, :players).map do |player|
     cards = player[:cards]
     value = cards_value(cards)
-    value_display = " [#{cards_value(cards)}]" unless value.nil?
+    busted_display = " - Busted!" if busted?(value)
+    value_display = " [#{value}#{busted_display}]" unless value.nil?
     cards_display = cards_for_display(cards).join(' | ')
 
     "#{player[:name]}:#{value_display} #{cards_display}"
@@ -136,18 +137,17 @@ def deal_table!(game_state)
   end
 end
 
-def busted?(player)
-  value = cards_value(player[:cards])
-  return false if value.nil?
+def busted?(cards_value)
+  return false if cards_value.nil?
 
-  cards_value(player[:cards]) > MAX_VALUE
+  cards_value > MAX_VALUE
 end
 
 def end_turn?(player)
   value = cards_value(player[:cards])
   return false if value.nil?
 
-  cards_value(player[:cards]) >= MAX_VALUE
+  value >= MAX_VALUE
 end
 
 def turn_cards_up!(player)
@@ -170,7 +170,9 @@ def turn!(player, game_state)
 end
 
 def players_in_play(game_state)
-  game_state.dig(:table, :players).reject { |player| busted?(player) }
+  game_state.dig(:table, :players).reject do |player|
+    busted?(cards_value(player[:cards]))
+  end
 end
 
 def players_by_top_score(game_state)
