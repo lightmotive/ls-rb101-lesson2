@@ -136,7 +136,7 @@ def deal_table!(game_state)
   end
 end
 
-def continue_turn?(player)
+def end_turn?(player)
   cards_value(player[:cards]) < MAX_VALUE
 end
 
@@ -147,7 +147,7 @@ end
 def turn!(player, game_state)
   turn_cards_up!(player) if player[:is_dealer]
 
-  return game_redraw(game_state) unless continue_turn?(player)
+  return game_redraw(game_state) if end_turn?(player)
 
   loop do
     input = player[:strategy].call(player, game_state)
@@ -155,7 +155,7 @@ def turn!(player, game_state)
       deal_card!(player, game_state)
       game_redraw(game_state)
     end
-    break if input == STAY_INPUT || !continue_turn?(player)
+    break if input == STAY_INPUT || end_turn?(player)
   end
 end
 
