@@ -260,10 +260,7 @@ end
 
 # * Main *
 
-def play(dealer_strategy, player_strategy)
-  players = players_prompt(player_strategy)
-  players_append_dealer!(players, dealer_strategy)
-
+def play(players)
   game_state = game_state_create(players)
   deal_table!(game_state)
   game_redraw(game_state)
@@ -274,6 +271,18 @@ def play(dealer_strategy, player_strategy)
 
   game_redraw(game_state)
   winners_display(winners(game_state))
+end
+
+def play_loop(dealer_strategy, player_strategy)
+  players = players_prompt(player_strategy)
+  players_append_dealer!(players, dealer_strategy)
+
+  loop do
+    play(players)
+
+    continue = prompt_yes_or_no("Would you like to play again?")
+    break puts 'Thank you for playing Twenty-One!' unless continue == 'y'
+  end
 end
 
 # * Player Strategies *
@@ -314,4 +323,4 @@ end
 
 # * Play with specific strategies (easily customize strategies) *
 
-play(dealer_strategy, player_strategy)
+play_loop(dealer_strategy, player_strategy)
