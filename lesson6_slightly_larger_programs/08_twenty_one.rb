@@ -36,9 +36,11 @@
 
 require_relative '../../ruby-common/prompt'
 require_relative '../../ruby-common/validation_error'
+require_relative '../../ruby-common/messages'
 HIT_INPUT = 'h'
 STAY_INPUT = 's'
 DEALER_NAME = 'Dealer'
+SUITS = ["\u2660", "\u2663", "\u2665", "\u2666"].freeze
 CARDS_ACE_VALUE = 'A'
 CARDS_JQK_VALUES = %w(J Q K).freeze
 CARDS_NUMERIC_VALUES = (2..10).to_a.freeze
@@ -46,10 +48,9 @@ CARDS_NUMERIC_VALUES = (2..10).to_a.freeze
 def cards_create
   cards = []
 
-  suits = ["\u2660", "\u2663", "\u2665", "\u2666"]
   values = [CARDS_ACE_VALUE] + CARDS_JQK_VALUES + CARDS_NUMERIC_VALUES
 
-  suits.each do |suit|
+  SUITS.each do |suit|
     values.each { |value| cards.push({ suit: suit, value: value }) }
   end
 
@@ -83,17 +84,24 @@ def cards_for_display(cards)
   end
 end
 
-def game_redraw(game_state)
-  clear_console
-  table_players = game_state.dig(:table, :players)
-
-  table_players.each do |player|
+def game_table_lines(game_state)
+  game_state.dig(:table, :players).map do |player|
     cards = player[:cards]
     value = cards_value(cards)
     value_display = " [#{cards_value(cards)}]" unless value.nil?
     cards_display = cards_for_display(cards).join(' | ')
-    puts "#{player[:name]}:#{value_display} #{cards_display}"
+
+    "#{player[:name]}:#{value_display} #{cards_display}"
   end
+end
+
+def game_redraw(game_state)
+  clear_console
+
+  lines = game_table_lines(game_state)
+  messages_bordered_display(lines, '-', header: 'Table')
+
+  display_empty_line
 end
 
 def players_dealer_last(game_state)
@@ -155,9 +163,25 @@ def display_winner(game_state)
   # First, check for bust. If no busts, compare value.
 end
 
-def players_prompt(player_strategy)
+def display_empty_line
+  puts
+end
+
+def welcome_display
   clear_console
-  puts "Welcome to Twenty-One!"
+
+  message = " Welcome to Twenty-One! "
+  border = "".ljust(message.length + 1, SUITS.join).concat(SUITS.last)
+
+  puts border
+  puts "#{SUITS.first}#{message}#{SUITS.last}"
+  puts border
+
+  display_empty_line
+end
+
+def players_prompt(player_strategy)
+  welcome_display
 
   players = []
 
