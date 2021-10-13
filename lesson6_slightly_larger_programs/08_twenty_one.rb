@@ -38,6 +38,7 @@ require_relative '../../ruby-common/prompt'
 require_relative '../../ruby-common/validation_error'
 HIT_INPUT = 'h'
 STAY_INPUT = 's'
+DEALER_NAME = 'Dealer'
 
 def cards_create
   cards = []
@@ -52,7 +53,7 @@ def cards_create
   cards
 end
 
-def cards_value(cards)
+def cards_value(_cards)
   # ** Calculate hand value **
   # Sum all values as follows:
   # - 2-10: face value
@@ -69,6 +70,7 @@ def cards_for_display(cards)
 end
 
 def game_redraw(game_state)
+  clear_console
   table_players = game_state.dig(:table, :players)
 
   table_players.each do |player|
@@ -77,8 +79,13 @@ def game_redraw(game_state)
   end
 end
 
+def players_dealer_last(game_state)
+  players = game_state.dig(:table, :players)
+  players.sort_by { |player| player[:is_dealer] ? 1 : 0 }
+end
+
 def table_create(players)
-  { players: players.map { |player| { cards: [] }.merge(player) } }
+  { players: players.map { |player| player.merge({ cards: [] }) } }
 end
 
 def game_state_create(players)
@@ -88,26 +95,34 @@ def game_state_create(players)
   }
 end
 
-def deal_cards!(game_state)
-  players = game_state.dig(:table, :players)
-  players_dealer_last = players.sort_by { |player| player[:is_dealer] ? 1 : 0 }
+def deal_card!(player, game_state, face_up: true)
+  cards = player[:cards]
+  cards.push(game_state[:deck].shift.merge({ face_up: face_up }))
+end
+
+def deal_table!(game_state)
+  players_dealer_last = players_dealer_last(game_state)
   2.times do |card_idx|
     players_dealer_last.each do |player|
-      cards = player[:cards]
       face_up = !player[:is_dealer] || (player[:is_dealer] && card_idx == 0)
-      cards.push(game_state[:deck].shift.merge({ face_up: face_up }))
+      deal_card!(player, game_state, face_up: face_up)
     end
   end
 end
 
-def turn!(_player_key, game_state)
-  # Get player and execute strategy
-
-  # game_redraw(game_state)
+def continue_turn?(player)
+  cards_value(player[:cards]) < 21
 end
 
-def continue_game?(game_state)
-  # Continue as long as no player has busted
+def turn!(player, game_state)
+  loop do
+    input = player[:strategy].call(player, game_state)
+    if input == HIT_INPUT
+      deal_card!(player, game_state)
+      game_redraw(game_state)
+    end
+    break if input == STAY_INPUT || !continue_turn?(player)
+  end
 end
 
 def display_winner(game_state)
@@ -132,7 +147,7 @@ end
 
 def players_append_dealer!(players, dealer_strategy)
   players.push({
-                 name: "Dealer",
+                 name: DEALER_NAME,
                  is_dealer: true,
                  strategy: dealer_strategy
                })
@@ -143,19 +158,20 @@ def play(dealer_strategy, player_strategy)
   players_append_dealer!(players, dealer_strategy)
 
   game_state = game_state_create(players)
-  deal_cards!(game_state)
+  deal_table!(game_state)
   game_redraw(game_state)
+
+  players_dealer_last(game_state).each do |player|
+    turn!(player, game_state)
+  end
 
   # require 'pp'
   # pp game_state # Validate progress thus far.
-
-  turn!(:player, game_state)
-  turn!(:dealer, game_state) if continue_game?(game_state)
   display_winner(game_state)
 end
 
-dealer_strategy = lambda do |game_state|
-  cards = game_state.dig(:table, :dealer, :cards)
+dealer_strategy = lambda do |dealer_player, _game_state|
+  cards = dealer_player[:cards]
   value = cards_value(cards)
 
   return HIT_INPUT if value < 17
@@ -163,8 +179,10 @@ dealer_strategy = lambda do |game_state|
   STAY_INPUT
 end
 
-player_strategy = lambda do |_game_state|
+# rubocop:disable Metrics/MethodLength
+def player_strategy_prompt(name, cards_value)
   prompt_until_valid(
+    "#{name}, you have #{cards_value}. " \
     "Hit (#{HIT_INPUT}) or stay (#{STAY_INPUT})?",
     convert_input: ->(input) { input.downcase },
     validate: lambda do |input|
@@ -174,6 +192,14 @@ player_strategy = lambda do |_game_state|
       end
     end
   )
+end
+# rubocop:enable Metrics/MethodLength
+
+player_strategy = lambda do |player, _game_state|
+  cards_value = cards_value(player[:cards])
+  player_input = player_strategy_prompt(player[:name], cards_value)
+  return HIT_INPUT if player_input == 'h'
+  STAY_INPUT
 end
 
 play(dealer_strategy, player_strategy)
