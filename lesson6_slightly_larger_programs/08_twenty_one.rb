@@ -203,21 +203,23 @@ dealer_strategy = lambda do |dealer_player, _game_state|
   STAY_INPUT
 end
 
-# rubocop:disable Metrics/MethodLength
+def player_strategy_input_validator_create
+  lambda do |input|
+    unless %W(#{HIT_INPUT} #{STAY_INPUT}).include?(input)
+      raise ValidationError,
+            "Please enter either #{HIT_INPUT} or #{STAY_INPUT}."
+    end
+  end
+end
+
 def player_strategy_prompt(name, cards_value)
   prompt_until_valid(
     "#{name}, you have #{cards_value}. " \
     "Hit (#{HIT_INPUT}) or stay (#{STAY_INPUT})?",
     convert_input: ->(input) { input.downcase },
-    validate: lambda do |input|
-      unless %W(#{HIT_INPUT} #{STAY_INPUT}).include?(input)
-        raise ValidationError,
-              "Please enter either #{HIT_INPUT} or #{STAY_INPUT}."
-      end
-    end
+    validate: player_strategy_input_validator_create
   )
 end
-# rubocop:enable Metrics/MethodLength
 
 player_strategy = lambda do |player, _game_state|
   cards_value = cards_value(player[:cards])
