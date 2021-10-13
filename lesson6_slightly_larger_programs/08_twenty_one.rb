@@ -136,8 +136,18 @@ def deal_table!(game_state)
   end
 end
 
+def busted?(player)
+  value = cards_value(player[:cards])
+  return false if value.nil?
+
+  cards_value(player[:cards]) > MAX_VALUE
+end
+
 def end_turn?(player)
-  cards_value(player[:cards]) < MAX_VALUE
+  value = cards_value(player[:cards])
+  return false if value.nil?
+
+  cards_value(player[:cards]) >= MAX_VALUE
 end
 
 def turn_cards_up!(player)
@@ -159,11 +169,36 @@ def turn!(player, game_state)
   end
 end
 
-def display_winner(game_state)
-  game_redraw(game_state)
-  # TODO:
-  # Determine winner based on hand value
-  # First, check for bust. If no busts, compare value.
+def players_in_play(game_state)
+  game_state.dig(:table, :players).reject { |player| busted?(player) }
+end
+
+def players_by_top_score(game_state)
+  players_in_play(game_state).sort_by do |player|
+    -cards_value(player[:cards])
+  end
+end
+
+def winners(game_state)
+  players = players_by_top_score(game_state)
+
+  winner = players.first
+  winning_score = cards_value(winner[:cards])
+
+  [winner] + players[1..-1].select do |player|
+    cards_value(player[:cards]) == winning_score
+  end
+end
+
+def winners_display(winners)
+  message = "No winner."
+  if winners.size > 1
+    winner_names = winners.map { |winner| winner[:name] }.join(' and ')
+    message = "Tie game between #{winner_names}."
+  elsif winners.size == 1 then message = "#{winners.first[:name]} won!"
+  end
+
+  puts "|*| #{message} |*|"
 end
 
 def display_empty_line
@@ -219,7 +254,8 @@ def play(dealer_strategy, player_strategy)
     turn!(player, game_state)
   end
 
-  display_winner(game_state)
+  game_redraw(game_state)
+  winners_display(winners(game_state))
 end
 
 dealer_strategy = lambda do |dealer_player, _game_state|
