@@ -44,6 +44,7 @@ SUITS = ["\u2660", "\u2663", "\u2665", "\u2666"].freeze
 CARDS_ACE_VALUE = 'A'
 CARDS_JQK_VALUES = %w(J Q K).freeze
 CARDS_NUMERIC_VALUES = (2..10).to_a.freeze
+MAX_VALUE = 21
 
 def cards_create
   cards = []
@@ -73,7 +74,7 @@ def cards_value(cards)
   return nil unless all_cards_face_up?(cards)
 
   value_with_ace11 = cards.sum { |card| card_value(card, ace_value: 11) }
-  return value_with_ace11 if value_with_ace11 <= 21
+  return value_with_ace11 if value_with_ace11 <= MAX_VALUE
 
   cards.sum { |card| card_value(card, ace_value: 1) }
 end
@@ -136,15 +137,17 @@ def deal_table!(game_state)
 end
 
 def continue_turn?(player)
-  cards_value(player[:cards]) < 21
+  cards_value(player[:cards]) < MAX_VALUE
 end
 
-def turn_cards_up!(cards)
-  cards.each { |card| card[:face_up] = true }
+def turn_cards_up!(player)
+  player[:cards].each { |card| card[:face_up] = true }
 end
 
 def turn!(player, game_state)
-  turn_cards_up!(player[:cards]) if player[:is_dealer]
+  turn_cards_up!(player) if player[:is_dealer]
+
+  return game_redraw(game_state) unless continue_turn?(player)
 
   loop do
     input = player[:strategy].call(player, game_state)
