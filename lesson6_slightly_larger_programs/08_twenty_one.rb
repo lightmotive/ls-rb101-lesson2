@@ -64,7 +64,13 @@ def card_value(card, ace_value: 0)
   value
 end
 
+def all_cards_face_up?(cards)
+  cards.all? { |card| card[:face_up] }
+end
+
 def cards_value(cards)
+  return nil unless all_cards_face_up?(cards)
+
   value_with_ace11 = cards.sum { |card| card_value(card, ace_value: 11) }
   return value_with_ace11 if value_with_ace11 <= 21
 
@@ -83,7 +89,10 @@ def game_redraw(game_state)
 
   table_players.each do |player|
     cards = player[:cards]
-    puts "#{player[:name]}: #{cards_for_display(cards).join(' | ')}"
+    value = cards_value(cards)
+    value_display = " [#{cards_value(cards)}]" unless value.nil?
+    cards_display = cards_for_display(cards).join(' | ')
+    puts "#{player[:name]}:#{value_display} #{cards_display}"
   end
 end
 
@@ -133,13 +142,19 @@ def turn!(player, game_state)
   end
 end
 
+def turn_cards_up!(cards)
+  cards.each { |card| card[:face_up] = true }
+end
+
 def display_winner(game_state)
+  game_redraw(game_state)
   # TODO:
   # Determine winner based on hand value
   # First, check for bust. If no busts, compare value.
 end
 
 def players_prompt(player_strategy)
+  clear_console
   puts "Welcome to Twenty-One!"
 
   players = []
@@ -172,6 +187,7 @@ def play(dealer_strategy, player_strategy)
   game_redraw(game_state)
 
   players_dealer_last(game_state).each do |player|
+    turn_cards_up!(player[:cards]) if player[:is_dealer]
     turn!(player, game_state)
   end
 
