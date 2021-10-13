@@ -37,6 +37,7 @@
 require_relative '../../ruby-common/prompt'
 require_relative '../../ruby-common/validation_error'
 require_relative '../../ruby-common/messages'
+
 HIT_INPUT = 'h'
 STAY_INPUT = 's'
 DEALER_NAME = 'Dealer'
@@ -45,6 +46,14 @@ CARDS_ACE_VALUE = 'A'
 CARDS_JQK_VALUES = %w(J Q K).freeze
 CARDS_NUMERIC_VALUES = (2..10).to_a.freeze
 MAX_VALUE = 21
+
+# * General *
+
+def display_empty_line
+  puts
+end
+
+# * Cards *
 
 def cards_create
   cards = []
@@ -85,31 +94,7 @@ def cards_for_display(cards)
   end
 end
 
-def game_table_lines(game_state)
-  game_state.dig(:table, :players).map do |player|
-    cards = player[:cards]
-    value = cards_value(cards)
-    busted_display = " - Busted!" if busted?(value)
-    value_display = " [#{value}#{busted_display}]" unless value.nil?
-    cards_display = cards_for_display(cards).join(' | ')
-
-    "#{player[:name]}:#{value_display} #{cards_display}"
-  end
-end
-
-def game_redraw(game_state)
-  clear_console
-
-  lines = game_table_lines(game_state)
-  messages_bordered_display(lines, '-', header: 'Table')
-
-  display_empty_line
-end
-
-def players_dealer_last(game_state)
-  players = game_state.dig(:table, :players)
-  players.sort_by { |player| player[:is_dealer] ? 1 : 0 }
-end
+# * Game State *
 
 def table_create(players)
   { players: players.map { |player| player.merge({ cards: [] }) } }
@@ -137,6 +122,45 @@ def deal_table!(game_state)
   end
 end
 
+# * Players *
+
+def welcome_display
+  clear_console
+
+  message = " Welcome to Twenty-One! "
+  border = "".ljust(message.length + 1, SUITS.join).concat(SUITS.last)
+
+  puts border
+  puts "#{SUITS.first}#{message}#{SUITS.last}"
+  puts border
+
+  display_empty_line
+end
+
+def players_prompt(player_strategy)
+  welcome_display
+
+  players = []
+
+  # TODO: Extra features - Prompt for player count (up to 3) and names for each.
+  puts "What's your name?"
+  players.push({
+                 name: gets.strip,
+                 is_dealer: false,
+                 strategy: player_strategy
+               })
+
+  players
+end
+
+def players_append_dealer!(players, dealer_strategy)
+  players.push({
+                 name: DEALER_NAME,
+                 is_dealer: true,
+                 strategy: dealer_strategy
+               })
+end
+
 def busted?(cards_value)
   return false if cards_value.nil?
 
@@ -148,6 +172,11 @@ def end_turn?(player)
   return false if value.nil?
 
   busted?(value) || value == MAX_VALUE
+end
+
+def players_dealer_last(game_state)
+  players = game_state.dig(:table, :players)
+  players.sort_by { |player| player[:is_dealer] ? 1 : 0 }
 end
 
 def turn_cards_up!(player)
@@ -203,46 +232,32 @@ def winners_display(winners)
   puts "|*| #{message} |*|"
 end
 
-def display_empty_line
-  puts
+# * Game Display *
+
+def game_table_lines(game_state)
+  game_state.dig(:table, :players).map do |player|
+    cards = player[:cards]
+    value = cards_value(cards)
+    busted_display = " - Busted!" if busted?(value)
+    value_display = " [#{value}#{busted_display}]" unless value.nil?
+    cards_display = cards_for_display(cards).join(' | ')
+
+    "#{player[:name]}:#{value_display} #{cards_display}"
+  end
 end
 
-def welcome_display
+def game_redraw(game_state)
   clear_console
 
-  message = " Welcome to Twenty-One! "
-  border = "".ljust(message.length + 1, SUITS.join).concat(SUITS.last)
-
-  puts border
-  puts "#{SUITS.first}#{message}#{SUITS.last}"
-  puts border
+  messages_bordered_display(
+    game_table_lines(game_state),
+    '-', header: 'Table'
+  )
 
   display_empty_line
 end
 
-def players_prompt(player_strategy)
-  welcome_display
-
-  players = []
-
-  # TODO: Extra features - Prompt for player count (up to 3) and names for each.
-  puts "What's your name?"
-  players.push({
-                 name: gets.strip,
-                 is_dealer: false,
-                 strategy: player_strategy
-               })
-
-  players
-end
-
-def players_append_dealer!(players, dealer_strategy)
-  players.push({
-                 name: DEALER_NAME,
-                 is_dealer: true,
-                 strategy: dealer_strategy
-               })
-end
+# * Main *
 
 def play(dealer_strategy, player_strategy)
   players = players_prompt(player_strategy)
@@ -259,6 +274,8 @@ def play(dealer_strategy, player_strategy)
   game_redraw(game_state)
   winners_display(winners(game_state))
 end
+
+# * Player Strategies *
 
 dealer_strategy = lambda do |dealer_player, _game_state|
   cards = dealer_player[:cards]
@@ -293,5 +310,7 @@ player_strategy = lambda do |player, _game_state|
   return HIT_INPUT if player_input == 'h'
   STAY_INPUT
 end
+
+# * Play with specific strategies (easily customize strategies) *
 
 play(dealer_strategy, player_strategy)
