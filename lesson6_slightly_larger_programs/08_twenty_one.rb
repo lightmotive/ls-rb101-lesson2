@@ -131,7 +131,13 @@ def continue_turn?(player)
   cards_value(player[:cards]) < 21
 end
 
+def turn_cards_up!(cards)
+  cards.each { |card| card[:face_up] = true }
+end
+
 def turn!(player, game_state)
+  turn_cards_up!(player[:cards]) if player[:is_dealer]
+
   loop do
     input = player[:strategy].call(player, game_state)
     if input == HIT_INPUT
@@ -140,10 +146,6 @@ def turn!(player, game_state)
     end
     break if input == STAY_INPUT || !continue_turn?(player)
   end
-end
-
-def turn_cards_up!(cards)
-  cards.each { |card| card[:face_up] = true }
 end
 
 def display_winner(game_state)
@@ -187,7 +189,6 @@ def play(dealer_strategy, player_strategy)
   game_redraw(game_state)
 
   players_dealer_last(game_state).each do |player|
-    turn_cards_up!(player[:cards]) if player[:is_dealer]
     turn!(player, game_state)
   end
 
