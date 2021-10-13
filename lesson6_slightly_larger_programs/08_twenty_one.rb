@@ -147,7 +147,7 @@ def end_turn?(player)
   value = cards_value(player[:cards])
   return false if value.nil?
 
-  value >= MAX_VALUE
+  busted?(value) || value == MAX_VALUE
 end
 
 def turn_cards_up!(player)
