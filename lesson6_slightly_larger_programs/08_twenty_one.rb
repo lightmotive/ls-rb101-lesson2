@@ -39,12 +39,15 @@ require_relative '../../ruby-common/validation_error'
 HIT_INPUT = 'h'
 STAY_INPUT = 's'
 DEALER_NAME = 'Dealer'
+CARDS_ACE_VALUE = 'A'
+CARDS_JQK_VALUES = %w(J Q K).freeze
+CARDS_NUMERIC_VALUES = (2..10).to_a.freeze
 
 def cards_create
   cards = []
 
   suits = ["\u2660", "\u2663", "\u2665", "\u2666"]
-  values = %w(A J Q K) + (2..10).to_a
+  values = [CARDS_ACE_VALUE] + CARDS_JQK_VALUES + CARDS_NUMERIC_VALUES
 
   suits.each do |suit|
     values.each { |value| cards.push({ suit: suit, value: value }) }
@@ -53,16 +56,19 @@ def cards_create
   cards
 end
 
-def cards_value(_cards)
-  # TODO:
+def card_value(card, ace_value: 0)
+  value = card[:value]
+  value = 10 if CARDS_JQK_VALUES.include?(value)
+  value = ace_value if value == CARDS_ACE_VALUE
 
-  # ** Calculate hand value **
-  # Sum all values as follows:
-  # - 2-10: face value
-  # - Jack, Queen, King: 10
-  # - Ace: depends on hand value...
-  #   - If hand value is <= 21 when ace is 11, then ace is 11.
-  #   - Otherwise, aces are worth 1.
+  value
+end
+
+def cards_value(cards)
+  value_with_ace11 = cards.sum { |card| card_value(card, ace_value: 11) }
+  return value_with_ace11 if value_with_ace11 <= 21
+
+  cards.sum { |card| card_value(card, ace_value: 1) }
 end
 
 def cards_for_display(cards)
@@ -169,8 +175,6 @@ def play(dealer_strategy, player_strategy)
     turn!(player, game_state)
   end
 
-  # require 'pp'
-  # pp game_state # Validate progress thus far.
   display_winner(game_state)
 end
 
