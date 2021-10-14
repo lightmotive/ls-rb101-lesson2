@@ -38,12 +38,16 @@ require_relative '../../ruby-common/prompt'
 require_relative '../../ruby-common/validation_error'
 require_relative '../../ruby-common/messages'
 
+CARDS = {
+  suits: ["\u2660", "\u2663", "\u2665", "\u2666"],
+  values: {
+    ace: 'A',
+    jqk: %w(J Q K),
+    numeric: (2..10).to_a
+  }
+}.freeze
 INPUTS = { hit: 'h', stay: 's' }
 DEALER_NAME = 'Dealer'
-SUITS = ["\u2660", "\u2663", "\u2665", "\u2666"].freeze
-CARDS_ACE_VALUE = 'A'
-CARDS_JQK_VALUES = %w(J Q K).freeze
-CARDS_NUMERIC_VALUES = (2..10).to_a.freeze
 MAX_VALUE = 21
 
 # * General *
@@ -57,9 +61,11 @@ end
 def cards_create
   cards = []
 
-  values = [CARDS_ACE_VALUE] + CARDS_JQK_VALUES + CARDS_NUMERIC_VALUES
+  values = [CARDS[:values][:ace]] +
+           CARDS[:values][:jqk] +
+           CARDS[:values][:numeric]
 
-  SUITS.each do |suit|
+  CARDS[:suits].each do |suit|
     values.each { |value| cards.push({ suit: suit, value: value }) }
   end
 
@@ -68,8 +74,8 @@ end
 
 def card_value(card, ace_value: 0)
   value = card[:value]
-  value = 10 if CARDS_JQK_VALUES.include?(value)
-  value = ace_value if value == CARDS_ACE_VALUE
+  value = 10 if CARDS[:values][:jqk].include?(value)
+  value = ace_value if value == CARDS[:values][:ace]
 
   value
 end
@@ -127,10 +133,11 @@ def welcome_display
   clear_console
 
   message = " Welcome to Twenty-One! "
-  border = "".ljust(message.length + 1, SUITS.join).concat(SUITS.last)
+  suits = CARDS[:suits]
+  border = "".ljust(message.length + 1, suits.join).concat(suits.last)
 
   puts border
-  puts "#{SUITS.first}#{message}#{SUITS.last}"
+  puts "#{suits.first}#{message}#{suits.last}"
   puts border
 
   display_empty_line
