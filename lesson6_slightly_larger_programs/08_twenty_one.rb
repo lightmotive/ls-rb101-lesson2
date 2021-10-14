@@ -38,8 +38,7 @@ require_relative '../../ruby-common/prompt'
 require_relative '../../ruby-common/validation_error'
 require_relative '../../ruby-common/messages'
 
-HIT_INPUT = 'h'
-STAY_INPUT = 's'
+INPUTS = { hit: 'h', stay: 's' }
 DEALER_NAME = 'Dealer'
 SUITS = ["\u2660", "\u2663", "\u2665", "\u2666"].freeze
 CARDS_ACE_VALUE = 'A'
@@ -190,11 +189,11 @@ def turn!(player, game_state)
 
   loop do
     input = player[:strategy].call(player, game_state)
-    if input == HIT_INPUT
+    if input == :hit
       deal_card!(player, game_state)
       game_redraw(game_state)
     end
-    break if input == STAY_INPUT || end_turn?(player)
+    break if input == :stay || end_turn?(player)
   end
 end
 
@@ -280,6 +279,7 @@ def play_loop(dealer_strategy, player_strategy)
   loop do
     play(players)
 
+    display_empty_line
     continue = prompt_yes_or_no("Would you like to play again?")
     break puts 'Thank you for playing Twenty-One!' unless continue == 'y'
   end
@@ -290,25 +290,27 @@ end
 dealer_strategy = lambda do |dealer_player, _game_state|
   cards = dealer_player[:cards]
   value = cards_value(cards)
+  return :hit if value < 17
 
-  return HIT_INPUT if value < 17
-
-  STAY_INPUT
+  :stay
 end
 
 def player_strategy_input_validator_create
   lambda do |input|
-    unless %W(#{HIT_INPUT} #{STAY_INPUT}).include?(input)
+    unless INPUTS.values.include?(input)
       raise ValidationError,
-            "Please enter either #{HIT_INPUT} or #{STAY_INPUT}."
+            "Please enter either #{INPUTS.values.join(' or ')}."
     end
   end
 end
 
 def player_strategy_prompt(name, cards_value)
+  inputs_display = INPUTS.map do |key, value|
+    "#{key.to_s.capitalize} (#{value})"
+  end.join(' or ')
+
   prompt_until_valid(
-    "#{name}, you have #{cards_value}. " \
-    "Hit (#{HIT_INPUT}) or stay (#{STAY_INPUT})?",
+    "#{name}, you have #{cards_value}. #{inputs_display}?",
     convert_input: ->(input) { input.downcase },
     validate: player_strategy_input_validator_create
   )
@@ -317,8 +319,7 @@ end
 player_strategy = lambda do |player, _game_state|
   cards_value = cards_value(player[:cards])
   player_input = player_strategy_prompt(player[:name], cards_value)
-  return HIT_INPUT if player_input == 'h'
-  STAY_INPUT
+  return INPUTS.rassoc(player_input)[0]
 end
 
 # * Play with specific strategies (easily customize strategies) *
