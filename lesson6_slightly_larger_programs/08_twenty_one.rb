@@ -50,12 +50,6 @@ INPUTS = { hit: 'h', stay: 's' }.freeze
 DEALER_NAME = 'Dealer'
 MAX_VALUE = 21
 
-# * General *
-
-def display_empty_line
-  puts
-end
-
 # * Cards *
 
 def cards_create
@@ -121,7 +115,7 @@ def deal_table!(game_state)
   players_dealer_last = players_dealer_last(game_state)
   2.times do |card_idx|
     players_dealer_last.each do |player|
-      face_up = !player[:is_dealer] || (player[:is_dealer] && card_idx == 0)
+      face_up = (!player[:is_dealer]) || card_idx == 0
       deal_card!(player, game_state, face_up: face_up)
     end
   end
@@ -139,7 +133,6 @@ def welcome_display
   puts border
   puts "#{suits.first}#{message}#{suits.last}"
   puts border
-
   display_empty_line
 end
 
@@ -147,24 +140,15 @@ def players_prompt(player_strategy)
   welcome_display
 
   players = []
-
   # TODO: Extra features - Prompt for player count (up to 3) and names for each.
   puts "What's your name?"
-  players.push({
-                 name: gets.strip,
-                 is_dealer: false,
-                 strategy: player_strategy
-               })
-
-  players
+  players.push({ name: gets.strip, is_dealer: false,
+                 strategy: player_strategy })
 end
 
 def players_append_dealer!(players, dealer_strategy)
-  players.push({
-                 name: DEALER_NAME,
-                 is_dealer: true,
-                 strategy: dealer_strategy
-               })
+  players.push({ name: DEALER_NAME, is_dealer: true,
+                 strategy: dealer_strategy })
 end
 
 def busted?(cards_value)
@@ -211,9 +195,7 @@ def players_in_play(game_state)
 end
 
 def players_by_top_score(game_state)
-  players_in_play(game_state).sort_by do |player|
-    -cards_value(player[:cards])
-  end
+  players_in_play(game_state).sort_by { |player| -cards_value(player[:cards]) }
 end
 
 def winners(game_state)
@@ -255,12 +237,7 @@ end
 
 def game_redraw(game_state)
   clear_console
-
-  messages_bordered_display(
-    game_table_lines(game_state),
-    '-', header: 'Table'
-  )
-
+  messages_bordered_display(game_table_lines(game_state), '-', header: 'Table')
   display_empty_line
 end
 
