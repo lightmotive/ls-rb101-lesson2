@@ -38,8 +38,12 @@ require_relative '../../ruby-common/prompt'
 require_relative '../../ruby-common/validation_error'
 require_relative '../../ruby-common/messages'
 
+SPADES_ICON = "\u2660"
+CLUBS_ICON = "\u2663"
+HEARTS_ICON = "\u2665"
+DIAMONDS_ICON = "\u2666"
 CARDS = {
-  suits: ["\u2660", "\u2663", "\u2665", "\u2666"],
+  suits: [SPADES_ICON, CLUBS_ICON, HEARTS_ICON, DIAMONDS_ICON],
   values: {
     ace: 'A',
     jqk: %w(J Q K),
@@ -126,12 +130,13 @@ end
 def welcome_display
   clear_console
 
-  message = " Welcome to Twenty-One! "
-  suits = CARDS[:suits]
-  border = "".ljust(message.length + 1, suits.join).concat(suits.last)
+  message = "#{CLUBS_ICON} Welcome to Twenty-One! #{CLUBS_ICON}"
+  border = "#{SPADES_ICON}#{HEARTS_ICON.center(
+    message.length - 2, DIAMONDS_ICON
+  )}#{SPADES_ICON}"
 
   puts border
-  puts "#{suits.first}#{message}#{suits.last}"
+  puts message
   puts border
   display_empty_line
 end
@@ -237,7 +242,8 @@ end
 
 def game_redraw(game_state)
   clear_console
-  messages_bordered_display(game_table_lines(game_state), '-', header: 'Table')
+  messages_bordered_display(game_table_lines(game_state),
+                            DIAMONDS_ICON, header: ' Table ')
   display_empty_line
 end
 
