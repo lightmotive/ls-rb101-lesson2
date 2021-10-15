@@ -46,7 +46,7 @@ CARDS = {
     numeric: (2..10).to_a
   }
 }.freeze
-INPUTS = { hit: 'h', stay: 's' }
+INPUTS = { hit: 'h', stay: 's' }.freeze
 DEALER_NAME = 'Dealer'
 MAX_VALUE = 21
 
