@@ -53,6 +53,7 @@ CARDS = {
 INPUTS = { hit: 'h', stay: 's' }.freeze
 DEALER_NAME = 'Dealer'
 MAX_VALUE = 21
+DEALER_HITS_UNTIL_DEFAULT_VALUE = 17
 
 # * Cards *
 
@@ -288,7 +289,7 @@ end
 
 dealer_strategy = lambda do |dealer_player, _game_state|
   value = dealer_player[:cards_value]
-  return :hit if value < 17
+  return :hit if value < DEALER_HITS_UNTIL_DEFAULT_VALUE
 
   :stay
 end
