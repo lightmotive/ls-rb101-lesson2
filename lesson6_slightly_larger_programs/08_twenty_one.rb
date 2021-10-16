@@ -54,6 +54,7 @@ INPUTS = { hit: 'h', stay: 's' }.freeze
 DEALER_NAME = 'Dealer'
 MAX_VALUE = 21
 DEALER_HITS_UNTIL_DEFAULT_VALUE = 17
+SCORE_TO_WIN_ROUND = 5 # We could allow player(s) to specify that score.
 
 # * Cards *
 
@@ -151,7 +152,8 @@ def players_prompt(player_strategy)
   welcome_display
 
   players = []
-  # TODO: Extra features - Prompt for player count (up to 3) and names for each.
+  # Extra Feature: Prompt for player count (up to 3) and names for each.
+  # - Ensure unique names!
   puts "What's your name?"
   players.push({ name: gets.strip, is_dealer: false,
                  strategy: player_strategy })
@@ -227,7 +229,7 @@ def winners_display(winners)
   if winners.size > 1
     winner_names = winners.map { |winner| winner[:name] }.join(' and ')
     message = "Tie game between #{winner_names}."
-  elsif winners.size == 1 then message = "#{winners.first[:name]} won!"
+  elsif winners.size == 1 then message = "#{winners.first[:name]} won the game!"
   end
 
   puts "|*| #{message} |*|"
@@ -254,9 +256,43 @@ def game_redraw(game_state)
   display_empty_line
 end
 
+# * Rounds (Scoring) *
+def round_state_create(players)
+  players.each_with_object({}) { |player, scores| scores[player[:name]] = 0 }
+end
+
+def update_round_score(winners, round_state)
+  return if winners.nil? || winners.count != 1
+
+  round_state[winners.first[:name]] += 1
+end
+
+def round_state_by_score(round_state)
+  round_state.sort_by { |_, score| -score }
+end
+
+def round_score_display(round_state)
+  display_empty_line
+  messages_bordered_display(
+    round_state_by_score(round_state).map do |(name, score)|
+      "#{name}: #{score}"
+    end,
+    DIAMONDS_ICON, header: ' Scoreboard '
+  )
+end
+
+def round_winner?(round_state)
+  round_state_by_score(round_state).first[1] == SCORE_TO_WIN_ROUND
+end
+
+def round_winner_display(round_state)
+  display_empty_line
+  puts "|**| #{round_state_by_score(round_state).first[0]} won the round! |**|"
+end
+
 # * Main *
 
-def play(players)
+def play_game(players, round_state)
   game_state = game_state_create(players)
   deal_table!(game_state)
   game_redraw(game_state)
@@ -266,12 +302,27 @@ def play(players)
   end
 
   game_redraw(game_state)
-  winners_display(winners(game_state))
+  winners = winners(game_state)
+  update_round_score(winners, round_state)
+  winners_display(winners)
+end
+
+def play_round(players)
+  round_state = round_state_create(players)
+  loop do
+    play_game(players, round_state)
+
+    round_score_display(round_state)
+    break round_winner_display(round_state) if round_winner?(round_state)
+
+    display_empty_line
+    prompt_enter_to_continue("Press enter to continue round...")
+  end
 end
 
 def play_again?
   display_empty_line
-  prompt_yes_or_no("Would you like to play again?") == 'y'
+  prompt_yes_or_no("Would you like to another round?") == 'y'
 end
 
 def play_loop(dealer_strategy, player_strategy)
@@ -279,7 +330,7 @@ def play_loop(dealer_strategy, player_strategy)
   players_append_dealer!(players, dealer_strategy)
 
   loop do
-    play(players)
+    play_round(players)
 
     break puts 'Thank you for playing Twenty-One!' unless play_again?
   end
