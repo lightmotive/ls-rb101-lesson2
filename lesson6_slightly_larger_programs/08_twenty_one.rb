@@ -110,9 +110,14 @@ def game_state_create(players)
   }
 end
 
+def update_player_cards_value!(player)
+  player[:cards_value] = cards_value(player[:cards])
+end
+
 def deal_card!(player, game_state, face_up: true)
   cards = player[:cards]
   cards.push(game_state[:deck].shift.merge({ face_up: face_up }))
+  update_player_cards_value!(player)
 end
 
 def deal_table!(game_state)
@@ -163,7 +168,7 @@ def busted?(cards_value)
 end
 
 def end_turn?(player)
-  value = cards_value(player[:cards])
+  value = player[:cards_value]
   return false if value.nil?
 
   busted?(value) || value == MAX_VALUE
@@ -176,6 +181,7 @@ end
 
 def turn_cards_up!(player)
   player[:cards].each { |card| card[:face_up] = true }
+  update_player_cards_value!(player)
 end
 
 def turn!(player, game_state)
@@ -195,12 +201,12 @@ end
 
 def players_in_play(game_state)
   game_state.dig(:table, :players).reject do |player|
-    busted?(cards_value(player[:cards]))
+    busted?(player[:cards_value])
   end
 end
 
 def players_by_top_score(game_state)
-  players_in_play(game_state).sort_by { |player| -cards_value(player[:cards]) }
+  players_in_play(game_state).sort_by { |player| -player[:cards_value] }
 end
 
 def winners(game_state)
@@ -208,10 +214,10 @@ def winners(game_state)
   return [] if players.empty?
 
   winner = players.first
-  winning_score = cards_value(winner[:cards])
+  winning_score = winner[:cards_value]
 
   [winner] + players[1..-1].select do |player|
-    cards_value(player[:cards]) == winning_score
+    player[:cards_value] == winning_score
   end
 end
 
@@ -231,7 +237,7 @@ end
 def game_table_lines(game_state)
   game_state.dig(:table, :players).map do |player|
     cards = player[:cards]
-    value = cards_value(cards)
+    value = player[:cards_value]
     busted_display = " - Busted!" if busted?(value)
     value_display = " [#{value}#{busted_display}]" unless value.nil?
     cards_display = cards_for_display(cards).join(' | ')
@@ -279,7 +285,7 @@ end
 
 dealer_strategy = lambda do |dealer_player, _game_state|
   cards = dealer_player[:cards]
-  value = cards_value(cards)
+  value = dealer_player[:cards_value]
   return :hit if value < 17
 
   :stay
@@ -307,7 +313,7 @@ def player_strategy_prompt(name, cards_value)
 end
 
 player_strategy = lambda do |player, _game_state|
-  cards_value = cards_value(player[:cards])
+  cards_value = player[:cards_value]
   player_input = player_strategy_prompt(player[:name], cards_value)
   return INPUTS.rassoc(player_input)[0]
 end
