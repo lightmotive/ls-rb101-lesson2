@@ -261,7 +261,7 @@ def round_state_create(players)
   players.each_with_object({}) { |player, scores| scores[player[:name]] = 0 }
 end
 
-def update_round_score(winners, round_state)
+def update_round_score!(winners, round_state)
   return if winners.nil? || winners.count != 1
 
   round_state[winners.first[:name]] += 1
@@ -303,7 +303,7 @@ def play_game(players, round_state)
 
   game_redraw(game_state)
   winners = winners(game_state)
-  update_round_score(winners, round_state)
+  update_round_score!(winners, round_state)
   winners_display(winners)
 end
 
