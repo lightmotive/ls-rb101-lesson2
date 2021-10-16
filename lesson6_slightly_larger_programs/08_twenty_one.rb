@@ -287,7 +287,6 @@ end
 # * Player Strategies *
 
 dealer_strategy = lambda do |dealer_player, _game_state|
-  cards = dealer_player[:cards]
   value = dealer_player[:cards_value]
   return :hit if value < 17
 
