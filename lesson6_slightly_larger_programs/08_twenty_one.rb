@@ -268,6 +268,11 @@ def play(players)
   winners_display(winners(game_state))
 end
 
+def play_again?
+  display_empty_line
+  prompt_yes_or_no("Would you like to play again?") == 'y'
+end
+
 def play_loop(dealer_strategy, player_strategy)
   players = players_prompt(player_strategy)
   players_append_dealer!(players, dealer_strategy)
@@ -275,9 +280,7 @@ def play_loop(dealer_strategy, player_strategy)
   loop do
     play(players)
 
-    display_empty_line
-    continue = prompt_yes_or_no("Would you like to play again?")
-    break puts 'Thank you for playing Twenty-One!' unless continue == 'y'
+    break puts 'Thank you for playing Twenty-One!' unless play_again?
   end
 end
 
