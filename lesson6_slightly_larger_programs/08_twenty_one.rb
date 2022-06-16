@@ -38,10 +38,11 @@ require_relative '../../ruby-common/prompt'
 require_relative '../../ruby-common/validation_error'
 require_relative '../../ruby-common/messages'
 
-SPADES_ICON = "\u2660"
-CLUBS_ICON = "\u2663"
-HEARTS_ICON = "\u2665"
-DIAMONDS_ICON = "\u2666"
+SPADES_ICON = "\u{2660}"
+CLUBS_ICON = "\u{2663}"
+HEARTS_ICON = "\u{2665}"
+DIAMONDS_ICON = "\u{2666}"
+FACE_DOWN_ICON = "\u{1F0A0}"
 CARDS = {
   suits: [SPADES_ICON, CLUBS_ICON, HEARTS_ICON, DIAMONDS_ICON],
   values: {
@@ -95,7 +96,7 @@ end
 
 def cards_for_display(cards)
   cards.map do |card|
-    card[:face_up] ? "#{card[:suit]}#{card[:value]}" : "\u{1F0A0}"
+    card[:face_up] ? "#{card[:suit]}#{card[:value]}" : FACE_DOWN_ICON
   end
 end
 
