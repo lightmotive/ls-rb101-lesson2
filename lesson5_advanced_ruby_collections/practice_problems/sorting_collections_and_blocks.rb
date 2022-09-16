@@ -328,4 +328,4 @@ TESTS = [
 run_tests('test_generate_duplicates', TESTS, ->(input) { test_generate_duplicates(*input) })
 # All tests passed (no duplicates generated).
 
-benchmark_report_test_data(1, 1, TESTS, ->(input) { test_generate_duplicates(*input) })
+benchmark_report_test_data(TESTS, ->(input) { test_generate_duplicates(*input) })

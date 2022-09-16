@@ -173,9 +173,9 @@ end
 
 run_tests('sum_at_row_math', TESTS, ->(input) { sum_at_row_math(input) })
 
-benchmark_report(2, 5, TESTS,
+benchmark_report(TESTS,
                  [
                    { label: 'Full Array', method: ->(number) { sum_at_row(number) } },
                    { label: 'Iteration - No Array', method: ->(number) { sum_at_row_optimized(number) } },
                    { label: 'Math', method: ->(number) { sum_at_row_math(number) } }
-                 ])
+                 ], iterations: 5)

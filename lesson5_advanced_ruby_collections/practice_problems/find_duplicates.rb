@@ -56,8 +56,8 @@ end
 
 run_tests('Hash Map', TESTS, ->(input) { find_duplicates_by_hash_map(input) })
 
-benchmark_report(2, 5, TESTS,
+benchmark_report(TESTS,
                  [
                    { label: 'Select with Index', method: ->(input) { find_duplicates_by_select_with_index(input) } },
                    { label: 'Hash Map', method: ->(input) { find_duplicates_by_hash_map(input) } }
-                 ])
+                 ], iterations: 5)
